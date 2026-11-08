@@ -27,7 +27,7 @@ services:
       - key: JWT_REFRESH_EXPIRATION
         value: 30d
       - key: DATABASE_URL
-        value: postgresql://postgres:MackNaia2025@db.xwmxgpdkmrzoraibdzrf.supabase.co:5432/postgres
+        value: postgresql://postgres.xwmxgpdkmrzoraibdzrf:MackNaia2025@aws-1-us-west-2.pooler.supabase.com:5432/postgres
       - key: MONCASH_CLIENT_ID
         value: 2b689e2271e4f5911c431023b26eebd6
       - key: MONCASH_SECRET
