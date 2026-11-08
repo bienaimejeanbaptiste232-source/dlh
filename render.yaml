@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: delivery-haiti-api
+    runtime: node
+    rootDir: apps/backend
+    buildCommand: npm install && npm run build
+    startCommand: node dist/main.js
+    plan: free
+    region: ohio
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SUPABASE_URL
+        value: https://xwmxgpdkmrzoraibdzrf.supabase.co
+      - key: SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bXhncGRrbXJ6b3JhaWJkenJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE0MjA2MTMsImV4cCI6MjEwNjk5NjYxM30.RdYRJkWOuTKcCKjLEXOCB88mzm8fzULPwEu_L0kAwgc
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3bXhncGRrbXJ6b3JhaWJkenJmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTQyMDYxMywiZXhwIjoyMTA2OTk2NjEzfQ.Bg6Sv7HR35FShSu9QiTpYcYKUq8RrH3tg0IPFYq6zQU
+      - key: JWT_SECRET
+        value: super_secret_jwt_key_delivery_haiti_2026_secure
+      - key: JWT_EXPIRATION
+        value: 15m
+      - key: JWT_REFRESH_SECRET
+        value: refresh_secret_key_delivery_haiti_long_lived
+      - key: JWT_REFRESH_EXPIRATION
+        value: 30d
+      - key: DATABASE_URL
+        value: postgresql://postgres:MackNaia2025@db.xwmxgpdkmrzoraibdzrf.supabase.co:5432/postgres
+      - key: MONCASH_CLIENT_ID
+        value: 2b689e2271e4f5911c431023b26eebd6
+      - key: MONCASH_SECRET
+        value: kqiQaeSiOqqNz6ypbjqgkDuYudEMk86fyVaF9susirgVJGkV-9DUay8nb2TOFTRK
+      - key: MONCASH_BUSINESS_KEY
+        value: 2b689e2271e4f5911c431023b26eebd6
+      - key: MONCASH_ENV
+        value: sandbox
