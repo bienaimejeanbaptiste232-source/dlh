@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "964484525040",
+    "project_id": "my-delivrery-haiti",
+    "storage_bucket": "my-delivrery-haiti.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964484525040:android:b3e867fd39dfde6fc0cb35",
+        "android_client_info": {
+          "package_name": "com.delivrery_haiti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTOqPUm9u4yqM_d8yAJV2Aiwx8P2POE9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:964484525040:android:b3e867fd39dfde6fc0cb35",
+        "android_client_info": {
+          "package_name": "com.deliveryhaiti.mobile_driver"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTOqPUm9u4yqM_d8yAJV2Aiwx8P2POE9k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

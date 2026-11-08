@@ -1,0 +1,6 @@
+/* Default Next.js boilerplate css removed to ensure forced light-mode aesthetic */
+.page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
