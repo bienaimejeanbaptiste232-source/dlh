@@ -53,7 +53,7 @@ export const getDatabaseConfig = (): TypeOrmModuleOptions => {
         type: 'postgres',
         url: databaseUrl,
         entities,
-        synchronize: true, // Auto-schema sync
+        synchronize: false, // Disabled - schema managed manually to avoid null constraint errors
         ssl: isSupabaseOrRemote ? { rejectUnauthorized: false } : false,
         logging: process.env.NODE_ENV === 'development',
       };

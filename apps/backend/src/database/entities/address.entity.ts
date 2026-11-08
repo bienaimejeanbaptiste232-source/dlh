@@ -24,7 +24,7 @@ export class Address {
   @Column({ default: 'Maison' })
   title: string;
 
-  @Column()
+  @Column({ default: 'Port-au-Prince' })
   streetAddress: string;
 
   @Column({ type: 'text', nullable: true })

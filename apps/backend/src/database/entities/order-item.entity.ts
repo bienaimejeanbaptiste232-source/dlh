@@ -39,6 +39,6 @@ export class OrderItem {
   @Column({ type: 'text', nullable: true })
   selectedOptions: string; // JSON: options sélectionnées (sauce piquante, extra plantain, etc.)
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   totalItemPrice: number;
 }

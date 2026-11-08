@@ -34,7 +34,7 @@ export class WalletTransaction {
   @Column({ type: 'float' })
   amount: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   balanceAfter: number;
 
   @Column({ type: 'text', nullable: true })

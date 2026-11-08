@@ -82,10 +82,10 @@ export class Order {
   @JoinColumn({ name: 'batchId' })
   batch: DeliveryBatch;
 
-  @Column('uuid')
+  @Column('uuid', { nullable: true })
   deliveryAddressId: string;
 
-  @ManyToOne(() => Address)
+  @ManyToOne(() => Address, { nullable: true })
   @JoinColumn({ name: 'deliveryAddressId' })
   deliveryAddress: Address;
 
@@ -97,7 +97,7 @@ export class Order {
   status: OrderStatus;
 
   // Ventilation financière
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   subtotalAmount: number;
 
   @Column({ type: 'float', default: 0.0 })
@@ -109,16 +109,16 @@ export class Order {
   @Column({ type: 'float', default: 0.0 })
   discountAmount: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   totalAmount: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   merchantEarnings: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   driverEarnings: number;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', default: 0.0 })
   platformCommission: number;
 
   @Column({ default: 'HTG' })
