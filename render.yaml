@@ -3,7 +3,7 @@ services:
     name: delivery-haiti-api
     runtime: node
     rootDir: apps/backend
-    buildCommand: npm install && npm run build
+    buildCommand: npm install --include=dev && npm run build
     startCommand: node dist/main.js
     plan: free
     region: ohio
@@ -36,3 +36,4 @@ services:
         value: 2b689e2271e4f5911c431023b26eebd6
       - key: MONCASH_ENV
         value: sandbox
+
