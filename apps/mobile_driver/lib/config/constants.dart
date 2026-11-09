@@ -5,10 +5,11 @@ class DriverConstants {
   static const String appTagline = 'Livrez vite, vivez mieux';
 
   // ─── API Backend NestJS ──────────────────────────────────────
-  static const String apiBaseUrl = 'http://127.0.0.1:4000/api/v1';
-  static const String apiBaseUrlLocal = 'http://localhost:4000/api/v1';
-  static const String socketUrl = 'http://127.0.0.1:4000';
-  static const String socketUrlLocal = 'http://localhost:4000';
+  static const String serverHost = String.fromEnvironment('SERVER_HOST', defaultValue: 'delivery-haiti-api.onrender.com');
+  static const String apiBaseUrl = 'https://$serverHost/api/v1';
+  static const String apiBaseUrlLocal = 'https://delivery-haiti-api.onrender.com/api/v1';
+  static const String socketUrl = 'https://$serverHost';
+  static const String socketUrlLocal = 'https://delivery-haiti-api.onrender.com';
 
   // ─── Supabase ────────────────────────────────────────────────
   static const String supabaseUrl = 'https://xwmxgpdkmrzoraibdzrf.supabase.co';
