@@ -141,409 +141,190 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
   return (
     <header className="navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#FFFFFF', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
-      {/* ── Tier 1: Utility Announcement Bar (Maket Ayisyen Style) ── */}
-      <div style={{
-        background: '#17191C',
-        color: '#D1D5DB',
-        fontSize: '0.75rem',
-        padding: '5px 20px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        borderBottom: '1px solid rgba(255,255,255,0.08)'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#FFFFFF', fontWeight: 600 }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00B96B' }} />
-            🇭🇹 Livrezon rapid · Cap-Haïtien & Tout Zòn Yo
-          </span>
-          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
-          <span style={{ color: '#9CA3AF' }} className="desktop-only">Peman MonCash, Natcash & Kat Bankè</span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+      {/* ── Tier 1: Main Header Row (1:1 Maket Ayisyen Design) ── */}
+      <nav className="ma-header-main">
+        {/* Left: Hamburger + Logo + "Vin Vandè" Pill */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          {/* Hamburger Icon */}
           <button
             onClick={() => setDrawerOpen(true)}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#F8FAFC',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4
-            }}
-            className="desktop-only"
+            aria-label="Louvri Meni"
+            className="ma-nav-menu-btn"
           >
-            <span>📍 Zòn:</span>
-            <span style={{ color: '#FF6000' }}>{selectedZone}</span>
+            <IconMenu />
           </button>
-          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
-          <button
-            onClick={() => nav('orders')}
-            style={{
-              background: 'none',
-              border: 'none',
-              color: '#D1D5DB',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 4
-            }}
-            className="desktop-only"
+
+          {/* Logo & Brand Name */}
+          <div
+            onClick={() => nav('home')}
+            style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer' }}
+            role="button"
+            tabIndex={0}
           >
-            <span>📋 Swiv Kòmann</span>
-          </button>
-          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
+            <img
+              src="/logo.png"
+              alt="Delivery Lakay"
+              style={{ height: 36, width: 'auto', objectFit: 'contain' }}
+            />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                  DELIVERY
+                </span>
+                <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#E11D48', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                  LAKAY
+                </span>
+              </div>
+              <span style={{ fontSize: '0.5625rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+                Makèt Ayisyen · Okap
+              </span>
+            </div>
+          </div>
+
+          {/* "Vin Vandè" Pill Button */}
           <a
             href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: '#FF6000', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700 }}
-            className="desktop-only"
+            className="ma-nav-sell-pill desktop-only"
           >
-            🏪 Vin Vandè
-          </a>
-          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
-          <a
-            href="https://wa.me/50940553636"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#25D366', fontWeight: 700, textDecoration: 'none' }}
-          >
-            <IconWhatsApp size={14} color="#25D366" />
-            <span>Asistans Okap</span>
+            Vin Vandè
           </a>
         </div>
-      </div>
 
-      {/* ── Tier 2: Main Header Bar (Maket Ayisyen Brand + Search + Actions) ── */}
-      <nav style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        gap: 12,
-        padding: '10px 20px',
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E8E8E8'
-      }}>
-        {/* Left: Brand Logo */}
-        <div
-          onClick={() => nav('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }}
-          role="button"
-          tabIndex={0}
-        >
-          <img
-            src="/logo.png"
-            alt="Delivery Lakay Haïti"
-            style={{ height: 38, width: 'auto', objectFit: 'contain' }}
-          />
-          <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.4px' }}>
-                Delivery Lakay
-              </span>
-              <span style={{
-                background: '#FFF3EB',
-                color: '#FF6000',
-                border: '1px solid rgba(255,96,0,0.3)',
-                borderRadius: 4,
-                padding: '1px 6px',
-                fontSize: '0.6875rem',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px'
-              }}>
-                HAÏTI
-              </span>
-            </div>
-            <div style={{ fontSize: '0.625rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.2px' }}>
-              Makèt & Livrezon Ofisyèl
-            </div>
-          </div>
-        </div>
-
-        {/* Category Drawer Trigger (Maket Ayisyen "☰ Kategori") */}
-        <button
-          onClick={() => setDrawerOpen(true)}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 7,
-            background: '#F8FAFC',
-            border: '1px solid #E2E8F0',
-            borderRadius: 8,
-            padding: '8px 14px',
-            fontSize: '0.8125rem',
-            fontWeight: 800,
-            color: '#1E293B',
-            cursor: 'pointer',
-            transition: 'all 0.15s ease',
-            flexShrink: 0
-          }}
-          className="desktop-only"
-        >
-          <IconMenu />
-          <span>Kategori</span>
-          <IconChevronDown />
-        </button>
-
-        {/* Central Search Bar (Expanded Full Width — All crowded buttons moved to Drawer!) */}
-        <form
-          onSubmit={handleSearchSubmit}
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            background: '#F1F5F9',
-            border: '1.5px solid #E2E8F0',
-            borderRadius: 8,
-            overflow: 'hidden',
-            transition: 'border-color 0.2s',
-            margin: '0 14px'
-          }}
-          className="desktop-only"
-        >
-          {/* Search Input */}
+        {/* Center: Search Input + Connected Search Button */}
+        <form onSubmit={handleSearchSubmit} className="ma-nav-search-form">
           <input
             type="text"
-            placeholder="Chèche manje, boutik, famasi, pwodwi lakay nan Cap-Haïtien..."
+            className="ma-nav-search-input"
+            placeholder="Chèche pwodwi, mak, kategori..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              flex: 1,
-              border: 'none',
-              background: 'transparent',
-              padding: '10px 16px',
-              fontSize: '0.875rem',
-              outline: 'none',
-              color: '#0F172A'
-            }}
           />
-
-          {/* Search Button */}
-          <button
-            type="submit"
-            style={{
-              background: '#FF6000',
-              color: '#FFFFFF',
-              border: 'none',
-              padding: '10px 22px',
-              fontWeight: 800,
-              fontSize: '0.8125rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              cursor: 'pointer',
-              transition: 'background 0.15s ease'
-            }}
-          >
+          <button type="submit" className="ma-nav-search-btn" aria-label="Chèche">
             <IconSearch />
-            <span>Rechèch</span>
           </button>
         </form>
 
-        {/* Right Action Buttons */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          {/* Shopping Cart Button */}
+        {/* Right: Account + Orders + Cart Icon */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
+          {/* User Account Button */}
           <button
-            onClick={openCart}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 7,
-              background: '#FFF3EB',
-              border: '1.5px solid rgba(255,96,0,0.3)',
-              color: '#FF6000',
-              padding: '7px 14px',
-              borderRadius: 8,
-              fontWeight: 800,
-              fontSize: '0.8125rem',
-              cursor: 'pointer',
-              position: 'relative'
-            }}
+            onClick={() => nav(user ? 'profile' : 'auth')}
+            className="ma-nav-account-btn desktop-only"
           >
-            <IconCart />
-            <span className="cart-text-label">Panyen</span>
-            {totalItems > 0 && (
-              <span style={{
-                background: '#FF6000',
-                color: '#FFFFFF',
-                borderRadius: '50%',
-                padding: '2px 7px',
-                fontSize: '0.75rem',
-                fontWeight: 900
-              }}>
-                {totalItems}
-              </span>
-            )}
+            <span className="ma-nav-sub-label">
+              Bonjou, {user ? (user.firstName || 'zanmi') : 'konekte'}
+            </span>
+            <span className="ma-nav-main-label">
+              Kont ▾
+            </span>
           </button>
 
-          {/* User Account Button (Desktop) */}
-          {user ? (
-            <button
-              onClick={() => nav('profile')}
-              className="desktop-only"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 7,
-                background: '#F8FAFC',
-                border: '1px solid #E2E8F0',
-                borderRadius: 8,
-                padding: '6px 12px',
-                cursor: 'pointer'
-              }}
-            >
-              <div style={{
-                width: 24,
-                height: 24,
-                borderRadius: '50%',
-                background: '#FF6000',
-                color: '#FFFFFF',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: '0.75rem'
-              }}>
-                {user.firstName?.[0] || 'U'}
-              </div>
-              <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#17191C' }}>
-                {user.firstName || 'Kont'}
-              </span>
-            </button>
-          ) : (
-            <button
-              onClick={() => nav('auth')}
-              className="desktop-only"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 6,
-                background: '#FF6000',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: 8,
-                padding: '7px 14px',
-                fontSize: '0.8125rem',
-                fontWeight: 800,
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(255,96,0,0.25)'
-              }}
-            >
-              <IconUser />
-              <span>Konekte</span>
-            </button>
-          )}
-
-          {/* Mobile Drawer Toggle */}
+          {/* Returns & Orders Button */}
           <button
-            onClick={() => setDrawerOpen(true)}
-            aria-label="Louvri Meni"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: '#17191C',
-              padding: 6,
-              display: 'flex'
-            }}
-            className="mobile-hamburger-btn"
+            onClick={() => nav('orders')}
+            className="ma-nav-orders-btn desktop-only"
           >
-            <IconMenu />
+            <span className="ma-nav-sub-label">Retounen</span>
+            <span className="ma-nav-main-label">& Kòmann</span>
+          </button>
+
+          {/* Cart Icon with Red Badge */}
+          <button
+            onClick={openCart}
+            className="ma-nav-cart-btn"
+            aria-label="Panyen Kòmann"
+          >
+            <IconCart />
+            <span className="ma-nav-cart-badge">{totalItems}</span>
           </button>
         </div>
       </nav>
 
-      {/* ── Tier 3: Subnav Horizontal Category Rail (Maket Ayisyen) ── */}
-      <div style={{
-        background: '#FFFFFF',
-        borderBottom: '1px solid #E2E8F0',
-        display: 'flex',
-        alignItems: 'center',
-        padding: '0 20px',
-        gap: 6,
-        overflowX: 'auto',
-        scrollbarWidth: 'none'
-      }}>
-        {CATEGORY_ITEMS.map(({ cat, label, icon }) => {
-          const isActive = activeCategory === cat && page === 'home'
-          return (
-            <button
-              key={cat}
-              onClick={() => filterCat(cat)}
-              style={{
-                background: 'none',
-                border: 'none',
-                borderBottom: isActive ? '2.5px solid #FF6000' : '2.5px solid transparent',
-                color: isActive ? '#FF6000' : '#475569',
-                fontWeight: isActive ? 800 : 600,
-                fontSize: '0.8125rem',
-                padding: '9px 12px',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 6,
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <span>{icon}</span>
-              <span>{label}</span>
-            </button>
-          )
-        })}
+      {/* ── Tier 2: Subnav Strip (Solid Black Bar #000000 1:1 Maket Ayisyen) ── */}
+      <div className="ma-subnav-bar">
+        <div className="ma-subnav-inner">
+          <button
+            className={`ma-subnav-link ${activeCategory === 'ALL' && page === 'home' ? 'active' : ''}`}
+            onClick={() => filterCat('ALL')}
+          >
+            Pwodwi Tout
+          </button>
 
-        {/* Quick Link: Ofri Flash */}
-        <button
-          onClick={() => {
-            if (page !== 'home') onNavigate('home')
-            setTimeout(() => {
-              document.getElementById('flash-offers')?.scrollIntoView({ behavior: 'smooth' })
-            }, 100)
-          }}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#FF6000',
-            fontWeight: 800,
-            fontSize: '0.8125rem',
-            padding: '9px 12px',
-            cursor: 'pointer',
-            whiteSpace: 'nowrap',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 5
-          }}
-        >
-          <span>⚡ Ofri Flash</span>
-        </button>
+          <button
+            className="ma-subnav-link"
+            onClick={() => {
+              if (page !== 'home') nav('home')
+              setTimeout(() => {
+                document.getElementById('stores-section')?.scrollIntoView({ behavior: 'smooth' })
+              }, 100)
+            }}
+          >
+            Boutik yo
+          </button>
 
-        {/* Quick Link: Kat Kado */}
-        <a
-          href="https://wa.me/50940553636?text=Mwen%20vle%20voye%20yon%20Kat%20Kado%20bay%20fanmi%20m"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            color: '#64748B',
-            fontWeight: 600,
-            fontSize: '0.8125rem',
-            padding: '9px 12px',
-            textDecoration: 'none',
-            whiteSpace: 'nowrap',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 5
-          }}
-        >
-          <span>🎁 Kat Kado</span>
-        </a>
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20yon%20Kat%20Kado%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ma-subnav-link"
+          >
+            🎁 Kat Kado
+          </a>
+
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20envite%20zanmi%20m%20sou%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ma-subnav-link"
+          >
+            🤝 Envite Zanmi
+          </a>
+
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20vann%20sou%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ma-subnav-link"
+          >
+            Vann sou Maket
+          </a>
+
+          <button
+            className="ma-subnav-link"
+            onClick={() => nav('orders')}
+          >
+            Swiv Kòmann
+          </button>
+
+          <button
+            className="ma-subnav-link"
+            onClick={() => setDrawerOpen(true)}
+          >
+            📍 Zòn: {selectedZone} ▾
+          </button>
+
+          <a
+            href="#footer-info"
+            onClick={(e) => {
+              e.preventDefault()
+              document.getElementById('footer-info')?.scrollIntoView({ behavior: 'smooth' })
+            }}
+            className="ma-subnav-link"
+          >
+            Kiyès Nou Ye
+          </a>
+
+          <a
+            href="https://wa.me/50940553636?text=Bonjou%20mwen%20bezwen%20èd"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ma-subnav-link"
+          >
+            Èd
+          </a>
+        </div>
       </div>
 
       {/* ── Slide-Out Category Drawer (Maket Ayisyen Pattern) ── */}

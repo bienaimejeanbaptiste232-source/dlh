@@ -137,39 +137,31 @@ const CATEGORY_ITEMS = [
   { key: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
 ]
 
-// ── Hero Promotional Slides (Piblisite Ofisyèl Delivery Lakay - DLH) ────
+// ── Hero Promotional Slides (Maket Ayisyen 1:1 Reference) ────
 const HERO_SLIDES = [
   {
-    tag: '🛵 DELIVERY LAKAY HAÏTI (DLH)',
-    title: 'Kousye Moto Rapid devan Baryè w nan Cap-Haïtien',
-    desc: 'Kòmande manje cho nan pi bon restoran, griyad ak fritay Okap. Kousye nou yo livre dirèk devan baryè w anndan 20-30 minit.',
-    img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=1400&q=80',
+    tag: 'PWOMOSYON',
+    title: 'BIZNIS OU SE PA NOU',
+    desc: 'Lanse, vann epi livre pwodwi w yo bay dè milye kliyan nan tout vil Okap ak tout katye yo.',
+    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80',
     filter: 'ALL',
-    cta: 'Kòmanse Kòmande →'
+    cta: 'Wè plis →'
   },
   {
-    tag: '💳 PEMAN FASIL & SANS TÈT CHAJE',
-    title: 'Peye ak MonCash, Natcash oswa Kach sou Livrezon',
-    desc: 'Pa bezwen kat kredi. Kòmande fasil sou sit la epi peye lè kousye a rive devan pòt ou nan tout katye nan Cap-Haïtien.',
-    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1400&q=80',
+    tag: 'LIVREZON OKAP',
+    title: 'LIVREZON SOU TOUT VIL OKAP',
+    desc: 'Kousye moto rapid devan baryè w anndan 20-30 minit. Manje cho, makèt ak pwodwi famasi.',
+    img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=1200&q=80',
     filter: 'ALL',
-    cta: 'Eksplore Meni Yo →'
+    cta: 'Wè plis →'
   },
   {
-    tag: '🛒 DLH MAKÈT & MEDIKAMAN 7/7',
-    title: 'Pwovizyon & Famasi Lakay Ou San Deplase',
-    desc: 'Sipèmache, dlo trete, bwason fre ak medikaman ijan nan famasi lannwit — livrezon rapid nan tout Cap-Haïtien.',
-    img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80',
-    filter: 'SUPERMARKET',
-    cta: 'Fè Pwovizyon Kounye a →'
-  },
-  {
-    tag: '📦 DLH KAGO & KOLI EKSPRÈS',
-    title: 'Voye ak Resevwa Pake nan Tout Zòn Okap',
-    desc: 'Transfè koli, komisyon ak dokiman ijan soti nan yon katye ale nan yon lòt. Sèvis serye ak swivi an dirèk.',
-    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1400&q=80',
+    tag: 'PEMAN FASIL',
+    title: 'MONCASH, NATCASH & KACH',
+    desc: 'Peye an sekirite dirèk sou telefòn ou oswa lè kousye a livre koli a nan men w.',
+    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1200&q=80',
     filter: 'ALL',
-    cta: 'Kòmande yon Kousye →'
+    cta: 'Wè plis →'
   }
 ]
 
@@ -904,23 +896,24 @@ export default function HomePage({
   // ══════════════════════════════════════════════════════════════
   return (
     <div className="page" style={{ maxWidth: 1180, margin: '0 auto', padding: '16px 20px 48px' }}>
-      {/* ── 1. Hero Panoramic Banner: Delivery Lakay (DLH) Promosyon ── */}
-      <section className="ma-hero-top" aria-label="Pwomosyon Delivery Lakay">
-        {/* Full-Width Panoramic Carousel */}
-        <div className="ma-slider">
+      {/* ── 1. Hero 2-Card Split Layout (1:1 Maket Ayisyen Reference) ── */}
+      <section className="ma-hero-maket" aria-label="Pwomosyon & Vandè Makèt Ayisyen">
+        {/* Left Card: Promo Slider Card (~70% width) */}
+        <div className="ma-hero-slider-card">
           {HERO_SLIDES.map((slide, idx) => (
             <div
               key={idx}
-              className={`ma-slide ${idx === currentSlide ? 'active' : ''}`}
+              className={`ma-hero-slide-item ${idx === currentSlide ? 'active' : ''}`}
               style={{ backgroundImage: `url(${slide.img})` }}
             >
-              <div className="ma-slide-overlay" />
-              <div className="ma-slide-body">
-                <span className="ma-slide-tag">{slide.tag}</span>
-                <h2 className="ma-slide-title">{slide.title}</h2>
-                <p className="ma-slide-desc">{slide.desc}</p>
+              <div className="ma-hero-slide-overlay" />
+              <div className="ma-hero-slide-content">
+                <span className="ma-hero-promo-badge">
+                  🏷️ {slide.tag}
+                </span>
+                <h1 className="ma-hero-slide-headline">{slide.title}</h1>
                 <button
-                  className="ma-slide-cta"
+                  className="ma-hero-slide-cta-pill"
                   onClick={() => {
                     if (slide.filter !== 'ALL') {
                       setFilterType(slide.filter)
@@ -929,27 +922,54 @@ export default function HomePage({
                     listRef.current?.scrollIntoView({ behavior: 'smooth' })
                   }}
                 >
-                  <span>{slide.cta}</span>
+                  <span>{slide.cta || 'Wè plis →'}</span>
                 </button>
               </div>
             </div>
           ))}
 
-          {/* Slider Arrows */}
-          <div className="ma-slider-nav">
-            <button className="ma-nav-btn" onClick={prevSlide} aria-label="Anvan">‹</button>
-            <button className="ma-nav-btn" onClick={nextSlide} aria-label="Apre">›</button>
-          </div>
+          {/* Left / Right Circular Arrow Buttons ‹ and › */}
+          <button className="ma-hero-arrow-btn left" onClick={prevSlide} aria-label="Anvan">‹</button>
+          <button className="ma-hero-arrow-btn right" onClick={nextSlide} aria-label="Apre">›</button>
 
-          {/* Slider Dots */}
-          <div className="ma-slider-dots">
+          {/* Slider Pagination (Active pill dash + round dots) */}
+          <div className="ma-hero-dots-wrap">
             {HERO_SLIDES.map((_, idx) => (
               <span
                 key={idx}
-                className={`ma-dot ${idx === currentSlide ? 'active' : ''}`}
+                className={`ma-hero-dot ${idx === currentSlide ? 'active' : ''}`}
                 onClick={() => setCurrentSlide(idx)}
               />
             ))}
+          </div>
+        </div>
+
+        {/* Right Card: Seller Card ("Vin vandè sou Maket") (~30% width) */}
+        <div className="ma-hero-seller-card">
+          <div className="ma-seller-icon-circle">
+            <IconStore />
+          </div>
+          <span className="ma-seller-tag-pill">POU VANDÈ</span>
+          <h2 className="ma-seller-card-title">Vin vandè sou Delivery Lakay</h2>
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="ma-seller-card-cta-btn"
+          >
+            Vin Vandè →
+          </a>
+
+          {/* Bottom Chat / Help Bubble (Exact Maket Ayisyen Widget) */}
+          <div className="ma-seller-bottom-widget">
+            <a
+              href="https://wa.me/50940553636?text=Bonjou%20mwen%20bezwen%20ede"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ma-seller-chat-bubble"
+            >
+              <span>How can we help? · Kijan nou ka ede w?</span>
+            </a>
           </div>
         </div>
       </section>
