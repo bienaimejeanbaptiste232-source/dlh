@@ -70,6 +70,8 @@ export interface Merchant {
   phone: string
   logoUrl?: string
   bannerUrl?: string
+  description?: string
+  openingHours?: string
   isOpen: boolean
   isVerified: boolean
   avgPrepTimeMinutes: number
@@ -89,6 +91,7 @@ export interface Product {
   preparationTimeMinutes?: number
   currency?: string
   category?: { name: string } | null
+  merchant?: { name: string; type?: string; address?: string } | null
 }
 
 // ── Merchants — read directly from Supabase (mirrors mobile app) ─

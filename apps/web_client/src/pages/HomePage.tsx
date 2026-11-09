@@ -62,6 +62,13 @@ const IconStore = () => (
   </svg>
 )
 
+const IconMapPin = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+)
+
 // ─── Helpers ──────────────────────────────────────────────────
 const formatHTG = (n: number) => `${Math.round(n).toLocaleString('fr-HT')} HTG`
 
@@ -130,31 +137,39 @@ const CATEGORY_ITEMS = [
   { key: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
 ]
 
-// ── Hero Promotional Slides ─────────────────────────────────────
+// ── Hero Promotional Slides (Piblisite Ofisyèl Delivery Lakay - DLH) ────
 const HERO_SLIDES = [
   {
-    tag: '🇭🇹 Delivery Lakay',
-    title: 'Pi gwo mache ak livrezon anliy ann Ayiti.',
-    desc: 'Kòmande manje cho, pwovizyon, medikaman ak pwodwi lokal — livrezon rapid nan tout Cap-Haïtien ak tout zòn yo.',
-    img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1200&q=80',
+    tag: '🛵 DELIVERY LAKAY HAÏTI (DLH)',
+    title: 'Kousye Moto Rapid devan Baryè w nan Cap-Haïtien',
+    desc: 'Kòmande manje cho nan pi bon restoran, griyad ak fritay Okap. Kousye nou yo livre dirèk devan baryè w anndan 20-30 minit.',
+    img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=1400&q=80',
     filter: 'ALL',
     cta: 'Kòmanse Kòmande →'
   },
   {
-    tag: 'Restoran & Gastronomi',
-    title: 'Pi bon tab Okap delivre cho devan pòt ou.',
-    desc: 'Griyad, diri djon-djon, pitza, fritay ak espesyalite kreyòl pare nan 20-30 minit.',
-    img: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
-    filter: 'RESTAURANT',
-    cta: 'Wè Meni Restoran Yo →'
+    tag: '💳 PEMAN FASIL & SANS TÈT CHAJE',
+    title: 'Peye ak MonCash, Natcash oswa Kach sou Livrezon',
+    desc: 'Pa bezwen kat kredi. Kòmande fasil sou sit la epi peye lè kousye a rive devan pòt ou nan tout katye nan Cap-Haïtien.',
+    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1400&q=80',
+    filter: 'ALL',
+    cta: 'Eksplore Meni Yo →'
   },
   {
-    tag: 'Sipèmache & Pwovizyon',
-    title: 'Tout pwovizyon lakay ou san deplase.',
-    desc: 'Episri, bwason, dlo trete ak tout nesesite kay la delivre dirèk devan baryè w.',
-    img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1200&q=80',
+    tag: '🛒 DLH MAKÈT & MEDIKAMAN 7/7',
+    title: 'Pwovizyon & Famasi Lakay Ou San Deplase',
+    desc: 'Sipèmache, dlo trete, bwason fre ak medikaman ijan nan famasi lannwit — livrezon rapid nan tout Cap-Haïtien.',
+    img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80',
     filter: 'SUPERMARKET',
     cta: 'Fè Pwovizyon Kounye a →'
+  },
+  {
+    tag: '📦 DLH KAGO & KOLI EKSPRÈS',
+    title: 'Voye ak Resevwa Pake nan Tout Zòn Okap',
+    desc: 'Transfè koli, komisyon ak dokiman ijan soti nan yon katye ale nan yon lòt. Sèvis serye ak swivi an dirèk.',
+    img: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1400&q=80',
+    filter: 'ALL',
+    cta: 'Kòmande yon Kousye →'
   }
 ]
 
@@ -204,13 +219,28 @@ export default function HomePage({
   const [storeProducts, setStoreProducts] = useState<Product[]>([])
   const [storeProdLoading, setStoreProdLoading] = useState(false)
   const [activeMenuCat, setActiveMenuCat] = useState('Tout')
-  const [previewProduct, setPreviewProduct] = useState<{ product: Product; img: string } | null>(null)
+
+  // Global Product Preview Modal State (Full description, no image overflow)
+  const [previewProduct, setPreviewProduct] = useState<{
+    product: Product
+    img: string
+    storeName: string
+    merchantId?: string
+  } | null>(null)
+  const [clickedId, setClickedId] = useState<string | null>(null)
 
   // Slider State
   const [currentSlide, setCurrentSlide] = useState(0)
   const sliderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
+  const flashRailRef = useRef<HTMLDivElement>(null)
   const countdown = useFlashCountdown()
+
+  const scrollFlashRail = (dir: 'left' | 'right') => {
+    if (flashRailRef.current) {
+      flashRailRef.current.scrollBy({ left: dir === 'left' ? -260 : 260, behavior: 'smooth' })
+    }
+  }
 
   // ── Sync initial filter ───────────────────────────────────────
   useEffect(() => {
@@ -332,8 +362,18 @@ export default function HomePage({
 
   // ── Popular / Trending Products (from allProducts) ───────────
   const trendingProducts = useMemo(() => {
-    return allProducts.slice(0, 8)
+    return allProducts.slice(0, 10)
   }, [allProducts])
+
+  // Duplicated for seamless infinite marquee scrolling (Right to Left)
+  const loopedTrendingProducts = useMemo(() => {
+    if (trendingProducts.length === 0) return []
+    let list = [...trendingProducts]
+    while (list.length < 8) {
+      list = [...list, ...trendingProducts]
+    }
+    return [...list, ...list]
+  }, [trendingProducts])
 
   // ── Flash Deal Products (simulated discount & progress) ───────
   const flashProducts = useMemo(() => {
@@ -345,7 +385,15 @@ export default function HomePage({
     }))
   }, [allProducts])
 
-  // ── Cart helper ───────────────────────────────────────────────
+  // ── Find merchant name for a product ──────────────────────────
+  const getStoreNameForProduct = (prod: Product): string => {
+    if (selectedMerchant) return selectedMerchant.name
+    if (prod.merchant?.name) return prod.merchant.name
+    const found = merchants.find(m => m.id === prod.merchantId)
+    return found ? found.name : 'Delivery Lakay'
+  }
+
+  // ── Cart helpers ──────────────────────────────────────────────
   const getQty = (prodId: string) => {
     const item = items.find(i => i.id === prodId)
     return item ? item.quantity : 0
@@ -364,8 +412,34 @@ export default function HomePage({
     showToast(`Ajoute nan panyen: ${product.name}`, 'success')
   }
 
+  // ── Open Product Modal ────────────────────────────────────────
+  const openProductModal = (product: Product, storeName?: string) => {
+    setClickedId(product.id)
+    setTimeout(() => setClickedId(null), 400)
+    const sName = storeName || getStoreNameForProduct(product)
+    const img = getProductImage(product, selectedMerchant?.type || '')
+    setPreviewProduct({
+      product,
+      img,
+      storeName: sName,
+      merchantId: product.merchantId || selectedMerchant?.id
+    })
+  }
+
+  // ── Select Store from Modal or Card ───────────────────────────
+  const handleSelectStoreById = (storeId?: string) => {
+    if (!storeId) return
+    const found = merchants.find(m => m.id === storeId)
+    if (found) {
+      setPreviewProduct(null)
+      setSelectedMerchant(found)
+      onSelectStore?.(found.id)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
   // ══════════════════════════════════════════════════════════════
-  // VIEW: STORE DETAIL / MENU VIEW (When a merchant is opened)
+  // VIEW: STORE DETAIL / MENU VIEW (When a merchant is clicked)
   // ══════════════════════════════════════════════════════════════
   if (selectedMerchant) {
     const banner = getMerchantBanner(selectedMerchant)
@@ -382,8 +456,11 @@ export default function HomePage({
       ? storeProducts
       : storeProducts.filter(p => (p.category?.name || 'Meni Jeneral') === activeMenuCat)
 
+    const storeDesc = selectedMerchant.description ||
+      `Byenvini nan ${selectedMerchant.name}! Nou ofri pi bon chwa nan ${meta.label.toLowerCase()} nan zòn Cap-Haïtien. Tout pwodwi nou yo prepare fre ak bon jan kalite pou delivre rapid devan pòt ou.`
+
     return (
-      <div className="page" style={{ maxWidth: 1180, margin: '0 auto', padding: '16px 20px 40px' }}>
+      <div className="page" style={{ maxWidth: 1180, margin: '0 auto', padding: '16px 20px 48px' }}>
         {/* Back Button */}
         <button
           onClick={() => {
@@ -403,92 +480,121 @@ export default function HomePage({
             color: '#1E293B',
             cursor: 'pointer',
             marginBottom: 16,
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            transition: 'all 0.15s ease'
           }}
         >
           <IconArrowLeft />
-          <span>Retounen nan Mache a</span>
+          <span>← Retounen nan Tout Boutik Yo</span>
         </button>
 
-        {/* Store Header Banner */}
-        <div style={{
-          position: 'relative',
-          borderRadius: 16,
-          overflow: 'hidden',
-          marginBottom: 24,
-          boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
-          border: '1px solid #E2E8F0'
-        }}>
-          <div style={{ height: 220, position: 'relative' }}>
+        {/* ── STORE HEADER CARD (Zero Image Overflow / Clean Separation) ── */}
+        <div className="ma-store-header-card">
+          {/* Banner Image Container */}
+          <div className="ma-store-banner-wrap">
             <img
               src={banner}
               alt={selectedMerchant.name}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80' }}
+              className="ma-store-banner-img"
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80'
+              }}
             />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 30%, rgba(10,25,47,0.88) 100%)' }} />
+            {/* Overlay Badges */}
+            <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 8 }}>
+              <span style={{
+                background: selectedMerchant.isOpen ? '#059669' : '#475569',
+                color: '#FFFFFF',
+                fontSize: '0.6875rem',
+                fontWeight: 800,
+                padding: '4px 10px',
+                borderRadius: 6,
+                textTransform: 'uppercase',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
+              }}>
+                {selectedMerchant.isOpen ? '● Ouvè Kounye a' : 'Fèmen pou Kounye a'}
+              </span>
+              <span style={{
+                background: 'rgba(15, 23, 42, 0.85)',
+                color: '#FFFFFF',
+                fontSize: '0.6875rem',
+                fontWeight: 700,
+                padding: '4px 10px',
+                borderRadius: 6,
+                backdropFilter: 'blur(4px)'
+              }}>
+                {meta.label}
+              </span>
+            </div>
           </div>
 
-          <div style={{
-            position: 'absolute',
-            bottom: 20,
-            left: 24,
-            right: 24,
-            display: 'flex',
-            alignItems: 'flex-end',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 16
-          }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                <span style={{
-                  background: selectedMerchant.isOpen ? '#059669' : '#475569',
-                  color: '#FFFFFF',
-                  fontSize: '0.6875rem',
-                  fontWeight: 800,
-                  padding: '3px 8px',
-                  borderRadius: 5,
-                  textTransform: 'uppercase'
-                }}>
-                  {selectedMerchant.isOpen ? '● Ouvè Kounye a' : 'Fèmen'}
-                </span>
-                <span style={{ background: 'rgba(255,255,255,0.2)', color: '#FFFFFF', fontSize: '0.6875rem', fontWeight: 700, padding: '3px 8px', borderRadius: 5 }}>
-                  {meta.label}
-                </span>
+          {/* Store Info Content Section (Proper padding, zero text spill) */}
+          <div className="ma-store-info-box">
+            <div className="ma-store-title-row">
+              <div>
+                <h1 className="ma-store-name">{selectedMerchant.name}</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                  <IconStar />
+                  <span style={{ fontWeight: 800, color: '#0F172A', fontSize: '0.875rem' }}>
+                    {selectedMerchant.rating ? selectedMerchant.rating.toFixed(1) : '4.9'}
+                  </span>
+                  <span style={{ color: '#64748B', fontSize: '0.75rem' }}>
+                    (Boutik Verifye pa Delivery Lakay)
+                  </span>
+                </div>
               </div>
-              <h1 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#FFFFFF', margin: 0, letterSpacing: '-0.5px' }}>
-                {selectedMerchant.name}
-              </h1>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#CBD5E1', fontSize: '0.8125rem', marginTop: 4 }}>
-                {selectedMerchant.address && <span>📍 {selectedMerchant.address}</span>}
-                <span>⏱ 25–35 min</span>
-                <span>🛵 Livrezon 150 HTG</span>
-              </div>
+
+              {selectedMerchant.phone && (
+                <a
+                  href={`https://wa.me/${selectedMerchant.phone.replace(/\D/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    background: '#25D366',
+                    color: '#FFFFFF',
+                    borderRadius: 8,
+                    padding: '8px 16px',
+                    fontSize: '0.8125rem',
+                    fontWeight: 800,
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 6,
+                    boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
+                  }}
+                >
+                  <span>💬 WhatsApp Boutik la</span>
+                </a>
+              )}
             </div>
 
-            {selectedMerchant.phone && (
-              <a
-                href={`https://wa.me/${selectedMerchant.phone.replace(/\D/g, '')}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  background: '#25D366',
-                  color: '#FFFFFF',
-                  borderRadius: 8,
-                  padding: '8px 16px',
-                  fontSize: '0.8125rem',
-                  fontWeight: 800,
-                  textDecoration: 'none',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)'
-                }}
-              >
-                <span>Kontakte Vandè a</span>
-              </a>
-            )}
+            {/* Full Store Description */}
+            <div className="ma-store-desc-box">
+              <strong style={{ display: 'block', color: '#0F172A', fontSize: '0.8125rem', marginBottom: 4 }}>
+                Enfòmasyon & Deskripsyon Boutik la:
+              </strong>
+              <span>{storeDesc}</span>
+            </div>
+
+            {/* Key Facts Strip */}
+            <div className="ma-store-meta-grid">
+              {selectedMerchant.address && (
+                <span className="ma-store-meta-item">
+                  <IconMapPin />
+                  <span>{selectedMerchant.address}</span>
+                </span>
+              )}
+              <span className="ma-store-meta-item">
+                <IconClock />
+                <span>Preparasyon: {selectedMerchant.avgPrepTimeMinutes || 25}–{(selectedMerchant.avgPrepTimeMinutes || 25) + 15} min</span>
+              </span>
+              <span className="ma-store-meta-item" style={{ color: '#FF6000', fontWeight: 800 }}>
+                🛵 Livrezon 150 HTG nan tout Cap-Haïtien
+              </span>
+              <span className="ma-store-meta-item">
+                💳 MonCash, Natcash & Espès
+              </span>
+            </div>
           </div>
         </div>
 
@@ -519,10 +625,17 @@ export default function HomePage({
         {/* Menu Items Grid */}
         {storeProdLoading ? (
           <div style={{ textAlign: 'center', padding: '60px 0', color: '#64748B' }}>
-            Chaje meni an...
+            Chaje meni ak pwodwi yo...
           </div>
         ) : displayedProducts.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: '#64748B' }}>
+          <div style={{
+            background: '#FFFFFF',
+            border: '1px solid #E2E8F0',
+            borderRadius: 14,
+            padding: '48px 20px',
+            textAlign: 'center',
+            color: '#64748B'
+          }}>
             Pa gen atik disponib nan kategori sa a pou kounye a.
           </div>
         ) : (
@@ -531,23 +644,44 @@ export default function HomePage({
               const img = getProductImage(p, selectedMerchant.type)
               const qty = getQty(p.id)
               return (
-                <div key={p.id} className="ma-pc">
-                  <div className="ma-pc-media" onClick={() => setPreviewProduct({ product: p, img })}>
+                <div
+                  key={p.id}
+                  className={`ma-pc ${clickedId === p.id ? 'is-clicked' : ''}`}
+                  onClick={() => openProductModal(p, selectedMerchant.name)}
+                >
+                  <div
+                    className="ma-pc-media"
+                  >
                     <img src={img} alt={p.name} className="ma-pc-img" />
-                    <span className="ma-pc-badge">{selectedMerchant.name.slice(0, 16)}</span>
+                    <span className="ma-pc-badge">Detay</span>
                   </div>
                   <div className="ma-pc-body">
-                    <div className="ma-pc-store">{p.category?.name || meta.label}</div>
-                    <div className="ma-pc-title" onClick={() => setPreviewProduct({ product: p, img })}>{p.name}</div>
+                    <div
+                      className="ma-pc-title"
+                    >
+                      {p.name}
+                    </div>
                     {p.description && (
-                      <p style={{ fontSize: '0.75rem', color: '#64748B', margin: '0 0 8px 0', lineClamp: 2, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                      <p style={{
+                        fontSize: '0.75rem',
+                        color: '#64748B',
+                        margin: '0 0 8px 0',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                        overflow: 'hidden',
+                        lineHeight: 1.4
+                      }}>
                         {p.description}
                       </p>
                     )}
                     <div className="ma-pc-foot">
                       <div className="ma-pc-price">{formatHTG(p.price)}</div>
                       {qty > 0 ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF3EB', borderRadius: 8, padding: '3px 6px', border: '1px solid #FF6000' }}>
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF3EB', borderRadius: 8, padding: '3px 6px', border: '1px solid #FF6000' }}
+                          onClick={e => e.stopPropagation()}
+                        >
                           <button
                             onClick={() => updateQty(p.id, qty - 1)}
                             style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', alignItems: 'center' }}
@@ -567,7 +701,10 @@ export default function HomePage({
                       ) : (
                         <button
                           className="ma-pc-btn"
-                          onClick={() => handleAddToCart(p, selectedMerchant.name)}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleAddToCart(p, selectedMerchant.name)
+                          }}
                         >
                           <IconPlus />
                           <span>Ajoute</span>
@@ -581,77 +718,183 @@ export default function HomePage({
           </div>
         )}
 
-        {/* Product Preview Modal */}
-        {previewProduct && (
-          <div
+        {/* Global Product Preview Modal rendered below */}
+        {renderProductModal()}
+      </div>
+    )
+  }
+
+  // ── Render Global Product Modal ───────────────────────────────
+  function renderProductModal() {
+    if (!previewProduct) return null
+    const { product, img, storeName, merchantId } = previewProduct
+    const qty = getQty(product.id)
+    const effectiveQty = qty > 0 ? qty : 1
+    const totalItemPrice = product.price * effectiveQty
+
+    const productFullDesc = product.description ||
+      `Atik bon jan kalite espesyal ${product.name} prepare pa patnè nou an "${storeName}" nan Cap-Haïtien. Tout engredyan yo chwazi ak swen pou garanti fraîcheur ak gou otantik. Kòmande li kounye a pou livrezon dirèk devan baryè w.`
+
+    return (
+      <div
+        className="product-modal-backdrop"
+        onClick={() => setPreviewProduct(null)}
+      >
+        <div
+          className="product-modal-card"
+          onClick={e => e.stopPropagation()}
+        >
+          {/* Close Button */}
+          <button
+            className="product-modal-close"
             onClick={() => setPreviewProduct(null)}
-            style={{
-              position: 'fixed',
-              inset: 0,
-              background: 'rgba(0,0,0,0.6)',
-              zIndex: 9999,
+            aria-label="Fèmen"
+          >
+            ✕
+          </button>
+
+          {/* Contained Image Frame (Zero Overflow) */}
+          <div className="ma-prod-modal-wrap">
+            <img
+              src={img}
+              alt={product.name}
+              className="ma-prod-modal-img"
+            />
+            {product.category?.name && (
+              <span style={{
+                position: 'absolute',
+                top: 14,
+                left: 14,
+                background: '#FF6000',
+                color: '#FFFFFF',
+                fontSize: '0.6875rem',
+                fontWeight: 800,
+                padding: '4px 10px',
+                borderRadius: 6,
+                textTransform: 'uppercase',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
+              }}>
+                {product.category.name}
+              </span>
+            )}
+          </div>
+
+          {/* Modal Information Body */}
+          <div style={{ padding: '14px 18px' }}>
+            {/* Store link badge */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+              <span
+                onClick={() => handleSelectStoreById(merchantId)}
+                style={{
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  color: '#FF6000',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4
+                }}
+              >
+                <IconStore />
+                <span>{storeName}</span>
+                <span style={{ textDecoration: 'underline' }}>Wè boutik la →</span>
+              </span>
+
+              <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 800 }}>
+                ● Disponib
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 style={{ margin: '0 0 4px 0', fontSize: '1.0625rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.3 }}>
+              {product.name}
+            </h3>
+
+            {/* Price Row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+              <span style={{ fontSize: '1.1875rem', fontWeight: 900, color: '#0F172A' }}>
+                {formatHTG(product.price)}
+              </span>
+              <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 700 }}>
+                ● Pri transparan · Livrezon rapid Okap
+              </span>
+            </div>
+
+            {/* Clean Product Description */}
+            <p style={{
+              margin: '0 0 10px 0',
+              fontSize: '0.8125rem',
+              lineHeight: 1.45,
+              color: '#475569',
+              background: '#F8FAFC',
+              padding: '8px 12px',
+              borderRadius: 8,
+              border: '1px solid #E2E8F0'
+            }}>
+              {product.description || `Pwodwi fre ak bon kalite prepare pa ${storeName}. Disponib pou livrezon rapid nan Cap-Haïtien.`}
+            </p>
+
+            {/* Delivery / Prep Notice */}
+            <div style={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              padding: 20
-            }}
-          >
-            <div
-              onClick={e => e.stopPropagation()}
-              style={{
-                background: '#FFFFFF',
-                borderRadius: 16,
-                maxWidth: 480,
-                width: '100%',
-                overflow: 'hidden',
-                boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-              }}
-            >
-              <div style={{ height: 220, position: 'relative' }}>
-                <img src={previewProduct.img} alt={previewProduct.product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                <button
-                  onClick={() => setPreviewProduct(null)}
-                  style={{ position: 'absolute', top: 12, right: 12, width: 32, height: 32, borderRadius: '50%', background: 'rgba(0,0,0,0.6)', color: '#FFFFFF', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem' }}
-                >
-                  ✕
-                </button>
-              </div>
-              <div style={{ padding: 20 }}>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.2rem', fontWeight: 900, color: '#0F172A' }}>
-                  {previewProduct.product.name}
-                </h3>
-                <div style={{ fontSize: '1.25rem', fontWeight: 900, color: '#FF6000', marginBottom: 12 }}>
-                  {formatHTG(previewProduct.product.price)}
+              gap: 6,
+              fontSize: '0.6875rem',
+              color: '#64748B',
+              marginBottom: 14
+            }}>
+              <IconClock />
+              <span>Tan preparasyon: <strong>20–30 minit</strong></span>
+            </div>
+
+            {/* Action Bar: Quantity Controls + Add To Cart */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {qty > 0 && (
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: '#FFF3EB',
+                  border: '1.5px solid #FF6000',
+                  borderRadius: 10,
+                  padding: '6px 12px'
+                }}>
+                  <button
+                    onClick={() => updateQty(product.id, qty - 1)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex' }}
+                  >
+                    <IconMinus />
+                  </button>
+                  <span style={{ fontWeight: 900, fontSize: '0.9375rem', color: '#FF6000', minWidth: 20, textAlign: 'center' }}>
+                    {qty}
+                  </span>
+                  <button
+                    onClick={() => updateQty(product.id, qty + 1)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex' }}
+                  >
+                    <IconPlus />
+                  </button>
                 </div>
-                {previewProduct.product.description && (
-                  <p style={{ fontSize: '0.875rem', color: '#475569', lineHeight: 1.5, marginBottom: 20 }}>
-                    {previewProduct.product.description}
-                  </p>
-                )}
-                <button
-                  onClick={() => {
-                    handleAddToCart(previewProduct.product, selectedMerchant.name)
-                    setPreviewProduct(null)
-                  }}
-                  style={{
-                    width: '100%',
-                    background: '#FF6000',
-                    color: '#FFFFFF',
-                    border: 'none',
-                    borderRadius: 10,
-                    padding: '12px',
-                    fontSize: '0.9375rem',
-                    fontWeight: 800,
-                    cursor: 'pointer',
-                    boxShadow: '0 4px 14px rgba(255,96,0,0.3)'
-                  }}
-                >
-                  Ajoute nan Panyen ({formatHTG(previewProduct.product.price)})
-                </button>
-              </div>
+              )}
+
+              <button
+                onClick={() => {
+                  handleAddToCart(product, storeName)
+                  setPreviewProduct(null)
+                }}
+                className="product-modal-add-btn"
+                style={{ flex: 1 }}
+              >
+                <IconPlus />
+                <span>
+                  {qty > 0
+                    ? `Ajoute Plis (${formatHTG(totalItemPrice)})`
+                    : `Ajoute nan Panyen (${formatHTG(product.price)})`}
+                </span>
+              </button>
             </div>
           </div>
-        )}
+        </div>
       </div>
     )
   }
@@ -661,9 +904,9 @@ export default function HomePage({
   // ══════════════════════════════════════════════════════════════
   return (
     <div className="page" style={{ maxWidth: 1180, margin: '0 auto', padding: '16px 20px 48px' }}>
-      {/* ── 1. Hero Split Top: Promo Carousel + Vin Vandè Aside ── */}
-      <section className="ma-hero-top" aria-label="Pwomosyon ak Reklam">
-        {/* Left: Carousel */}
+      {/* ── 1. Hero Panoramic Banner: Delivery Lakay (DLH) Promosyon ── */}
+      <section className="ma-hero-top" aria-label="Pwomosyon Delivery Lakay">
+        {/* Full-Width Panoramic Carousel */}
         <div className="ma-slider">
           {HERO_SLIDES.map((slide, idx) => (
             <div
@@ -709,69 +952,6 @@ export default function HomePage({
             ))}
           </div>
         </div>
-
-        {/* Right: Side Column (Vin Vandè + Mini Cards) */}
-        <div className="ma-side-col">
-          {/* Vin Vandè Aside Card */}
-          <aside className="ma-sell-card">
-            <span className="ma-sell-badge">
-              <IconStore />
-              <span>Pou vandè ak komèsan</span>
-            </span>
-            <h3 className="ma-sell-title">Vin vandè sou Delivery Lakay</h3>
-            <p className="ma-sell-desc">
-              Louvri boutik ou gratis epi kòmanse vann bay dè milye kliyan ann Ayiti.
-            </p>
-            <ul className="ma-sell-list">
-              <li>
-                <IconCheck />
-                <span>Boutik ou pare nan kèk minit</span>
-              </li>
-              <li>
-                <IconCheck />
-                <span>Peman sekirize (MonCash, Natcash, Kat)</span>
-              </li>
-              <li>
-                <IconCheck />
-                <span>Kousye nou yo pran swen tout livrezon</span>
-              </li>
-            </ul>
-            <a
-              href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ma-sell-btn"
-            >
-              <span>Vin Vandè Kounye a →</span>
-            </a>
-          </aside>
-
-          {/* Mini Action Cards */}
-          <div className="ma-mini-cards">
-            <a
-              href="https://wa.me/50940553636?text=Mwen%20vle%20voye%20yon%20Kat%20Kado%20bay%20fanmi%20m"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ma-mini-card"
-            >
-              <span className="ma-mini-icon">🎁</span>
-              <strong className="ma-mini-title">Kat Kado</strong>
-              <span className="ma-mini-sub">Voye bay fanmi w</span>
-            </a>
-
-            <div
-              onClick={() => {
-                const trackInput = document.getElementById('merchant-search')
-                trackInput?.scrollIntoView({ behavior: 'smooth' })
-              }}
-              className="ma-mini-card"
-            >
-              <span className="ma-mini-icon">📦</span>
-              <strong className="ma-mini-title">Swiv Kòmann</strong>
-              <span className="ma-mini-sub">Kote koli ou ye</span>
-            </div>
-          </div>
-        </div>
       </section>
 
       {/* ── 2. Trust Ribbon (Maket Ayisyen 4 Pillars) ── */}
@@ -804,84 +984,84 @@ export default function HomePage({
             <span className="ma-trust-sub">WhatsApp dirèk Okap</span>
           </div>
         </div>
-      </section>
 
-      {/* ── 3. Achte pa Kategori (Horizontal Category Rail) ── */}
-      <section style={{ marginBottom: 32 }}>
-        <div className="ma-sec-header">
-          <h2 className="ma-sec-title">Achte pa kategori</h2>
-          <button
-            className="ma-sec-link"
-            onClick={() => {
-              setFilterType('ALL')
-              onFilterChange?.('ALL')
-            }}
-          >
-            Tout kategori →
-          </button>
-        </div>
-
-        <div className="ma-cat-rail">
-          {CATEGORY_ITEMS.map(c => {
-            const isActive = filterType === c.key
-            return (
-              <button
-                key={c.key}
-                className={`ma-cat-pill ${isActive ? 'active' : ''}`}
-                onClick={() => {
-                  setFilterType(c.key)
-                  onFilterChange?.(c.key)
-                  listRef.current?.scrollIntoView({ behavior: 'smooth' })
-                }}
-              >
-                <span className="ma-cat-pill-icon">{c.icon}</span>
-                <span>{c.label}</span>
-              </button>
-            )
-          })}
+        {/* Haitian Payment Trust Badges */}
+        <div className="ma-payment-badges-row">
+          <span className="ma-pay-badge moncash">🔴 MonCash Aksepte</span>
+          <span className="ma-pay-badge natcash">🟠 Natcash Aksepte</span>
+          <span className="ma-pay-badge cash">🟢 Peye Lè Livrezon Rive (Kach)</span>
+          <span className="ma-pay-badge card">💳 Kat Bankè Sekirize</span>
         </div>
       </section>
 
-      {/* ── 4. ⚡ Ofri Flash (Live Countdown Deals Rail) ── */}
+      {/* ── 4. ⚡ Ofri Flash (Live Countdown Deals Rail — Ultra-Clean) ── */}
       {flashProducts.length > 0 && (
         <section id="flash-offers" className="ma-flash-box" aria-label="Ofri Flash">
           <div className="ma-flash-header">
             <div className="ma-flash-title-wrap">
               <h2 className="ma-sec-title" style={{ margin: 0 }}>⚡ Ofri Flash</h2>
-              <span className="ma-flash-badge">Tan Limite</span>
+              <span className="ma-flash-badge">Rabè Espesyal</span>
             </div>
-            <div className="ma-flash-timer">
-              <span className="ma-flash-timer-dot" />
-              <span>Fini nan: {countdown}</span>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div className="ma-flash-timer">
+                <span className="ma-flash-timer-dot" />
+                <span>Fini nan: {countdown}</span>
+              </div>
+
+              {/* Smooth Scroll Navigation Arrows */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} className="desktop-only">
+                <button
+                  className="ma-rail-nav-btn"
+                  onClick={() => scrollFlashRail('left')}
+                  aria-label="Anvan"
+                >
+                  ‹
+                </button>
+                <button
+                  className="ma-rail-nav-btn"
+                  onClick={() => scrollFlashRail('right')}
+                  aria-label="Apre"
+                >
+                  ›
+                </button>
+              </div>
             </div>
           </div>
 
-          <div className="ma-flash-rail">
+          <div className="ma-flash-rail" ref={flashRailRef}>
             {flashProducts.map(fp => {
               const img = getProductImage(fp)
+              const sName = getStoreNameForProduct(fp)
+              const qty = getQty(fp.id)
               return (
                 <div
                   key={fp.id}
-                  className="ma-pc"
-                  style={{ width: 220, flexShrink: 0 }}
+                  className={`ma-pc ${clickedId === fp.id ? 'is-clicked' : ''}`}
+                  style={{ width: 160, flexShrink: 0 }}
+                  onClick={() => openProductModal(fp, sName)}
                 >
-                  <div className="ma-pc-media">
+                  <div
+                    className="ma-pc-media"
+                  >
                     <img src={img} alt={fp.name} className="ma-pc-img" />
-                    <span className="ma-pc-badge">⚡ -{fp.discount}%</span>
-                    <span className="ma-pc-discount">Flash</span>
+                    <span className="ma-pc-badge">-{fp.discount}%</span>
                   </div>
                   <div className="ma-pc-body">
-                    <div className="ma-pc-store">{fp.category?.name || 'Ofri Espesyal'}</div>
-                    <div className="ma-pc-title">{fp.name}</div>
+                    <div
+                      className="ma-pc-title"
+                    >
+                      {fp.name}
+                    </div>
 
-                    {/* Stock Progress Bar */}
-                    <div style={{ margin: '6px 0 10px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.625rem', color: '#64748B', fontWeight: 700, marginBottom: 3 }}>
-                        <span>Vann: {fp.soldPercent}%</span>
-                        <span style={{ color: '#FF6000' }}>Rete kèk</span>
+                    {/* Sleek Minimal Stock Indicator */}
+                    <div style={{ margin: '4px 0 10px' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6875rem', color: '#64748B', fontWeight: 700, marginBottom: 4 }}>
+                        <span>⚡ Rete sèlman kèk</span>
+                        <span style={{ color: '#FF6000' }}>{fp.soldPercent}% vann</span>
                       </div>
-                      <div style={{ height: 5, background: '#E2E8F0', borderRadius: 3, overflow: 'hidden' }}>
-                        <div style={{ width: `${fp.soldPercent}%`, height: '100%', background: '#FF6000', borderRadius: 3 }} />
+                      <div style={{ height: 4, background: '#F1F5F9', borderRadius: 2, overflow: 'hidden' }}>
+                        <div style={{ width: `${fp.soldPercent}%`, height: '100%', background: '#FF6000', borderRadius: 2 }} />
                       </div>
                     </div>
 
@@ -890,68 +1070,23 @@ export default function HomePage({
                         <span className="ma-pc-price">{formatHTG(fp.price)}</span>
                         <span className="ma-pc-old-price">{formatHTG(fp.oldPrice)}</span>
                       </div>
-                      <button
-                        className="ma-pc-btn"
-                        onClick={() => handleAddToCart(fp, 'Ofri Flash')}
-                      >
-                        <IconPlus />
-                        <span>Ajoute</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* ── 5. 🔥 Pi popilè kounye a (Maket Ayisyen .pc Cards) ── */}
-      {trendingProducts.length > 0 && (
-        <section style={{ marginBottom: 36 }}>
-          <div className="ma-sec-header">
-            <h2 className="ma-sec-title">🔥 Pi popilè kounye a</h2>
-            <button
-              className="ma-sec-link"
-              onClick={() => listRef.current?.scrollIntoView({ behavior: 'smooth' })}
-            >
-              Wè plis →
-            </button>
-          </div>
-
-          <div className="ma-pc-grid">
-            {trendingProducts.map(p => {
-              const img = getProductImage(p)
-              const qty = getQty(p.id)
-              return (
-                <div key={p.id} className="ma-pc">
-                  <div className="ma-pc-media">
-                    <img src={img} alt={p.name} className="ma-pc-img" />
-                    <span className="ma-pc-badge">🔥 Popilè</span>
-                  </div>
-                  <div className="ma-pc-body">
-                    <div className="ma-pc-store">{p.category?.name || 'Pwodwi Lokal'}</div>
-                    <div className="ma-pc-title">{p.name}</div>
-                    <div className="ma-pc-rating">
-                      <IconStar />
-                      <span>4.9 (120+ kòmand)</span>
-                    </div>
-                    <div className="ma-pc-foot">
-                      <div className="ma-pc-price">{formatHTG(p.price)}</div>
                       {qty > 0 ? (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF3EB', borderRadius: 8, padding: '3px 6px', border: '1px solid #FF6000' }}>
+                        <div
+                          style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#FFF3EB', borderRadius: 8, padding: '2px 5px', border: '1px solid #FF6000' }}
+                          onClick={e => e.stopPropagation()}
+                        >
                           <button
-                            onClick={() => updateQty(p.id, qty - 1)}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', alignItems: 'center' }}
+                            onClick={() => updateQty(fp.id, qty - 1)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
                           >
                             <IconMinus />
                           </button>
-                          <span style={{ fontWeight: 900, fontSize: '0.8125rem', color: '#FF6000', minWidth: 16, textAlign: 'center' }}>
+                          <span style={{ fontWeight: 900, fontSize: '0.75rem', color: '#FF6000', minWidth: 14, textAlign: 'center' }}>
                             {qty}
                           </span>
                           <button
-                            onClick={() => updateQty(p.id, qty + 1)}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', alignItems: 'center' }}
+                            onClick={() => updateQty(fp.id, qty + 1)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
                           >
                             <IconPlus />
                           </button>
@@ -959,7 +1094,10 @@ export default function HomePage({
                       ) : (
                         <button
                           className="ma-pc-btn"
-                          onClick={() => handleAddToCart(p, 'Delivery Lakay')}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleAddToCart(fp, sName)
+                          }}
                         >
                           <IconPlus />
                           <span>Ajoute</span>
@@ -970,6 +1108,121 @@ export default function HomePage({
                 </div>
               )
             })}
+          </div>
+        </section>
+      )}
+
+      {/* ── 5. 🔥 Pi popilè kounye a (Animated Smooth Marquee: Adwat pou Agoch) ── */}
+      {trendingProducts.length > 0 && (
+        <section style={{ marginBottom: 36 }}>
+          <div className="ma-sec-header">
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <h2 className="ma-sec-title">🔥 Pi popilè kounye a</h2>
+                <span style={{
+                  fontSize: '0.6875rem',
+                  fontWeight: 800,
+                  background: '#FFF3EB',
+                  color: '#FF6000',
+                  padding: '2px 8px',
+                  borderRadius: 12,
+                  letterSpacing: '0.3px'
+                }}>
+                  ● An mouvman
+                </span>
+              </div>
+              <div style={{ fontSize: '0.8125rem', color: '#64748B', marginTop: 2 }}>
+                Plat ak pwodwi ki pi popilè jodi a (pase sourit la pou kanpe li)
+              </div>
+            </div>
+            <button
+              className="ma-sec-link"
+              onClick={() => listRef.current?.scrollIntoView({ behavior: 'smooth' })}
+            >
+              Wè tout meni →
+            </button>
+          </div>
+
+          {/* Continuous Infinite Animated Marquee (Right to Left) */}
+          <div className="ma-popular-marquee-container">
+            <div className="ma-popular-marquee-track">
+              {loopedTrendingProducts.map((p, idx) => {
+                const img = getProductImage(p)
+                const qty = getQty(p.id)
+                const sName = getStoreNameForProduct(p)
+                return (
+                  <div
+                    key={`${p.id}-${idx}`}
+                    className={`ma-pc ${clickedId === p.id ? 'is-clicked' : ''}`}
+                    style={{ width: 165, flexShrink: 0 }}
+                    onClick={() => openProductModal(p, sName)}
+                  >
+                    <div
+                      className="ma-pc-media"
+                    >
+                      <img src={img} alt={p.name} className="ma-pc-img" />
+                      {/* Clean Minimal Rating Pill in Top-Right */}
+                      <div className="ma-pc-rating-pill">
+                        <IconStar />
+                        <span>4.9</span>
+                      </div>
+                    </div>
+                    <div className="ma-pc-body">
+                      <div
+                        className="ma-pc-title"
+                      >
+                        {p.name}
+                      </div>
+
+                      <div className="ma-pc-meta-row">
+                        <span>⏱ Livrezon Okap</span>
+                        <span>·</span>
+                        <span style={{ color: '#059669', fontWeight: 700 }}>Disponib</span>
+                      </div>
+
+                      <div className="ma-pc-foot">
+                        <div className="ma-pc-price-wrap">
+                          <span className="ma-pc-price">{formatHTG(p.price)}</span>
+                        </div>
+                        {qty > 0 ? (
+                          <div
+                            style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#FFF3EB', borderRadius: 8, padding: '2px 5px', border: '1px solid #FF6000' }}
+                            onClick={e => e.stopPropagation()}
+                          >
+                            <button
+                              onClick={() => updateQty(p.id, qty - 1)}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
+                            >
+                              <IconMinus />
+                            </button>
+                            <span style={{ fontWeight: 900, fontSize: '0.75rem', color: '#FF6000', minWidth: 14, textAlign: 'center' }}>
+                              {qty}
+                            </span>
+                            <button
+                              onClick={() => updateQty(p.id, qty + 1)}
+                              style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
+                            >
+                              <IconPlus />
+                            </button>
+                          </div>
+                        ) : (
+                          <button
+                            className="ma-pc-btn"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleAddToCart(p, sName)
+                            }}
+                          >
+                            <IconPlus />
+                            <span>Ajoute</span>
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           </div>
         </section>
       )}
@@ -985,43 +1238,31 @@ export default function HomePage({
           </div>
         </div>
 
-        {/* Search Bar in Catalogue */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 10,
-          background: '#FFFFFF',
-          border: '1.5px solid #E2E8F0',
-          borderRadius: 12,
-          padding: '10px 16px',
-          marginBottom: 16,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.03)'
-        }}>
-          <IconSearch />
-          <input
-            id="merchant-search"
-            type="text"
-            placeholder="Chèche yon restoran, boutik, famasi nan Cap-Haïtien..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            style={{
-              flex: 1,
-              border: 'none',
-              outline: 'none',
-              fontSize: '0.875rem',
-              color: '#0F172A',
-              background: 'transparent'
-            }}
-          />
-          {search && (
+        {/* Active Search Indicator (From Top Search) */}
+        {search && (
+          <div style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            background: '#FFF3EB',
+            border: '1px solid #FF6000',
+            borderRadius: 20,
+            padding: '4px 12px',
+            marginBottom: 14,
+            fontSize: '0.8125rem',
+            color: '#FF6000',
+            fontWeight: 700
+          }}>
+            <span>Rechèch: « {search} »</span>
             <button
               onClick={() => setSearch('')}
-              style={{ background: 'none', border: 'none', color: '#94A3B8', cursor: 'pointer', fontWeight: 800 }}
+              style={{ background: 'none', border: 'none', color: '#FF6000', cursor: 'pointer', fontWeight: 900, padding: 0 }}
+              title="Efase rechèch"
             >
               ✕
             </button>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Quick Filter Buttons (All, Open, Rating, Fast) */}
         <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 12, marginBottom: 20, scrollbarWidth: 'none' }}>
@@ -1106,6 +1347,7 @@ export default function HomePage({
                   onClick={() => {
                     setSelectedMerchant(m)
                     onSelectStore?.(m.id)
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
                   }}
                   style={{
                     background: '#FFFFFF',
@@ -1193,23 +1435,149 @@ export default function HomePage({
         )}
       </section>
 
-      {/* ── 7. Merchant Recruitment Bottom Banner (Maket Ayisyen) ── */}
-      <section className="ma-cta-banner">
-        <div className="ma-cta-content">
-          <span className="ma-cta-eyebrow">🇭🇹 Fè Kòb Ak Biznis Ou</span>
-          <h2 className="ma-cta-title">Ou gen yon boutik oswa yon restoran? Vann li!</h2>
-          <p className="ma-cta-sub">
-            Plis pase 10,000 kliyan nan Cap-Haïtien ap chèche sa w genyen. Nou jere livrezon, kousye ak peman pou ou.
-          </p>
+      {/* ── 7. ⭐ Temwayaj Kliyan Okap & Zòn Kouvri (Social Proof & Coverage) ── */}
+      <section style={{ marginBottom: 40 }}>
+        <div className="ma-sec-header">
+          <div>
+            <h2 className="ma-sec-title">⭐ Kliyan Okap yo bay avi yo</h2>
+            <div style={{ fontSize: '0.8125rem', color: '#64748B', marginTop: 2 }}>
+              Plis pase 10,000 kòmand livre ak satisfaksyon nan Nò a
+            </div>
+          </div>
+          <span style={{ fontSize: '0.8125rem', color: '#059669', fontWeight: 800 }}>
+            ★ 4.9 / 5 (850+ kòmantè)
+          </span>
         </div>
-        <a
-          href="https://wa.me/50940553636?text=Mwen%20vle%20louvri%20boutik%20mwen%20sou%20Delivery%20Lakay"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="ma-cta-btn"
-        >
-          Louvri Boutik Ou Gratis →
-        </a>
+
+        {/* 3 Review Cards */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+          gap: 16,
+          marginBottom: 20
+        }}>
+          {[
+            {
+              name: 'Patrick S.',
+              zone: 'Vertières, Okap',
+              stars: 5,
+              text: 'Manje a te rive cho anndan 25 minit! Kousye a te trè politi. Mwen te peye ak MonCash san pyès tèt chaje.',
+              avatar: 'PS',
+              bg: '#FFF3EB',
+              color: '#FF6000'
+            },
+            {
+              name: 'Marie-Ange D.',
+              zone: 'Carenage, Okap',
+              stars: 5,
+              text: 'Mwen te bezwen medikaman nan famasi ta lannwit pou pitit mwen. Livrè a te rive rapid devan baryè a. Yon vrè delivrans!',
+              avatar: 'MD',
+              bg: '#ECFDF5',
+              color: '#059669'
+            },
+            {
+              name: 'Jean-Baptiste F.',
+              zone: 'Champ de Mars, Okap',
+              stars: 5,
+              text: 'Pi bon sèvis livrezon nan vil la. Pri yo klè, pa gen frè kache, epi kòmand la rive egzakteman sa m te mande a.',
+              avatar: 'JF',
+              bg: '#EFF6FF',
+              color: '#2563EB'
+            }
+          ].map((t, idx) => (
+            <div
+              key={idx}
+              style={{
+                background: '#FFFFFF',
+                border: '1px solid #E2E8F0',
+                borderRadius: 14,
+                padding: '18px 20px',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 38,
+                    height: 38,
+                    borderRadius: '50%',
+                    background: t.bg,
+                    color: t.color,
+                    fontWeight: 900,
+                    fontSize: '0.8125rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                  }}>
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <div style={{ fontWeight: 800, fontSize: '0.875rem', color: '#0F172A' }}>{t.name}</div>
+                    <div style={{ fontSize: '0.6875rem', color: '#64748B' }}>{t.zone}</div>
+                  </div>
+                </div>
+                <div style={{ color: '#F59E0B', fontSize: '0.8125rem', fontWeight: 800 }}>
+                  {'★'.repeat(t.stars)}
+                </div>
+              </div>
+              <p style={{ margin: 0, fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, fontStyle: 'italic' }}>
+                « {t.text} »
+              </p>
+              <div style={{ marginTop: 'auto', paddingTop: 10, fontSize: '0.6875rem', color: '#059669', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <span>✓ Kliyan Verifye Okap</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Cap-Haïtien Neighborhoods Coverage Strip */}
+        <div style={{
+          background: '#F8FAFC',
+          border: '1px solid #E2E8F0',
+          borderRadius: 14,
+          padding: '16px 20px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+            <span style={{ fontWeight: 800, fontSize: '0.8125rem', color: '#0F172A' }}>
+              📍 Zòn & Katye Nou Kouvri nan Cap-Haïtien:
+            </span>
+            <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 800 }}>
+              ● Livrezon aktif 7/7
+            </span>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+            {[
+              'Sant-Vil Okap',
+              'Carenage',
+              'Rival',
+              'Barrière-Bouteille',
+              'Madeline',
+              'Vertières',
+              'Champ de Mars',
+              'Vaudreuil',
+              'Quartier Morin',
+              'Limonade',
+              'Milot'
+            ].map(zone => (
+              <span
+                key={zone}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #CBD5E1',
+                  borderRadius: 20,
+                  padding: '3px 10px',
+                  fontSize: '0.6875rem',
+                  fontWeight: 600,
+                  color: '#334155'
+                }}
+              >
+                {zone}
+              </span>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* ── 8. How It Works (4 Clean Steps) ── */}
@@ -1247,6 +1615,9 @@ export default function HomePage({
           ))}
         </div>
       </section>
+
+      {/* Global Product Preview Modal */}
+      {renderProductModal()}
     </div>
   )
 }

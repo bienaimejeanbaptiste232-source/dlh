@@ -37,3 +37,4 @@ export async function fetchProductsByMerchant(merchantId: string) {
   const { data } = await supabase.from('products').select('*').eq('merchantId', merchantId);
   return data || [];
 }
+

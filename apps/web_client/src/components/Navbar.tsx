@@ -105,7 +105,6 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
   const [selectedZone, setSelectedZone] = useState(() => {
     return (typeof window !== 'undefined' && localStorage.getItem('dlh_zone')) || 'Sant Vil'
   })
-  const [zoneOpen, setZoneOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchCategory, setSearchCategory] = useState<MerchantCategory>('ALL')
 
@@ -163,6 +162,53 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button
+            onClick={() => setDrawerOpen(true)}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#F8FAFC',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4
+            }}
+            className="desktop-only"
+          >
+            <span>📍 Zòn:</span>
+            <span style={{ color: '#FF6000' }}>{selectedZone}</span>
+          </button>
+          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
+          <button
+            onClick={() => nav('orders')}
+            style={{
+              background: 'none',
+              border: 'none',
+              color: '#D1D5DB',
+              cursor: 'pointer',
+              fontSize: '0.75rem',
+              fontWeight: 600,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 4
+            }}
+            className="desktop-only"
+          >
+            <span>📋 Swiv Kòmann</span>
+          </button>
+          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: '#FF6000', textDecoration: 'none', fontSize: '0.75rem', fontWeight: 700 }}
+            className="desktop-only"
+          >
+            🏪 Vin Vandè
+          </a>
+          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
           <a
             href="https://wa.me/50940553636"
             target="_blank"
@@ -170,10 +216,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#25D366', fontWeight: 700, textDecoration: 'none' }}
           >
             <IconWhatsApp size={14} color="#25D366" />
-            <span>Asistans: +509 40 55 36 36</span>
+            <span>Asistans Okap</span>
           </a>
-          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
-          <span style={{ color: '#E5E7EB', fontWeight: 700 }} className="desktop-only">HTG (Gdes)</span>
         </div>
       </div>
 
@@ -249,12 +293,11 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           <IconChevronDown />
         </button>
 
-        {/* Central Search Bar (Maket Ayisyen Style) */}
+        {/* Central Search Bar (Expanded Full Width — All crowded buttons moved to Drawer!) */}
         <form
           onSubmit={handleSearchSubmit}
           style={{
             flex: 1,
-            maxWidth: 580,
             display: 'flex',
             alignItems: 'center',
             background: '#F1F5F9',
@@ -262,43 +305,22 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             borderRadius: 8,
             overflow: 'hidden',
             transition: 'border-color 0.2s',
+            margin: '0 14px'
           }}
           className="desktop-only"
         >
-          {/* Category Dropdown */}
-          <select
-            value={searchCategory}
-            onChange={(e) => setSearchCategory(e.target.value as MerchantCategory)}
-            style={{
-              background: '#FFFFFF',
-              border: 'none',
-              borderRight: '1px solid #E2E8F0',
-              padding: '9px 12px',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              color: '#334155',
-              cursor: 'pointer',
-              outline: 'none',
-              maxWidth: 140
-            }}
-          >
-            {CATEGORY_ITEMS.map(c => (
-              <option key={c.cat} value={c.cat}>{c.label}</option>
-            ))}
-          </select>
-
           {/* Search Input */}
           <input
             type="text"
-            placeholder="Chèche manje, boutik, famasi, pwodwi lakay..."
+            placeholder="Chèche manje, boutik, famasi, pwodwi lakay nan Cap-Haïtien..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             style={{
               flex: 1,
               border: 'none',
               background: 'transparent',
-              padding: '9px 12px',
-              fontSize: '0.8125rem',
+              padding: '10px 16px',
+              fontSize: '0.875rem',
               outline: 'none',
               color: '#0F172A'
             }}
@@ -311,7 +333,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               background: '#FF6000',
               color: '#FFFFFF',
               border: 'none',
-              padding: '9px 16px',
+              padding: '10px 22px',
               fontWeight: 800,
               fontSize: '0.8125rem',
               display: 'flex',
@@ -326,134 +348,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           </button>
         </form>
 
-        {/* Delivery Zone Selector */}
-        <div style={{ position: 'relative' }} className="desktop-only">
-          <button
-            onClick={() => setZoneOpen(!zoneOpen)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              background: '#F8FAFC',
-              border: '1px solid #E2E8F0',
-              borderRadius: 8,
-              padding: '7px 12px',
-              cursor: 'pointer',
-              fontSize: '0.75rem',
-              fontWeight: 700,
-              color: '#334155'
-            }}
-          >
-            <span style={{ color: '#FF6000' }}>📍</span>
-            <span>{selectedZone}</span>
-            <IconChevronDown />
-          </button>
-
-          {zoneOpen && (
-            <>
-              <div
-                style={{ position: 'fixed', inset: 0, zIndex: 998 }}
-                onClick={() => setZoneOpen(false)}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 6px)',
-                  right: 0,
-                  width: 200,
-                  background: '#FFFFFF',
-                  borderRadius: 10,
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
-                  border: '1px solid #E2E8F0',
-                  zIndex: 999,
-                  padding: '6px',
-                }}
-              >
-                <div style={{ padding: '6px 10px', fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>
-                  Chwazi Zòn Livrezon
-                </div>
-                {ZONES.map(z => (
-                  <button
-                    key={z}
-                    onClick={() => {
-                      setSelectedZone(z)
-                      setZoneOpen(false)
-                      try { localStorage.setItem('dlh_zone', z) } catch {}
-                    }}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      padding: '7px 10px',
-                      border: 'none',
-                      background: selectedZone === z ? '#FFF3EB' : 'transparent',
-                      color: selectedZone === z ? '#FF6000' : '#1E293B',
-                      fontWeight: selectedZone === z ? 800 : 600,
-                      fontSize: '0.75rem',
-                      borderRadius: 6,
-                      cursor: 'pointer',
-                      textAlign: 'left'
-                    }}
-                  >
-                    <span>{z}</span>
-                    {selectedZone === z && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6000' }} />}
-                  </button>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
         {/* Right Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          {/* Vin Vandè / Boutik Mwen Button (Maket Ayisyen Signature) */}
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              background: '#0A192F',
-              color: '#FFFFFF',
-              border: '1px solid rgba(255,96,0,0.3)',
-              borderRadius: 8,
-              padding: '7px 13px',
-              fontSize: '0.8125rem',
-              fontWeight: 800,
-              textDecoration: 'none',
-              transition: 'background 0.15s ease'
-            }}
-            className="desktop-only"
-          >
-            <IconStore />
-            <span>Vin Vandè</span>
-          </a>
-
-          {/* Orders Tracking (Desktop) */}
-          <button
-            onClick={() => nav('orders')}
-            className="desktop-only"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              color: page === 'orders' ? '#FF6000' : '#334155',
-              fontWeight: 700,
-              fontSize: '0.8125rem',
-              padding: '7px 10px',
-              borderRadius: 6
-            }}
-          >
-            <IconClipboard />
-            <span>Swiv Kòmann</span>
-          </button>
-
           {/* Shopping Cart Button */}
           <button
             onClick={openCart}
@@ -673,6 +569,43 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             </div>
 
             <div className="ma-drawer-body">
+              {/* Delivery Zone Selector in Drawer */}
+              <div style={{
+                background: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                borderRadius: 10,
+                padding: '12px 14px',
+                marginBottom: 16
+              }}>
+                <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span style={{ color: '#FF6000' }}>📍</span>
+                  <span>Zòn Livrezon ou nan Okap</span>
+                </div>
+                <select
+                  value={selectedZone}
+                  onChange={(e) => {
+                    setSelectedZone(e.target.value)
+                    try { localStorage.setItem('dlh_zone', e.target.value) } catch {}
+                  }}
+                  style={{
+                    width: '100%',
+                    background: '#FFFFFF',
+                    border: '1.5px solid #CBD5E1',
+                    borderRadius: 8,
+                    padding: '8px 12px',
+                    fontSize: '0.8125rem',
+                    fontWeight: 700,
+                    color: '#0F172A',
+                    outline: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  {ZONES.map(z => (
+                    <option key={z} value={z}>{z}</option>
+                  ))}
+                </select>
+              </div>
+
               <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
                 Achte pa Kategori
               </div>

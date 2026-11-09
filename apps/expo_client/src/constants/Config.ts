@@ -21,3 +21,4 @@ export const Config = {
     accent: '#3B82F6',
   },
 };
+
