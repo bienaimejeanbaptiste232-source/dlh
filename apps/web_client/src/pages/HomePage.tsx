@@ -137,31 +137,31 @@ const CATEGORY_ITEMS = [
   { key: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
 ]
 
-// ── Hero Promotional Slides (Maket Ayisyen 1:1 Reference) ────
+// ── Hero Promotional Slides (Otantik DLH - Wot Rezolisyon) ────
 const HERO_SLIDES = [
   {
-    tag: 'PWOMOSYON',
+    tag: 'PWOMOSYON VANDÈ',
     title: 'BIZNIS OU SE PA NOU',
     desc: 'Lanse, vann epi livre pwodwi w yo bay dè milye kliyan nan tout vil Okap ak tout katye yo.',
-    img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80',
+    img: '/banners/dlh_merchant_boutique.jpg',
     filter: 'ALL',
     cta: 'Wè plis →'
   },
   {
-    tag: 'LIVREZON OKAP',
-    title: 'LIVREZON SOU TOUT VIL OKAP',
-    desc: 'Kousye moto rapid devan baryè w anndan 20-30 minit. Manje cho, makèt ak pwodwi famasi.',
-    img: 'https://images.unsplash.com/photo-1526367790999-0150786686a2?auto=format&fit=crop&w=1200&q=80',
+    tag: 'KOUSYE DLH OKAP',
+    title: 'LIVREZON SOU MOTO NAN 20 MINIT',
+    desc: 'Kousye moto rapid devan baryè w. Kòmann manje cho, makèt ak famasi delivre dirèk ak bwat DLH.',
+    img: '/banners/dlh_courier_hero.jpg',
     filter: 'ALL',
-    cta: 'Wè plis →'
+    cta: 'Kòmande Kounye a →'
   },
   {
     tag: 'PEMAN FASIL',
     title: 'MONCASH, NATCASH & KACH',
-    desc: 'Peye an sekirite dirèk sou telefòn ou oswa lè kousye a livre koli a nan men w.',
-    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1200&q=80',
+    desc: 'Peye an sekirite dirèk sou telefòn ou oswa lè kousye a livre koli a nan men w nan Cap-Haïtien.',
+    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1400&q=80',
     filter: 'ALL',
-    cta: 'Wè plis →'
+    cta: 'Eksplore Meni Yo →'
   }
 ]
 
