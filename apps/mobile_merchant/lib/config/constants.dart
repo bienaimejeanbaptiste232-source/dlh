@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class MerchantConstants {
   static const String appName = 'Delivery Lakay Machann';
-  static const String serverHost = String.fromEnvironment('SERVER_HOST', defaultValue: '192.168.43.156');
-  static const String apiBaseUrl = 'http://$serverHost:4000/api/v1';
-  static const String apiBaseUrlLocal = 'http://localhost:4000/api/v1';
+  static const String serverHost = String.fromEnvironment('SERVER_HOST', defaultValue: 'delivery-haiti-api.onrender.com');
+  static const String apiBaseUrl = 'https://$serverHost/api/v1';
+  static const String apiBaseUrlLocal = 'https://delivery-haiti-api.onrender.com/api/v1';
 
   // ─── Supabase ────────────────────────────────────────────────
   static const String supabaseUrl = 'https://xwmxgpdkmrzoraibdzrf.supabase.co';

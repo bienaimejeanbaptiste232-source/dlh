@@ -6,9 +6,9 @@ class AppConstants {
 
   // ─── API Backend NestJS ──────────────────────────────────────
   // Lè w sou menm rezo Wi-Fi ak òdinatè a, li konekte dirèkteman sou IP lokal sa a:
-  static const String serverHost = String.fromEnvironment('SERVER_HOST', defaultValue: '10.193.14.178');
-  static const String apiBaseUrl = 'http://$serverHost:4000/api/v1';
-  static const String apiBaseUrlLocal = 'http://localhost:4000/api/v1';
+  static const String serverHost = String.fromEnvironment('SERVER_HOST', defaultValue: 'delivery-haiti-api.onrender.com');
+  static const String apiBaseUrl = 'https://$serverHost/api/v1';
+  static const String apiBaseUrlLocal = 'https://delivery-haiti-api.onrender.com/api/v1';
 
   // ─── Supabase ────────────────────────────────────────────────
   static const String supabaseUrl = 'https://xwmxgpdkmrzoraibdzrf.supabase.co';
