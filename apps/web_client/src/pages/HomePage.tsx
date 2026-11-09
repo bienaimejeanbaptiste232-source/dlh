@@ -974,46 +974,6 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* ── 2. Trust Ribbon (Maket Ayisyen 4 Pillars) ── */}
-      <section className="ma-trust-strip" aria-label="Garanti Delivery Lakay">
-        <div className="ma-trust-item">
-          <div className="ma-trust-icon">🔒</div>
-          <div className="ma-trust-text">
-            <span className="ma-trust-title">Peman Sekirize</span>
-            <span className="ma-trust-sub">MonCash, Natcash & Kat</span>
-          </div>
-        </div>
-        <div className="ma-trust-item">
-          <div className="ma-trust-icon">✅</div>
-          <div className="ma-trust-text">
-            <span className="ma-trust-title">Vandè Verifye</span>
-            <span className="ma-trust-sub">Biznis lokal sètifye</span>
-          </div>
-        </div>
-        <div className="ma-trust-item">
-          <div className="ma-trust-icon">🚚</div>
-          <div className="ma-trust-text">
-            <span className="ma-trust-title">Livrezon Rapid</span>
-            <span className="ma-trust-sub">Cap-Haïtien nan kèk minit</span>
-          </div>
-        </div>
-        <div className="ma-trust-item">
-          <div className="ma-trust-icon">💬</div>
-          <div className="ma-trust-text">
-            <span className="ma-trust-title">Sipò 24/7</span>
-            <span className="ma-trust-sub">WhatsApp dirèk Okap</span>
-          </div>
-        </div>
-
-        {/* Haitian Payment Trust Badges */}
-        <div className="ma-payment-badges-row">
-          <span className="ma-pay-badge moncash">🔴 MonCash Aksepte</span>
-          <span className="ma-pay-badge natcash">🟠 Natcash Aksepte</span>
-          <span className="ma-pay-badge cash">🟢 Peye Lè Livrezon Rive (Kach)</span>
-          <span className="ma-pay-badge card">💳 Kat Bankè Sekirize</span>
-        </div>
-      </section>
-
       {/* ── 4. ⚡ Ofri Flash (Live Countdown Deals Rail — Ultra-Clean) ── */}
       {flashProducts.length > 0 && (
         <section id="flash-offers" className="ma-flash-box" aria-label="Ofri Flash">
