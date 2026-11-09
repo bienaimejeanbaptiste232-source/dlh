@@ -137,7 +137,7 @@ const CATEGORY_ITEMS = [
   { key: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
 ]
 
-// ── Hero Promotional Slides (Otantik DLH - Wot Rezolisyon) ────
+// ── Hero Promotional Slides (3 Foto Otantik DLH - Wot Rezolisyon Okap) ────
 const HERO_SLIDES = [
   {
     tag: 'PWOMOSYON VANDÈ',
@@ -156,12 +156,12 @@ const HERO_SLIDES = [
     cta: 'Kòmande Kounye a →'
   },
   {
-    tag: 'PEMAN FASIL',
-    title: 'MONCASH, NATCASH & KACH',
-    desc: 'Peye an sekirite dirèk sou telefòn ou oswa lè kousye a livre koli a nan men w nan Cap-Haïtien.',
-    img: 'https://images.unsplash.com/photo-1556742049-0a67e557224f?auto=format&fit=crop&w=1400&q=80',
+    tag: 'KAP-AYISYEN 100% LAKAY',
+    title: 'LIVREZON TOUT KOTE NAN VIL OKAP',
+    desc: 'Depi sou Plas Dam devan Katedral rive nan tout katye Okap, kousye DLH rive jwenn ou rapid devan pòt ou.',
+    img: '/banners/dlh_cathedrale_cap.jpg',
     filter: 'ALL',
-    cta: 'Eksplore Meni Yo →'
+    cta: 'Eksplore Sit La →'
   }
 ]
 
