@@ -123,6 +123,18 @@ export async function fetchProducts(merchantId: string): Promise<Product[]> {
   }
 }
 
+// ── All Products for Trending & Marketplace Showcases ───────────
+export async function fetchAllProducts(limit = 24): Promise<Product[]> {
+  const url = `${SUPABASE_URL}/rest/v1/products?select=*,category:categories(name)&isAvailable=eq.true&limit=${limit}&order=name.asc`
+  try {
+    const res = await fetch(url, { headers: publicHeaders })
+    if (!res.ok) return []
+    return res.json()
+  } catch {
+    return []
+  }
+}
+
 // ── Auth (via NestJS backend) ───────────────────────────────────
 export async function apiLogin(phone: string, password: string) {
   const clean = phone.replace(/\D/g, '')

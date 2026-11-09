@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import type { MerchantCategory } from '../App'
@@ -12,9 +12,9 @@ interface NavbarProps {
   activeCategory?: MerchantCategory
 }
 
-// ── SVG Icons (Zero Emojis, Pure Crisp SVGs) ─────────────────
+// ── SVG Icons ──────────────────────────────────────────────────
 const IconCart = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" width="19" height="19">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" width="18" height="18">
     <circle cx="9" cy="21" r="1" />
     <circle cx="20" cy="21" r="1" />
     <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -42,12 +42,6 @@ const IconSearch = () => (
   </svg>
 )
 
-const IconPhone = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
-    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-  </svg>
-)
-
 const IconWhatsApp = ({ size = 15, color = 'currentColor' }: { size?: number; color?: string }) => (
   <svg viewBox="0 0 24 24" width={size} height={size} fill={color}>
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.711 1.456h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.486-8.414z"/>
@@ -55,7 +49,7 @@ const IconWhatsApp = ({ size = 15, color = 'currentColor' }: { size?: number; co
 )
 
 const IconMenu = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width="22" height="22">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width="20" height="20">
     <line x1="3" y1="12" x2="21" y2="12" />
     <line x1="3" y1="6" x2="21" y2="6" />
     <line x1="3" y1="18" x2="21" y2="18" />
@@ -63,22 +57,22 @@ const IconMenu = () => (
 )
 
 const IconX = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width="22" height="22">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width="20" height="20">
     <line x1="18" y1="6" x2="6" y2="18" />
     <line x1="6" y1="6" x2="18" y2="18" />
   </svg>
 )
 
-const IconMapPin = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width={14} height={14}>
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-    <circle cx="12" cy="10" r="3" />
+const IconChevronDown = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+    <polyline points="6 9 12 15 18 9" />
   </svg>
 )
 
-const IconChevronDown = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" width={12} height={12}>
-    <polyline points="6 9 12 15 18 9" />
+const IconStore = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+    <polyline points="9 22 9 12 15 12 15 22" />
   </svg>
 )
 
@@ -94,83 +88,106 @@ const ZONES = [
   'Bande du Nord'
 ]
 
+const CATEGORY_ITEMS: { cat: MerchantCategory; label: string; icon: string }[] = [
+  { cat: 'ALL', label: 'Tout Kategori', icon: '🛍️' },
+  { cat: 'RESTAURANT', label: 'Restoran & Bar', icon: '🍽️' },
+  { cat: 'FAST_FOOD', label: 'Fast Food & Fritay', icon: '🍗' },
+  { cat: 'SUPERMARKET', label: 'Sipèmache & Pwovizyon', icon: '🛒' },
+  { cat: 'PHARMACY', label: 'Famasi & Sante', icon: '💊' },
+  { cat: 'CONSTRUCTION', label: 'Materyo Konstriksyon', icon: '🧱' },
+  { cat: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
+]
+
 export default function Navbar({ page, onNavigate, onCategoryFilter, activeCategory = 'ALL' }: NavbarProps) {
   const { user } = useAuth()
   const { totalItems, openCart } = useCart()
-  const [menuOpen, setMenuOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedZone, setSelectedZone] = useState(() => {
     return (typeof window !== 'undefined' && localStorage.getItem('dlh_zone')) || 'Sant Vil'
   })
   const [zoneOpen, setZoneOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchCategory, setSearchCategory] = useState<MerchantCategory>('ALL')
 
   const nav = (p: NavPage) => {
     onNavigate(p)
-    setMenuOpen(false)
+    setDrawerOpen(false)
   }
 
   const filterCat = (cat: MerchantCategory) => {
     onCategoryFilter?.(cat)
-    setMenuOpen(false)
+    setDrawerOpen(false)
+    if (page !== 'home') {
+      onNavigate('home')
+    }
+  }
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (searchCategory !== 'ALL') {
+      onCategoryFilter?.(searchCategory)
+    }
+    if (page !== 'home') {
+      onNavigate('home')
+    }
+    // Dispatch search query to HomePage listener
+    window.dispatchEvent(new CustomEvent('dlh:search', { detail: { query: searchQuery } }))
+    const searchInput = document.getElementById('merchant-search') as HTMLInputElement | null
+    if (searchInput) {
+      searchInput.value = searchQuery
+      searchInput.dispatchEvent(new Event('input', { bubbles: true }))
+      searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
   }
 
   return (
-    <header className="navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#FFFFFF', boxShadow: '0 2px 10px rgba(0,0,0,0.06)' }}>
-      {/* ── Tier 1: Alibaba-Style Thin Top Bar ── */}
-      <div className="navbar-top-bar" style={{
+    <header className="navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#FFFFFF', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+      {/* ── Tier 1: Utility Announcement Bar (Maket Ayisyen Style) ── */}
+      <div style={{
         background: '#17191C',
         color: '#D1D5DB',
         fontSize: '0.75rem',
-        padding: '5px 24px',
+        padding: '5px 20px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
         borderBottom: '1px solid rgba(255,255,255,0.08)'
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#9CA3AF' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#FFFFFF', fontWeight: 600 }}>
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#00B96B' }} />
-            Livraison rapide · Cap-Haïtien & environs
+            🇭🇹 Livrezon rapid · Cap-Haïtien & Tout Zòn Yo
           </span>
-          <span style={{ color: '#4B5563' }}>|</span>
-          <span style={{ color: '#E5E7EB', fontWeight: 600 }}>Service officiel de livraison en Haïti</span>
+          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
+          <span style={{ color: '#9CA3AF' }} className="desktop-only">Peman MonCash, Natcash & Kat Bankè</span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <a
             href="https://wa.me/50940553636"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#25D366', fontWeight: 600, textDecoration: 'none' }}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: 5, color: '#25D366', fontWeight: 700, textDecoration: 'none' }}
           >
             <IconWhatsApp size={14} color="#25D366" />
-            <span>Asistans WhatsApp: +509 40 55 36 36</span>
+            <span>Asistans: +509 40 55 36 36</span>
           </a>
-          {user ? (
-            <span style={{ color: '#FF6000', fontWeight: 700, cursor: 'pointer' }} onClick={() => nav('profile')}>
-              Kliyan: {user.firstName || 'Mwen'}
-            </span>
-          ) : (
-            <span style={{ color: '#FF6000', fontWeight: 700, cursor: 'pointer' }} onClick={() => nav('auth')}>
-              Konekte / Enskri
-            </span>
-          )}
+          <span style={{ color: '#4B5563' }} className="desktop-only">|</span>
+          <span style={{ color: '#E5E7EB', fontWeight: 700 }} className="desktop-only">HTG (Gdes)</span>
         </div>
       </div>
 
-      {/* ── Tier 2: Main Brand Bar ── */}
-      <nav
-        className="navbar-main-brand-bar"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          padding: '10px 20px',
-          background: '#FFFFFF',
-          borderBottom: '1px solid #E8E8E8'
-        }}
-      >
-        {/* Brand Logo & Name */}
+      {/* ── Tier 2: Main Header Bar (Maket Ayisyen Brand + Search + Actions) ── */}
+      <nav style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 12,
+        padding: '10px 20px',
+        background: '#FFFFFF',
+        borderBottom: '1px solid #E8E8E8'
+      }}>
+        {/* Left: Brand Logo */}
         <div
           onClick={() => nav('home')}
           style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }}
@@ -184,10 +201,10 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           />
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span className="navbar-brand-name" style={{ fontSize: '1.15rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.3px' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.4px' }}>
                 Delivery Lakay
               </span>
-              <span className="navbar-brand-badge" style={{
+              <span style={{
                 background: '#FFF3EB',
                 color: '#FF6000',
                 border: '1px solid rgba(255,96,0,0.3)',
@@ -201,42 +218,137 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 HAÏTI
               </span>
             </div>
+            <div style={{ fontSize: '0.625rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.2px' }}>
+              Makèt & Livrezon Ofisyèl
+            </div>
           </div>
         </div>
 
-        {/* ── Delivery Zone Selector (UberEats / DoorDash Style) ── */}
-        <div style={{ position: 'relative' }}>
+        {/* Category Drawer Trigger (Maket Ayisyen "☰ Kategori") */}
+        <button
+          onClick={() => setDrawerOpen(true)}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 7,
+            background: '#F8FAFC',
+            border: '1px solid #E2E8F0',
+            borderRadius: 8,
+            padding: '8px 14px',
+            fontSize: '0.8125rem',
+            fontWeight: 800,
+            color: '#1E293B',
+            cursor: 'pointer',
+            transition: 'all 0.15s ease',
+            flexShrink: 0
+          }}
+          className="desktop-only"
+        >
+          <IconMenu />
+          <span>Kategori</span>
+          <IconChevronDown />
+        </button>
+
+        {/* Central Search Bar (Maket Ayisyen Style) */}
+        <form
+          onSubmit={handleSearchSubmit}
+          style={{
+            flex: 1,
+            maxWidth: 580,
+            display: 'flex',
+            alignItems: 'center',
+            background: '#F1F5F9',
+            border: '1.5px solid #E2E8F0',
+            borderRadius: 8,
+            overflow: 'hidden',
+            transition: 'border-color 0.2s',
+          }}
+          className="desktop-only"
+        >
+          {/* Category Dropdown */}
+          <select
+            value={searchCategory}
+            onChange={(e) => setSearchCategory(e.target.value as MerchantCategory)}
+            style={{
+              background: '#FFFFFF',
+              border: 'none',
+              borderRight: '1px solid #E2E8F0',
+              padding: '9px 12px',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              color: '#334155',
+              cursor: 'pointer',
+              outline: 'none',
+              maxWidth: 140
+            }}
+          >
+            {CATEGORY_ITEMS.map(c => (
+              <option key={c.cat} value={c.cat}>{c.label}</option>
+            ))}
+          </select>
+
+          {/* Search Input */}
+          <input
+            type="text"
+            placeholder="Chèche manje, boutik, famasi, pwodwi lakay..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              flex: 1,
+              border: 'none',
+              background: 'transparent',
+              padding: '9px 12px',
+              fontSize: '0.8125rem',
+              outline: 'none',
+              color: '#0F172A'
+            }}
+          />
+
+          {/* Search Button */}
+          <button
+            type="submit"
+            style={{
+              background: '#FF6000',
+              color: '#FFFFFF',
+              border: 'none',
+              padding: '9px 16px',
+              fontWeight: 800,
+              fontSize: '0.8125rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+              cursor: 'pointer',
+              transition: 'background 0.15s ease'
+            }}
+          >
+            <IconSearch />
+            <span>Rechèch</span>
+          </button>
+        </form>
+
+        {/* Delivery Zone Selector */}
+        <div style={{ position: 'relative' }} className="desktop-only">
           <button
             onClick={() => setZoneOpen(!zoneOpen)}
-            className="navbar-zone-btn"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
-              background: '#F9FAFB',
-              border: '1px solid #E5E7EB',
-              borderRadius: 22,
-              padding: '6px 12px',
+              gap: 6,
+              background: '#F8FAFC',
+              border: '1px solid #E2E8F0',
+              borderRadius: 8,
+              padding: '7px 12px',
               cursor: 'pointer',
-              transition: 'border-color 0.15s, background 0.15s',
+              fontSize: '0.75rem',
+              fontWeight: 700,
+              color: '#334155'
             }}
           >
-            <div style={{ color: '#FF6000', display: 'flex', alignItems: 'center' }}>
-              <IconMapPin />
-            </div>
-            <div style={{ textAlign: 'left', lineHeight: 1.25 }}>
-              <div className="zone-label-full" style={{ fontSize: '0.625rem', color: '#6B7280', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.4px' }}>
-                Livrezon nan
-              </div>
-              <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#17191C', display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span className="zone-label-full">Cap-Haïtien · {selectedZone}</span>
-                <span className="zone-label-compact">{selectedZone}</span>
-                <span style={{ color: '#9CA3AF', display: 'inline-flex' }}><IconChevronDown /></span>
-              </div>
-            </div>
+            <span style={{ color: '#FF6000' }}>📍</span>
+            <span>{selectedZone}</span>
+            <IconChevronDown />
           </button>
 
-          {/* Zone Dropdown */}
           {zoneOpen && (
             <>
               <div
@@ -246,61 +358,81 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <div
                 style={{
                   position: 'absolute',
-                  top: 'calc(100% + 8px)',
-                  left: 0,
-                  width: 230,
+                  top: 'calc(100% + 6px)',
+                  right: 0,
+                  width: 200,
                   background: '#FFFFFF',
-                  borderRadius: 14,
-                  boxShadow: '0 12px 30px rgba(0,0,0,0.12), 0 2px 6px rgba(0,0,0,0.04)',
-                  border: '1px solid #E8E8E8',
+                  borderRadius: 10,
+                  boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  border: '1px solid #E2E8F0',
                   zIndex: 999,
                   padding: '6px',
                 }}
               >
-                <div style={{ padding: '8px 12px 6px', fontSize: '0.6875rem', fontWeight: 800, color: '#9CA3AF', textTransform: 'uppercase', letterSpacing: '0.5px', borderBottom: '1px solid #F3F4F6' }}>
+                <div style={{ padding: '6px 10px', fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase' }}>
                   Chwazi Zòn Livrezon
                 </div>
-                <div style={{ maxHeight: 240, overflowY: 'auto' }}>
-                  {ZONES.map(z => {
-                    const isSelected = selectedZone === z
-                    return (
-                      <button
-                        key={z}
-                        onClick={() => {
-                          setSelectedZone(z)
-                          setZoneOpen(false)
-                          try { localStorage.setItem('dlh_zone', z) } catch {}
-                        }}
-                        style={{
-                          width: '100%',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: '8px 12px',
-                          border: 'none',
-                          background: isSelected ? '#FFF3EB' : 'transparent',
-                          color: isSelected ? '#FF6000' : '#1F2937',
-                          fontWeight: isSelected ? 800 : 600,
-                          fontSize: '0.8125rem',
-                          borderRadius: 8,
-                          cursor: 'pointer',
-                          textAlign: 'left',
-                        }}
-                      >
-                        <span>{z}</span>
-                        {isSelected && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6000' }} />}
-                      </button>
-                    )
-                  })}
-                </div>
+                {ZONES.map(z => (
+                  <button
+                    key={z}
+                    onClick={() => {
+                      setSelectedZone(z)
+                      setZoneOpen(false)
+                      try { localStorage.setItem('dlh_zone', z) } catch {}
+                    }}
+                    style={{
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '7px 10px',
+                      border: 'none',
+                      background: selectedZone === z ? '#FFF3EB' : 'transparent',
+                      color: selectedZone === z ? '#FF6000' : '#1E293B',
+                      fontWeight: selectedZone === z ? 800 : 600,
+                      fontSize: '0.75rem',
+                      borderRadius: 6,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                  >
+                    <span>{z}</span>
+                    {selectedZone === z && <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#FF6000' }} />}
+                  </button>
+                ))}
               </div>
             </>
           )}
         </div>
 
-        {/* Right Actions */}
+        {/* Right Action Buttons */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          {/* Orders Link (Desktop only) */}
+          {/* Vin Vandè / Boutik Mwen Button (Maket Ayisyen Signature) */}
+          <a
+            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: '#0A192F',
+              color: '#FFFFFF',
+              border: '1px solid rgba(255,96,0,0.3)',
+              borderRadius: 8,
+              padding: '7px 13px',
+              fontSize: '0.8125rem',
+              fontWeight: 800,
+              textDecoration: 'none',
+              transition: 'background 0.15s ease'
+            }}
+            className="desktop-only"
+          >
+            <IconStore />
+            <span>Vin Vandè</span>
+          </a>
+
+          {/* Orders Tracking (Desktop) */}
           <button
             onClick={() => nav('orders')}
             className="desktop-only"
@@ -311,18 +443,18 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               background: 'transparent',
               border: 'none',
               cursor: 'pointer',
-              color: page === 'orders' ? '#FF6000' : '#374151',
+              color: page === 'orders' ? '#FF6000' : '#334155',
               fontWeight: 700,
-              fontSize: '0.875rem',
-              padding: '8px 12px',
+              fontSize: '0.8125rem',
+              padding: '7px 10px',
               borderRadius: 6
             }}
           >
             <IconClipboard />
-            <span>Kòmand Yo</span>
+            <span>Swiv Kòmann</span>
           </button>
 
-          {/* Cart Button */}
+          {/* Shopping Cart Button */}
           <button
             onClick={openCart}
             style={{
@@ -333,15 +465,15 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               border: '1.5px solid rgba(255,96,0,0.3)',
               color: '#FF6000',
               padding: '7px 14px',
-              borderRadius: 20,
+              borderRadius: 8,
               fontWeight: 800,
-              fontSize: '0.875rem',
+              fontSize: '0.8125rem',
               cursor: 'pointer',
               position: 'relative'
             }}
           >
             <IconCart />
-            <span className="cart-text-label">Panye</span>
+            <span className="cart-text-label">Panyen</span>
             {totalItems > 0 && (
               <span style={{
                 background: '#FF6000',
@@ -356,7 +488,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             )}
           </button>
 
-          {/* User Profile / Login Button (Desktop only, mobile has it in BottomNav) */}
+          {/* User Account Button (Desktop) */}
           {user ? (
             <button
               onClick={() => nav('profile')}
@@ -364,17 +496,17 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: 8,
-                background: '#F9FAFB',
-                border: '1px solid #E5E7EB',
-                borderRadius: 24,
-                padding: '5px 12px',
+                gap: 7,
+                background: '#F8FAFC',
+                border: '1px solid #E2E8F0',
+                borderRadius: 8,
+                padding: '6px 12px',
                 cursor: 'pointer'
               }}
             >
               <div style={{
-                width: 30,
-                height: 30,
+                width: 24,
+                height: 24,
                 borderRadius: '50%',
                 background: '#FF6000',
                 color: '#FFFFFF',
@@ -382,15 +514,13 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontWeight: 800,
-                fontSize: '0.8125rem'
+                fontSize: '0.75rem'
               }}>
                 {user.firstName?.[0] || 'U'}
               </div>
-              <div style={{ textAlign: 'left' }}>
-                <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#17191C' }}>
-                  {user.firstName || 'Kont'}
-                </div>
-              </div>
+              <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#17191C' }}>
+                {user.firstName || 'Kont'}
+              </span>
             </button>
           ) : (
             <button
@@ -403,12 +533,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 background: '#FF6000',
                 color: '#FFFFFF',
                 border: 'none',
-                borderRadius: 20,
-                padding: '8px 16px',
-                fontSize: '0.875rem',
+                borderRadius: 8,
+                padding: '7px 14px',
+                fontSize: '0.8125rem',
                 fontWeight: 800,
                 cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(255,96,0,0.3)'
+                boxShadow: '0 2px 8px rgba(255,96,0,0.25)'
               }}
             >
               <IconUser />
@@ -416,10 +546,10 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             </button>
           )}
 
-          {/* Hamburger (Mobile) */}
+          {/* Mobile Drawer Toggle */}
           <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Meni"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Louvri Meni"
             style={{
               background: 'transparent',
               border: 'none',
@@ -430,31 +560,23 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             }}
             className="mobile-hamburger-btn"
           >
-            {menuOpen ? <IconX /> : <IconMenu />}
+            <IconMenu />
           </button>
         </div>
       </nav>
 
-      {/* ── Tier 3: Subnav Category Row — Bouton yo filtre vreman ── */}
+      {/* ── Tier 3: Subnav Horizontal Category Rail (Maket Ayisyen) ── */}
       <div style={{
         background: '#FFFFFF',
-        borderBottom: '1px solid #E8E8E8',
+        borderBottom: '1px solid #E2E8F0',
         display: 'flex',
         alignItems: 'center',
-        padding: '0 24px',
-        gap: 4,
+        padding: '0 20px',
+        gap: 6,
         overflowX: 'auto',
         scrollbarWidth: 'none'
       }}>
-        {([
-          { cat: 'ALL',           label: 'Tout Kategori' },
-          { cat: 'RESTAURANT',    label: 'Restoran & Bar' },
-          { cat: 'FAST_FOOD',     label: 'Fast Food' },
-          { cat: 'SUPERMARKET',   label: 'Sipèmache & Pwovizyon' },
-          { cat: 'PHARMACY',      label: 'Famasi & Swen' },
-          { cat: 'CONSTRUCTION',  label: 'Materyo & Zouti' },
-          { cat: 'BEVERAGE_DEPOT',label: 'Dépôt Bwason' },
-        ] as { cat: MerchantCategory; label: string }[]).map(({ cat, label }) => {
+        {CATEGORY_ITEMS.map(({ cat, label, icon }) => {
           const isActive = activeCategory === cat && page === 'home'
           return (
             <button
@@ -464,193 +586,145 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 background: 'none',
                 border: 'none',
                 borderBottom: isActive ? '2.5px solid #FF6000' : '2.5px solid transparent',
-                color: isActive ? '#FF6000' : '#4B5563',
+                color: isActive ? '#FF6000' : '#475569',
                 fontWeight: isActive ? 800 : 600,
                 fontSize: '0.8125rem',
-                padding: '9px 10px',
+                padding: '9px 12px',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'color 0.15s, border-color 0.15s'
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                transition: 'all 0.15s ease'
               }}
             >
-              {label}
+              <span>{icon}</span>
+              <span>{label}</span>
             </button>
           )
         })}
-      </div>
 
-      {/* ── Mobile Overlay & Drawer ── */}
-      {menuOpen && (
-        <div
-          onClick={() => setMenuOpen(false)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.5)',
-            zIndex: 2000
+        {/* Quick Link: Ofri Flash */}
+        <button
+          onClick={() => {
+            if (page !== 'home') onNavigate('home')
+            setTimeout(() => {
+              document.getElementById('flash-offers')?.scrollIntoView({ behavior: 'smooth' })
+            }, 100)
           }}
-        />
-      )}
+          style={{
+            background: 'none',
+            border: 'none',
+            color: '#FF6000',
+            fontWeight: 800,
+            fontSize: '0.8125rem',
+            padding: '9px 12px',
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5
+          }}
+        >
+          <span>⚡ Ofri Flash</span>
+        </button>
 
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        right: 0,
-        width: 300,
-        height: '100dvh',
-        background: '#FFFFFF',
-        zIndex: 2001,
-        transform: menuOpen ? 'translateX(0)' : 'translateX(100%)',
-        transition: 'transform 0.25s ease',
-        display: 'flex',
-        flexDirection: 'column',
-        boxShadow: '-4px 0 20px rgba(0,0,0,0.15)'
-      }}>
-        <div style={{
-          padding: '16px 20px',
-          borderBottom: '1px solid #E8E8E8',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <img src="/logo.png" alt="Logo" style={{ height: 32 }} />
-            <span style={{ fontWeight: 800, fontSize: '1rem', color: '#17191C' }}>Delivery Lakay</span>
-          </div>
-          <button
-            onClick={() => setMenuOpen(false)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280' }}
-          >
-            <IconX />
-          </button>
-        </div>
-
-        <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: 12, flex: 1 }}>
-          {/* Mobile Zone Selector */}
-          <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px', marginBottom: 4 }}>
-            <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#9CA3AF', textTransform: 'uppercase', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
-              <IconMapPin />
-              <span>Zòn Livrezon: Cap-Haïtien</span>
-            </div>
-            <select
-              value={selectedZone}
-              onChange={e => {
-                const z = e.target.value
-                setSelectedZone(z)
-                try { localStorage.setItem('dlh_zone', z) } catch {}
-              }}
-              style={{
-                width: '100%',
-                padding: '8px 10px',
-                borderRadius: 8,
-                border: '1.5px solid #FF6000',
-                background: '#FFFFFF',
-                color: '#17191C',
-                fontWeight: 700,
-                fontSize: '0.85rem',
-                outline: 'none',
-              }}
-            >
-              {ZONES.map(z => (
-                <option key={z} value={z}>{z}</option>
-              ))}
-            </select>
-          </div>
-
-          <button
-            onClick={() => nav('home')}
-            style={{
-              padding: '12px 16px',
-              textAlign: 'left',
-              background: page === 'home' ? '#FFF3EB' : 'transparent',
-              color: page === 'home' ? '#FF6000' : '#17191C',
-              fontWeight: 700,
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer'
-            }}
-          >
-            Akèy
-          </button>
-          <button
-            onClick={() => nav('orders')}
-            style={{
-              padding: '12px 16px',
-              textAlign: 'left',
-              background: page === 'orders' ? '#FFF3EB' : 'transparent',
-              color: page === 'orders' ? '#FF6000' : '#17191C',
-              fontWeight: 700,
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer'
-            }}
-          >
-            Kòmand Mwen Yo
-          </button>
-          <button
-            onClick={() => { openCart(); setMenuOpen(false) }}
-            style={{
-              padding: '12px 16px',
-              textAlign: 'left',
-              background: 'transparent',
-              color: '#17191C',
-              fontWeight: 700,
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}
-          >
-            <span>Panye Mwen</span>
-            {totalItems > 0 && (
-              <span style={{ background: '#FF6000', color: '#FFFFFF', padding: '2px 8px', borderRadius: 12, fontSize: '0.75rem' }}>
-                {totalItems}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => nav(user ? 'profile' : 'auth')}
-            style={{
-              padding: '12px 16px',
-              textAlign: 'left',
-              background: page === 'profile' || page === 'auth' ? '#FFF3EB' : 'transparent',
-              color: page === 'profile' || page === 'auth' ? '#FF6000' : '#17191C',
-              fontWeight: 700,
-              border: 'none',
-              borderRadius: 8,
-              cursor: 'pointer'
-            }}
-          >
-            {user ? 'Pwofil Mwen' : 'Konekte / Enskri'}
-          </button>
-
-          <div style={{ marginTop: 'auto', paddingTop: 20, borderTop: '1px solid #E8E8E8' }}>
-            <a
-              href="https://wa.me/50940553636"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 8,
-                padding: '12px',
-                background: '#25D366',
-                color: '#FFFFFF',
-                borderRadius: 8,
-                textDecoration: 'none',
-                fontWeight: 700,
-                fontSize: '0.875rem',
-                justifyContent: 'center'
-              }}
-            >
-              <IconWhatsApp size={18} color="#FFFFFF" />
-              <span>WhatsApp: +509 40 55 36 36</span>
-            </a>
-          </div>
-        </div>
+        {/* Quick Link: Kat Kado */}
+        <a
+          href="https://wa.me/50940553636?text=Mwen%20vle%20voye%20yon%20Kat%20Kado%20bay%20fanmi%20m"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: '#64748B',
+            fontWeight: 600,
+            fontSize: '0.8125rem',
+            padding: '9px 12px',
+            textDecoration: 'none',
+            whiteSpace: 'nowrap',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 5
+          }}
+        >
+          <span>🎁 Kat Kado</span>
+        </a>
       </div>
+
+      {/* ── Slide-Out Category Drawer (Maket Ayisyen Pattern) ── */}
+      {drawerOpen && (
+        <>
+          <div
+            className="ma-drawer-backdrop"
+            onClick={() => setDrawerOpen(false)}
+          />
+          <div className="ma-drawer-content">
+            <div className="ma-drawer-head">
+              <div className="ma-drawer-title">
+                <img src="/logo.png" alt="Logo" style={{ height: 28 }} />
+                <span>Delivery Lakay</span>
+              </div>
+              <button
+                className="ma-drawer-close"
+                onClick={() => setDrawerOpen(false)}
+                aria-label="Fèmen"
+              >
+                <IconX />
+              </button>
+            </div>
+
+            <div className="ma-drawer-body">
+              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+                Achte pa Kategori
+              </div>
+              {CATEGORY_ITEMS.map(({ cat, label, icon }) => (
+                <div
+                  key={cat}
+                  className={`ma-drawer-item ${activeCategory === cat ? 'active' : ''}`}
+                  onClick={() => filterCat(cat)}
+                >
+                  <span style={{ fontSize: '1.1rem' }}>{icon}</span>
+                  <span>{label}</span>
+                </div>
+              ))}
+
+              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '12px 0' }} />
+
+              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+                Sèvis Kliyan
+              </div>
+              <div className="ma-drawer-item" onClick={() => nav('orders')}>
+                <IconClipboard />
+                <span>📦 Swiv Kòmann Ou</span>
+              </div>
+              <div className="ma-drawer-item" onClick={() => nav('profile')}>
+                <IconUser />
+                <span>👤 Kont & Pwofil Mwen</span>
+              </div>
+              <a
+                className="ma-drawer-item"
+                href="https://wa.me/50940553636?text=Mwen%20bezwen%20asistans%20sou%20Delivery%20Lakay"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <IconWhatsApp size={16} color="#25D366" />
+                <span>💬 Asistans WhatsApp</span>
+              </a>
+            </div>
+
+            <div className="ma-drawer-footer">
+              <a
+                href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="ma-sell-btn"
+              >
+                <IconStore />
+                <span>Vin Vandè sou Delivery Lakay</span>
+              </a>
+            </div>
+          </div>
+        </>
+      )}
     </header>
   )
 }
