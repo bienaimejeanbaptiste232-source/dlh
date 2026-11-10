@@ -28,10 +28,18 @@ export default function HomeScreen({ navigation }: any) {
         fetchRestaurants(),
         fetchCategories(),
       ]);
-      setRestaurants(restData || []);
-      setCategories(catData || []);
+      const rList = Array.isArray(restData)
+        ? restData
+        : (restData?.data && Array.isArray(restData.data) ? restData.data : []);
+      const cList = Array.isArray(catData)
+        ? catData
+        : (catData?.data && Array.isArray(catData.data) ? catData.data : []);
+      setRestaurants(rList);
+      setCategories(cList);
     } catch (e) {
       console.error(e);
+      setRestaurants([]);
+      setCategories([]);
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -47,9 +55,11 @@ export default function HomeScreen({ navigation }: any) {
     loadData();
   };
 
-  const filteredRestaurants = restaurants.filter((r) =>
-    r.name?.toLowerCase().includes(search.toLowerCase())
-  );
+  const filteredRestaurants = Array.isArray(restaurants)
+    ? restaurants.filter((r) =>
+        r?.name?.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
 
   return (
     <SafeAreaView style={styles.container}>
