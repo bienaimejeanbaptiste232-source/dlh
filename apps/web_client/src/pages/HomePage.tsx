@@ -62,6 +62,12 @@ const IconStore = () => (
   </svg>
 )
 
+const IconWhatsApp = ({ size = 15, color = 'currentColor' }: { size?: number; color?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} fill={color}>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.711 1.456h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.486-8.414z"/>
+  </svg>
+)
+
 const IconMapPin = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
     <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
@@ -885,6 +891,17 @@ export default function HomePage({
                 </span>
               </button>
             </div>
+
+            {/* Viral WhatsApp Share Link */}
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Bonjou! Gade bèl pwodwi sa sou Delivery Lakay: ${product.name} pa "${storeName}" pou sèlman ${formatHTG(product.price)}. Kòmande dirèk nan Okap sou http://localhost:5173/`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ma-modal-wa-share"
+            >
+              <IconWhatsApp size={16} color="#16A34A" />
+              <span>Pataje pwodwi sa ak yon zanmi sou WhatsApp</span>
+            </a>
           </div>
         </div>
       </div>
@@ -971,6 +988,34 @@ export default function HomePage({
               <span>How can we help? · Kijan nou ka ede w?</span>
             </a>
           </div>
+        </div>
+      </section>
+
+      {/* ── 2. Ranje Kategori Vizyèl (Circular Visual Categories Rail) ── */}
+      <section className="ma-cat-rail-wrap" aria-label="Kategori Pwodwi nan Okap">
+        <div className="ma-cat-rail-title">
+          <span>🛍️ Eksplore pa Kategori nan Okap</span>
+        </div>
+        <div className="ma-cat-rail-track">
+          {CATEGORY_ITEMS.map((item) => {
+            const isActive = filterType === item.key
+            return (
+              <button
+                key={item.key}
+                className={`ma-cat-circle-item ${isActive ? 'active' : ''}`}
+                onClick={() => {
+                  setFilterType(item.key)
+                  onFilterChange?.(item.key)
+                  listRef.current?.scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                <div className="ma-cat-circle-bubble">
+                  {item.icon}
+                </div>
+                <span className="ma-cat-circle-label">{item.label}</span>
+              </button>
+            )
+          })}
         </div>
       </section>
 
@@ -1593,6 +1638,37 @@ export default function HomePage({
               <p style={{ margin: 0, fontSize: '0.8125rem', color: '#64748B', lineHeight: 1.4 }}>{s.desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── 9. DLH Mobile App Download Banner (Pro Commercial Feature) ── */}
+      <section className="ma-app-banner" aria-label="Aplikasyon Mobil Delivery Lakay">
+        <div className="ma-app-banner-content">
+          <span className="ma-app-tag">📱 APLIKASYON MOBIL OFISYÈL</span>
+          <h3 className="ma-app-title">Kòmande Pi Rapid Sou Telefòn Ou</h3>
+          <p className="ma-app-desc">
+            Enstale aplikasyon Android Delivery Lakay la pou resevwa notifikasyon an dirèk lè kousye w la sou wout epi pwofite tout rabè espesyal yo nan Okap.
+          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <a
+              href="https://wa.me/50940553636?text=Mwen%20vle%20lyen%20telechaje%20aplikasyon%20Delivery%20Lakay%20sou%20Android"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ma-app-download-btn"
+            >
+              <span>🤖 Telechaje APK Android (Gratis)</span>
+            </a>
+            <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>
+              Konpatib ak tout telefòn Android · Cap-Haïtien
+            </span>
+          </div>
+        </div>
+        <div className="ma-app-mockup-wrap">
+          <img
+            src="/banners/dlh_courier_hero.jpg"
+            alt="Delivery Lakay App"
+            className="ma-app-mockup-img"
+          />
         </div>
       </section>
 
