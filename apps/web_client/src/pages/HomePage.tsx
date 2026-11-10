@@ -132,15 +132,43 @@ function getProductImage(product: Product, type = '') {
   return 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
 }
 
-// ── Authentic Haitian Market Categories ─────────────────────────
+// ── Authentic Haitian Market Categories (HD Photo Thumbnails - NO Emojis) ────
 const CATEGORY_ITEMS = [
-  { key: 'ALL', label: 'Tout Kategori', icon: '🛍️' },
-  { key: 'RESTAURANT', label: 'Restoran & Bar', icon: '🍽️' },
-  { key: 'FAST_FOOD', label: 'Fast Food & Fritay', icon: '🍗' },
-  { key: 'SUPERMARKET', label: 'Sipèmache & Pwovizyon', icon: '🛒' },
-  { key: 'PHARMACY', label: 'Famasi & Sante', icon: '💊' },
-  { key: 'CONSTRUCTION', label: 'Materyo Konstriksyon', icon: '🧱' },
-  { key: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
+  {
+    key: 'ALL',
+    label: 'Tout Kategori',
+    img: 'https://images.unsplash.com/photo-1472851294608-062f824d29cc?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'RESTAURANT',
+    label: 'Restoran & Bar',
+    img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'FAST_FOOD',
+    label: 'Fast Food & Fritay',
+    img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'SUPERMARKET',
+    label: 'Sipèmache & Pwovizyon',
+    img: 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'PHARMACY',
+    label: 'Famasi & Sante',
+    img: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'BEVERAGE_DEPOT',
+    label: 'Dépôt Bwason & Dlo',
+    img: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=260&q=80'
+  },
+  {
+    key: 'CONSTRUCTION',
+    label: 'Materyo Konstriksyon',
+    img: 'https://images.unsplash.com/photo-1581783898377-1c85bf937427?auto=format&fit=crop&w=260&q=80'
+  },
 ]
 
 // ── Hero Promotional Slides (3 Foto Otantik DLH - Wot Rezolisyon Okap) ────
@@ -232,11 +260,18 @@ export default function HomePage({
   const sliderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const flashRailRef = useRef<HTMLDivElement>(null)
+  const catRailRef = useRef<HTMLDivElement>(null)
   const countdown = useFlashCountdown()
 
   const scrollFlashRail = (dir: 'left' | 'right') => {
     if (flashRailRef.current) {
       flashRailRef.current.scrollBy({ left: dir === 'left' ? -260 : 260, behavior: 'smooth' })
+    }
+  }
+
+  const scrollCatRail = (dir: 'left' | 'right') => {
+    if (catRailRef.current) {
+      catRailRef.current.scrollBy({ left: dir === 'left' ? -240 : 240, behavior: 'smooth' })
     }
   }
 
@@ -991,12 +1026,34 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* ── 2. Ranje Kategori Vizyèl (Circular Visual Categories Rail) ── */}
+      {/* ── 2. Ranje Kategori Vizyèl (Sleek Circular Photo Categories Rail - NO Emojis) ── */}
       <section className="ma-cat-rail-wrap" aria-label="Kategori Pwodwi nan Okap">
-        <div className="ma-cat-rail-title">
-          <span>🛍️ Eksplore pa Kategori nan Okap</span>
+        <div className="ma-cat-rail-header">
+          <div className="ma-cat-rail-title">
+            <span className="ma-cat-title-bar" />
+            <span>Eksplore pa Kategori nan Okap</span>
+          </div>
+
+          {/* Smooth Scroll Buttons */}
+          <div className="ma-cat-nav-arrows desktop-only">
+            <button
+              className="ma-cat-nav-btn"
+              onClick={() => scrollCatRail('left')}
+              aria-label="Kategori Anvan"
+            >
+              ‹
+            </button>
+            <button
+              className="ma-cat-nav-btn"
+              onClick={() => scrollCatRail('right')}
+              aria-label="Kategori Apre"
+            >
+              ›
+            </button>
+          </div>
         </div>
-        <div className="ma-cat-rail-track">
+
+        <div className="ma-cat-rail-track" ref={catRailRef}>
           {CATEGORY_ITEMS.map((item) => {
             const isActive = filterType === item.key
             return (
@@ -1010,7 +1067,13 @@ export default function HomePage({
                 }}
               >
                 <div className="ma-cat-circle-bubble">
-                  {item.icon}
+                  <img
+                    src={item.img}
+                    alt={item.label}
+                    className="ma-cat-circle-img"
+                    loading="lazy"
+                  />
+                  {isActive && <span className="ma-cat-active-dot" />}
                 </div>
                 <span className="ma-cat-circle-label">{item.label}</span>
               </button>

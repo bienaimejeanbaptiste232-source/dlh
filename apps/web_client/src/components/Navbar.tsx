@@ -88,14 +88,14 @@ const ZONES = [
   'Bande du Nord'
 ]
 
-const CATEGORY_ITEMS: { cat: MerchantCategory; label: string; icon: string }[] = [
-  { cat: 'ALL', label: 'Tout Kategori', icon: '🛍️' },
-  { cat: 'RESTAURANT', label: 'Restoran & Bar', icon: '🍽️' },
-  { cat: 'FAST_FOOD', label: 'Fast Food & Fritay', icon: '🍗' },
-  { cat: 'SUPERMARKET', label: 'Sipèmache & Pwovizyon', icon: '🛒' },
-  { cat: 'PHARMACY', label: 'Famasi & Sante', icon: '💊' },
-  { cat: 'CONSTRUCTION', label: 'Materyo Konstriksyon', icon: '🧱' },
-  { cat: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo', icon: '🥤' },
+const CATEGORY_ITEMS: { cat: MerchantCategory; label: string }[] = [
+  { cat: 'ALL', label: 'Tout Kategori' },
+  { cat: 'RESTAURANT', label: 'Restoran & Bar' },
+  { cat: 'FAST_FOOD', label: 'Fast Food & Fritay' },
+  { cat: 'SUPERMARKET', label: 'Sipèmache & Pwovizyon' },
+  { cat: 'PHARMACY', label: 'Famasi & Sante' },
+  { cat: 'CONSTRUCTION', label: 'Materyo Konstriksyon' },
+  { cat: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo' },
 ]
 
 export default function Navbar({ page, onNavigate, onCategoryFilter, activeCategory = 'ALL' }: NavbarProps) {
@@ -270,7 +270,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             rel="noopener noreferrer"
             className="ma-subnav-link"
           >
-            🎁 Kat Kado
+            Kat Kado
           </a>
 
           <a
@@ -279,7 +279,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             rel="noopener noreferrer"
             className="ma-subnav-link"
           >
-            🤝 Envite Zanmi
+            Envite Zanmi
           </a>
 
           <a
@@ -302,7 +302,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             className="ma-subnav-link"
             onClick={() => setDrawerOpen(true)}
           >
-            📍 Zòn: {selectedZone} ▾
+            Zòn: {selectedZone} ▾
           </button>
 
           <a
@@ -390,13 +390,13 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
                 Achte pa Kategori
               </div>
-              {CATEGORY_ITEMS.map(({ cat, label, icon }) => (
+              {CATEGORY_ITEMS.map(({ cat, label }) => (
                 <div
                   key={cat}
                   className={`ma-drawer-item ${activeCategory === cat ? 'active' : ''}`}
                   onClick={() => filterCat(cat)}
                 >
-                  <span style={{ fontSize: '1.1rem' }}>{icon}</span>
+                  <span style={{ width: 8, height: 8, borderRadius: '50%', background: activeCategory === cat ? '#FF6000' : '#CBD5E1', display: 'inline-block', marginRight: 6 }} />
                   <span>{label}</span>
                 </div>
               ))}
@@ -408,11 +408,11 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </div>
               <div className="ma-drawer-item" onClick={() => nav('orders')}>
                 <IconClipboard />
-                <span>📦 Swiv Kòmann Ou</span>
+                <span>Swiv Kòmann Ou</span>
               </div>
               <div className="ma-drawer-item" onClick={() => nav('profile')}>
                 <IconUser />
-                <span>👤 Kont & Pwofil Mwen</span>
+                <span>Kont & Pwofil Mwen</span>
               </div>
               <a
                 className="ma-drawer-item"
