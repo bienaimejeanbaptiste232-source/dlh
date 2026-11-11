@@ -7780,6 +7780,109 @@ body {
   font-weight: 400;
 }
 
+/* 2-Step Progress Bar (Glassmorphic) */
+.merchant-step-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 6px 10px;
+}
+
+.merchant-step-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.merchant-step-pill.active {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.merchant-step-pill.completed {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.merchant-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+.merchant-step-pill.active .merchant-step-num {
+  background: #FF6000;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(255, 96, 0, 0.4);
+}
+
+.merchant-step-pill.completed .merchant-step-num {
+  background: #16A34A;
+  color: #FFFFFF;
+}
+
+.merchant-step-label {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.merchant-step-line {
+  flex: 1;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  transition: background 0.2s ease;
+}
+
+.merchant-step-line.active {
+  background: linear-gradient(90deg, #FF6000 0%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+.merchant-glass-back-step-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 10px;
+  margin-top: 8px;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.merchant-glass-back-step-btn:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
 /* Glassmorphism Phone Alert Notice */
 .merchant-phone-alert {
   display: flex;

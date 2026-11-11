@@ -16,9 +16,15 @@ const CATEGORIES = [
 ]
 
 export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageProps) {
+  // Step state: 1 = Etablisman, 2 = Responsab & Aksè
+  const [step, setStep] = useState<1 | 2>(1)
+
+  // Step 1: Etablisman
   const [businessName, setBusinessName] = useState('')
   const [businessType, setBusinessType] = useState('RESTAURANT')
   const [address, setAddress] = useState('')
+
+  // Step 2: Responsab & Sekirite
   const [fullName, setFullName] = useState('')
   const [phoneNumber, setPhoneNumber] = useState('')
   const [password, setPassword] = useState('')
@@ -30,7 +36,8 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
   const [isSuccess, setIsSuccess] = useState(false)
   const [submittedBusinessName, setSubmittedBusinessName] = useState('')
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Handle Next Step
+  const handleNextStep = (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!businessName.trim()) {
@@ -41,6 +48,15 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
       showToast('Tanpri antre adrès la nan Cap-Haïtien', 'error')
       return
     }
+
+    setStep(2)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  // Handle Final Submit
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
     if (!fullName.trim()) {
       showToast('Tanpri antre non responsab la', 'error')
       return
@@ -150,7 +166,7 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
     )
   }
 
-  // ── Registration Form (Matching Reference Image 1:1) ──────────────
+  // ── Two-Part Registration Form (Matching Reference Image) ─────────
   return (
     <div className="merchant-glass-page">
       <div className="merchant-glass-card">
@@ -158,14 +174,43 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
         <div className="merchant-glass-header">
           <h1 className="merchant-glass-title">Enskripsyon Machann</h1>
           <p className="merchant-glass-subtitle">
-            Ranpli fòmilè a pou kòmanse vann sou Delivery Lakay
+            {step === 1
+              ? 'Pati 1 sou 2 : Enfòmasyon Etablisman an'
+              : 'Pati 2 sou 2 : Responsab & Aksè Sekirite'}
           </p>
+        </div>
+
+        {/* 2-Step Progress Indicator (Glassmorphic) */}
+        <div className="merchant-step-indicator">
+          <button
+            type="button"
+            className={`merchant-step-pill ${step === 1 ? 'active' : 'completed'}`}
+            onClick={() => setStep(1)}
+          >
+            <span className="merchant-step-num">
+              {step === 2 ? '✓' : '1'}
+            </span>
+            <span className="merchant-step-label">Etablisman</span>
+          </button>
+
+          <div className={`merchant-step-line ${step === 2 ? 'active' : ''}`} />
+
+          <button
+            type="button"
+            className={`merchant-step-pill ${step === 2 ? 'active' : ''}`}
+            onClick={() => {
+              if (businessName.trim() && address.trim()) setStep(2)
+            }}
+          >
+            <span className="merchant-step-num">2</span>
+            <span className="merchant-step-label">Responsab</span>
+          </button>
         </div>
 
         {/* Clean Glassmorphic Phone Notice */}
         <div className="merchant-phone-alert">
           <div className="merchant-phone-alert-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
               <rect x="5" y="2" width="14" height="20" rx="2" ry="2" />
               <line x1="12" y1="18" x2="12.01" y2="18" />
             </svg>
@@ -178,168 +223,196 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
           </div>
         </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="merchant-glass-form">
-          {/* Non Etablisman */}
-          <div className="merchant-input-wrapper">
-            <input
-              type="text"
-              className="merchant-glass-input"
-              placeholder="Non Etablisman an"
-              value={businessName}
-              onChange={(e) => setBusinessName(e.target.value)}
-              required
-            />
-            <span className="merchant-input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                <path d="M3 3h18v4H3z" />
-                <path d="M4 7v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7" />
-                <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" />
-              </svg>
-            </span>
-          </div>
+        {/* ── PATI 1: Enfòmasyon Etablisman an ── */}
+        {step === 1 && (
+          <form onSubmit={handleNextStep} className="merchant-glass-form">
+            {/* Non Etablisman */}
+            <div className="merchant-input-wrapper">
+              <input
+                type="text"
+                className="merchant-glass-input"
+                placeholder="Non Etablisman an"
+                value={businessName}
+                onChange={(e) => setBusinessName(e.target.value)}
+                required
+                autoFocus
+              />
+              <span className="merchant-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <path d="M3 3h18v4H3z" />
+                  <path d="M4 7v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7" />
+                  <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" />
+                </svg>
+              </span>
+            </div>
 
-          {/* Kategori */}
-          <div className="merchant-input-wrapper">
-            <select
-              className="merchant-glass-input merchant-glass-select"
-              value={businessType}
-              onChange={(e) => setBusinessType(e.target.value)}
+            {/* Kategori */}
+            <div className="merchant-input-wrapper">
+              <select
+                className="merchant-glass-input merchant-glass-select"
+                value={businessType}
+                onChange={(e) => setBusinessType(e.target.value)}
+              >
+                {CATEGORIES.map((cat) => (
+                  <option key={cat.value} value={cat.value} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                    {cat.label}
+                  </option>
+                ))}
+              </select>
+              <span className="merchant-input-icon" style={{ pointerEvents: 'none' }}>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+                  <polyline points="6 9 12 15 18 9" />
+                </svg>
+              </span>
+            </div>
+
+            {/* Adrès nan Cap-Haïtien */}
+            <div className="merchant-input-wrapper">
+              <input
+                type="text"
+                className="merchant-glass-input"
+                placeholder="Adrès nan Cap-Haïtien (eg. Rue 18 H, Sant-Vil)"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                required
+              />
+              <span className="merchant-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+              </span>
+            </div>
+
+            {/* Bouton Kontinye */}
+            <button
+              type="submit"
+              className="merchant-glass-submit-btn"
+              style={{ marginTop: 10 }}
             >
-              {CATEGORIES.map((cat) => (
-                <option key={cat.value} value={cat.value} style={{ background: '#0F172A', color: '#FFFFFF' }}>
-                  {cat.label}
-                </option>
-              ))}
-            </select>
-            <span className="merchant-input-icon" style={{ pointerEvents: 'none' }}>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-                <polyline points="6 9 12 15 18 9" />
-              </svg>
-            </span>
-          </div>
+              <span>Kontinye nan Pati 2</span>
+              <span>→</span>
+            </button>
+          </form>
+        )}
 
-          {/* Adrès nan Cap-Haïtien */}
-          <div className="merchant-input-wrapper">
-            <input
-              type="text"
-              className="merchant-glass-input"
-              placeholder="Adrès nan Cap-Haïtien (eg. Rue 18 H, Sant-Vil)"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
-            <span className="merchant-input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                <circle cx="12" cy="10" r="3" />
-              </svg>
-            </span>
-          </div>
+        {/* ── PATI 2: Responsab & Aksè Sekirite ── */}
+        {step === 2 && (
+          <form onSubmit={handleSubmit} className="merchant-glass-form">
+            {/* Non ak Prenon Responsab la */}
+            <div className="merchant-input-wrapper">
+              <input
+                type="text"
+                className="merchant-glass-input"
+                placeholder="Non ak Prenon Responsab la"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                autoFocus
+              />
+              <span className="merchant-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                  <circle cx="12" cy="7" r="4" />
+                </svg>
+              </span>
+            </div>
 
-          {/* Non ak Prenon Responsab la */}
-          <div className="merchant-input-wrapper">
-            <input
-              type="text"
-              className="merchant-glass-input"
-              placeholder="Non ak Prenon Responsab la"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-            />
-            <span className="merchant-input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                <circle cx="12" cy="7" r="4" />
-              </svg>
-            </span>
-          </div>
+            {/* Nimewo Telefòn */}
+            <div className="merchant-input-wrapper">
+              <input
+                type="tel"
+                className="merchant-glass-input"
+                placeholder="Nimewo Telefòn (+509 40 55 36 36)"
+                value={phoneNumber}
+                onChange={(e) => setPhoneNumber(e.target.value)}
+                required
+              />
+              <span className="merchant-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </span>
+            </div>
 
-          {/* Nimewo Telefòn */}
-          <div className="merchant-input-wrapper">
-            <input
-              type="tel"
-              className="merchant-glass-input"
-              placeholder="Nimewo Telefòn (+509 40 55 36 36)"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-            />
-            <span className="merchant-input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-              </svg>
-            </span>
-          </div>
+            {/* Modpas */}
+            <div className="merchant-input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="merchant-glass-input"
+                placeholder="Modpas (omwen 6 karaktè)"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <button
+                type="button"
+                className="merchant-input-icon-btn"
+                onClick={() => setShowPassword(prev => !prev)}
+                title={showPassword ? 'Kache modpas' : 'Montre modpas'}
+              >
+                {showPassword ? (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                ) : (
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                    <line x1="1" y1="1" x2="23" y2="23" />
+                  </svg>
+                )}
+              </button>
+            </div>
 
-          {/* Modpas */}
-          <div className="merchant-input-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              className="merchant-glass-input"
-              placeholder="Modpas (omwen 6 karaktè)"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            {/* Konfime Modpas */}
+            <div className="merchant-input-wrapper">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="merchant-glass-input"
+                placeholder="Konfime Modpas la"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <span className="merchant-input-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </span>
+            </div>
+
+            {/* Checkbox (Style matching the reference image) */}
+            <label className="merchant-checkbox-label">
+              <input
+                type="checkbox"
+                className="merchant-checkbox"
+                checked={agreeTerms}
+                onChange={(e) => setAgreeTerms(e.target.checked)}
+              />
+              <span>Mwen aksepte kondisyon patenarya yo</span>
+            </label>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="merchant-glass-submit-btn"
+            >
+              {isLoading ? 'Soumisyon ap fèt...' : 'Kreye Kont Machann'}
+            </button>
+
+            {/* Back to Step 1 Button */}
             <button
               type="button"
-              className="merchant-input-icon-btn"
-              onClick={() => setShowPassword(prev => !prev)}
-              title={showPassword ? 'Kache modpas' : 'Montre modpas'}
+              onClick={() => setStep(1)}
+              className="merchant-glass-back-step-btn"
             >
-              {showPassword ? (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
-                  <line x1="1" y1="1" x2="23" y2="23" />
-                </svg>
-              )}
+              ← Retounen nan Pati 1 (Etablisman)
             </button>
-          </div>
-
-          {/* Konfime Modpas */}
-          <div className="merchant-input-wrapper">
-            <input
-              type={showPassword ? 'text' : 'password'}
-              className="merchant-glass-input"
-              placeholder="Konfime Modpas la"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            <span className="merchant-input-icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            </span>
-          </div>
-
-          {/* Checkbox (Style matching the reference image) */}
-          <label className="merchant-checkbox-label">
-            <input
-              type="checkbox"
-              className="merchant-checkbox"
-              checked={agreeTerms}
-              onChange={(e) => setAgreeTerms(e.target.checked)}
-            />
-            <span>Mwen aksepte kondisyon patenarya yo</span>
-          </label>
-
-          {/* Submit Button (Matching the reference image) */}
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="merchant-glass-submit-btn"
-          >
-            {isLoading ? 'Soumisyon ap fèt...' : 'Kreye Kont Machann'}
-          </button>
-        </form>
+          </form>
+        )}
 
         {/* Footer Subtext */}
         <div className="merchant-glass-footer">
