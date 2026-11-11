@@ -717,111 +717,59 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             onTouchEnd={() => setDrawerOpen(false)}
           />
           <div ref={drawerContentRef} className="ma-drawer-content">
+            {/* Header: Maket Ayisyen Red Header with Close Button */}
             <div className="ma-drawer-head">
-              <div className="ma-drawer-title">
-                <img src="/logo.png" alt="Logo" style={{ height: 28 }} />
-                <span>Delivery Lakay</span>
+              <div>
+                <div style={{ color: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, opacity: 0.95, marginBottom: 2 }}>
+                  Byenveni 👋
+                </div>
+                <div style={{ color: '#FFFFFF', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.3px' }}>
+                  Maket Ayisyen
+                </div>
               </div>
               <button
                 className="ma-drawer-close"
                 onClick={() => setDrawerOpen(false)}
                 aria-label="Fèmen"
               >
-                <IconX />
+                ✕
               </button>
             </div>
 
-            {/* User Greeting Card in Drawer */}
-            <div style={{
-              background: '#0F172A',
-              padding: '16px 18px',
-              color: '#FFFFFF',
-              borderBottom: '1px solid #1E293B'
-            }}>
-              {user ? (
-                <div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-                    <div style={{
-                      width: 42,
-                      height: 42,
-                      borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #FF6000, #E11D48)',
-                      color: '#FFFFFF',
-                      fontWeight: 900,
-                      fontSize: '1.05rem',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      flexShrink: 0
-                    }}>
-                      {user.firstName ? user.firstName.charAt(0).toUpperCase() : 'K'}
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontSize: '0.9375rem', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {user.firstName} {user.lastName || ''}
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>
-                        {user.phoneNumber || 'Kliyan Delivery Lakay'}
-                      </div>
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button
-                      onClick={() => { setDrawerOpen(false); nav('profile') }}
-                      style={{
-                        flex: 1, background: '#334155', color: '#FFFFFF', border: 'none',
-                        borderRadius: 6, padding: '7px 10px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer'
-                      }}
-                    >
-                      Pwofil Mwen
-                    </button>
-                    <button
-                      onClick={() => { setDrawerOpen(false); logout() }}
-                      style={{
-                        background: 'rgba(239, 68, 68, 0.15)', color: '#FCA5A5', border: '1px solid rgba(239, 68, 68, 0.3)',
-                        borderRadius: 6, padding: '7px 10px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer'
-                      }}
-                    >
-                      Dekonekte
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
-                  <div>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 800, color: '#FFFFFF' }}>Byenvini sou DLH!</div>
-                    <div style={{ fontSize: '0.6875rem', color: '#94A3B8' }}>Konekte pou kòmande pi vit</div>
-                  </div>
-                  <button
-                    onClick={() => { setDrawerOpen(false); nav('auth') }}
-                    style={{
-                      background: '#FF6000', color: '#FFFFFF', border: 'none',
-                      borderRadius: 8, padding: '7px 14px', fontSize: '0.75rem', fontWeight: 800, cursor: 'pointer'
-                    }}
-                  >
-                    Konekte
-                  </button>
-                </div>
-              )}
-            </div>
-
             <div className="ma-drawer-body">
+              {/* ── KONT MWEN ── */}
+              <div className="ma-drawer-section-title">
+                KONT MWEN
+              </div>
 
-              {/* ── 1. AKSÈ PRENSIPAL ── */}
-              <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
-                Navigasyon Prensipal
-              </div>
-              <div
-                className={`ma-drawer-item ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
-                onClick={goHome}
-              >
-                <IconHome />
-                <span>Akèy DLH</span>
-              </div>
-              <div className="ma-drawer-item" onClick={goToStores}>
-                <IconStore />
-                <span>Tout Boutik & Restoran Okap</span>
-              </div>
+              {!user ? (
+                <>
+                  <div className="ma-drawer-item" onClick={() => nav('auth')}>
+                    <span style={{ fontSize: '1.15rem' }}>🔑</span>
+                    <span>Konekte</span>
+                  </div>
+                  <div className="ma-drawer-item" onClick={() => nav('auth')}>
+                    <span style={{ fontSize: '1.15rem' }}>✨</span>
+                    <span>Kreye yon kont</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="ma-drawer-item" onClick={() => nav('profile')}>
+                    <span style={{ fontSize: '1.15rem' }}>👤</span>
+                    <span>Pwofil mwen ({user.firstName || 'Kont'})</span>
+                  </div>
+                  <div className="ma-drawer-item" onClick={() => nav('orders')}>
+                    <span style={{ fontSize: '1.15rem' }}>📦</span>
+                    <span>Kòmann mwen yo</span>
+                  </div>
+                  <div className="ma-drawer-item" onClick={() => { setDrawerOpen(false); logout() }}>
+                    <span style={{ fontSize: '1.15rem' }}>🚪</span>
+                    <span>Dekonekte</span>
+                  </div>
+                </>
+              )}
+
               <div
                 className="ma-drawer-item"
                 onClick={() => {
@@ -829,90 +777,88 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   openCart()
                 }}
               >
-                <IconCart />
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
-                  <span>Panyen Kòmann Mwen</span>
-                  {totalItems > 0 && (
-                    <span style={{
-                      background: '#FF6000',
-                      color: '#FFFFFF',
-                      fontSize: '0.6875rem',
-                      fontWeight: 900,
-                      padding: '2px 7px',
-                      borderRadius: 10
-                    }}>
-                      {totalItems}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="ma-drawer-item" onClick={() => nav('orders')}>
-                <IconClipboard />
-                <span>Swiv Kòmann Mwen yo</span>
+                <span style={{ fontSize: '1.15rem' }}>🛒</span>
+                <span>Panye ({totalItems})</span>
               </div>
 
-              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '10px 0' }} />
+              <div style={{ height: 1, background: '#F1F5F9', margin: '8px 0' }} />
 
-              {/* ── 2. SÈVIS & KATEGORI ── */}
-              <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
-                Sèvis Livrezon DLH
+              {/* ── ACHTE PA KATEGORI ── */}
+              <div className="ma-drawer-section-title">
+                ACHTE PA KATEGORI
               </div>
+
+              <div
+                className={`ma-drawer-item ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
+                onClick={goHome}
+              >
+                <span style={{ fontSize: '1.15rem' }}>🛍️</span>
+                <span>Tout pwodwi</span>
+              </div>
+
               <div
                 className={`ma-drawer-item ${activeCategory === 'RESTAURANT' ? 'active' : ''}`}
                 onClick={() => filterCat('RESTAURANT')}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#EF4444', display: 'inline-block' }} />
-                <span>Restoran & Bar</span>
+                <span style={{ fontSize: '1.15rem' }}>🍽️</span>
+                <span>Manje Ayisyen</span>
               </div>
+
               <div
                 className={`ma-drawer-item ${activeCategory === 'FAST_FOOD' ? 'active' : ''}`}
                 onClick={() => filterCat('FAST_FOOD')}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#F59E0B', display: 'inline-block' }} />
-                <span>Fast Food & Fritay</span>
+                <span style={{ fontSize: '1.15rem' }}>🌶️</span>
+                <span>Epis ak Pwodwi Lakay</span>
               </div>
-              <div
-                className={`ma-drawer-item ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
-                onClick={() => filterCat('SUPERMARKET')}
-              >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-                <span>Sipèmache & Episri</span>
-              </div>
-              <div
-                className={`ma-drawer-item ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
-                onClick={() => filterCat('PHARMACY')}
-              >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#06B6D4', display: 'inline-block' }} />
-                <span>Famasi & Sante</span>
-              </div>
+
               <div
                 className={`ma-drawer-item ${activeCategory === 'CONSTRUCTION' ? 'active' : ''}`}
                 onClick={() => filterCat('CONSTRUCTION')}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#8B5CF6', display: 'inline-block' }} />
-                <span>Materyo Konstriksyon</span>
+                <span style={{ fontSize: '1.15rem' }}>👕</span>
+                <span>Rad ak Akseswa</span>
               </div>
+
               <div
                 className={`ma-drawer-item ${activeCategory === 'BEVERAGE_DEPOT' ? 'active' : ''}`}
                 onClick={() => filterCat('BEVERAGE_DEPOT')}
               >
-                <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#3B82F6', display: 'inline-block' }} />
-                <span>Dépôt Bwason & Dlo</span>
+                <span style={{ fontSize: '1.15rem' }}>👟</span>
+                <span>Soulye</span>
               </div>
 
-              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '10px 0' }} />
-
-              {/* ── 3. ÈD & SIPÒ KLIYAN ── */}
-              <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
-                Sipò Kliyan 24/7
+              <div
+                className={`ma-drawer-item ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
+                onClick={() => filterCat('SUPERMARKET')}
+              >
+                <span style={{ fontSize: '1.15rem' }}>🛒</span>
+                <span>Sipèmache & Episri</span>
               </div>
+
+              <div
+                className={`ma-drawer-item ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
+                onClick={() => filterCat('PHARMACY')}
+              >
+                <span style={{ fontSize: '1.15rem' }}>💊</span>
+                <span>Famasi & Sante</span>
+              </div>
+
+              <div style={{ height: 1, background: '#F1F5F9', margin: '8px 0' }} />
+
+              {/* ── ASISTANS & ÈD ── */}
+              <div className="ma-drawer-section-title">
+                ÈD & SIPÒ
+              </div>
+
               <div
                 className="ma-drawer-item"
-                onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
+                onClick={() => nav('orders')}
               >
-                <IconHelp />
-                <span>Sant Èd & Asistans DLH</span>
+                <span style={{ fontSize: '1.15rem' }}>🛵</span>
+                <span>Swiv yon kòmann</span>
               </div>
+
               <a
                 href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20bezwen%20asistans."
                 target="_blank"
@@ -920,29 +866,17 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className="ma-drawer-item"
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="#25D366">
-                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.455 5.711 1.456h.005c6.554 0 11.89-5.335 11.893-11.893a11.82 11.82 0 00-3.486-8.414z"/>
-                </svg>
-                <span>WhatsApp · +509 40 55 36 36</span>
+                <span style={{ fontSize: '1.15rem' }}>💬</span>
+                <span>WhatsApp Sipò · +509 40 55 36 36</span>
               </a>
-              <a
-                href="tel:+50940553636"
-                className="ma-drawer-item"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.11 10.9 19.79 19.79 0 0 1 1.07 2.27 2 2 0 0 1 3.03 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16.92z" />
-                </svg>
-                <span>Rele Dispatch · +509 40 55 36 36</span>
-              </a>
+
               <div
                 className="ma-drawer-item"
-                onClick={() => { setDrawerOpen(false); nav('terms') }}
+                onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
               >
-                <IconFileText />
-                <span>Kondisyon & Règleman sou Vi Prive</span>
+                <span style={{ fontSize: '1.15rem' }}>❓</span>
+                <span>Sant Èd & Kesyon Souvan</span>
               </div>
-
             </div>
 
             <div className="ma-drawer-footer">
@@ -955,12 +889,9 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className="ma-sell-btn"
                 style={{ width: '100%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
               >
-                <IconStore />
+                <span style={{ fontSize: '1.1rem' }}>🏪</span>
                 <span>Vin Vandè sou Delivery Lakay</span>
               </button>
-              <div style={{ textAlign: 'center', fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 600 }}>
-                Delivery Lakay Haïti · Sèvis Livrezon Okap
-              </div>
             </div>
           </div>
         </>
