@@ -49,6 +49,82 @@ const IconWhatsApp = ({ size = 15, color = 'currentColor' }: { size?: number; co
   </svg>
 )
 
+const IconLogIn = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+    <polyline points="10 17 15 12 10 7" />
+    <line x1="15" y1="12" x2="3" y2="12" />
+  </svg>
+)
+
+const IconUserPlus = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+    <circle cx="8.5" cy="7" r="4" />
+    <line x1="20" y1="8" x2="20" y2="14" />
+    <line x1="23" y1="11" x2="17" y2="11" />
+  </svg>
+)
+
+const IconLogOut = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+    <polyline points="16 17 21 12 16 7" />
+    <line x1="21" y1="12" x2="9" y2="12" />
+  </svg>
+)
+
+const IconBag = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+    <line x1="3" y1="6" x2="21" y2="6" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </svg>
+)
+
+const IconUtensils = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M18 2v20M22 2v4a4 4 0 0 1-4 4M2 2v6a4 4 0 0 0 4 4v10M6 2v20M10 2v6a4 4 0 0 1-4 4" />
+  </svg>
+)
+
+const IconFlame = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+  </svg>
+)
+
+const IconTag = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+    <line x1="7" y1="7" x2="7.01" y2="7" />
+  </svg>
+)
+
+const IconPill = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+    <line x1="8.5" y1="8.5" x2="15.5" y2="15.5" />
+  </svg>
+)
+
+const IconTruck = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <rect x="1" y="3" width="15" height="13" />
+    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+    <circle cx="5.5" cy="18.5" r="2.5" />
+    <circle cx="18.5" cy="18.5" r="2.5" />
+  </svg>
+)
+
+const IconBox = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+    <line x1="12" y1="22.08" x2="12" y2="12" />
+  </svg>
+)
+
 const IconMenu = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width="20" height="20">
     <line x1="3" y1="12" x2="21" y2="12" />
@@ -717,18 +793,43 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             onTouchEnd={() => setDrawerOpen(false)}
           />
           <div ref={drawerContentRef} className="ma-drawer-content">
-            {/* Header: Maket Ayisyen Red Gradient Header */}
-            <div className="ma-drawer-head">
-              <div>
-                <div style={{ color: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, opacity: 0.92, marginBottom: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span>Byenveni</span>
-                  <span style={{ fontSize: '1rem' }}>👋</span>
+            {/* Header: Delivery Lakay Official Brand Header with Logo */}
+            <div className="ma-drawer-head" style={{
+              background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
+              padding: '16px 18px',
+              borderBottom: '1px solid #334155'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{
+                  width: 44,
+                  height: 44,
+                  borderRadius: 12,
+                  background: '#FFFFFF',
+                  padding: 4,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
+                  flexShrink: 0
+                }}>
+                  <img
+                    src="/logo.png"
+                    alt="Delivery Lakay"
+                    style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                  />
                 </div>
-                <div style={{ color: '#FFFFFF', fontSize: '1.28rem', fontWeight: 900, letterSpacing: '-0.3px', lineHeight: 1.15 }}>
-                  Makèt Ayisyen
-                </div>
-                <div style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.6875rem', fontWeight: 600, marginTop: 2 }}>
-                  Livrezon nan tout Cap-Haïtien
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#FFFFFF', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                      DELIVERY
+                    </span>
+                    <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#FF6000', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                      LAKAY
+                    </span>
+                  </div>
+                  <span style={{ fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 600, marginTop: 2 }}>
+                    Sèvis Livrezon · Cap-Haïtien
+                  </span>
                 </div>
               </div>
               <button
@@ -749,8 +850,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               {!user ? (
                 <>
                   <div className="ma-drawer-row" onClick={() => nav('auth')}>
-                    <div className="ma-drawer-icon-box" style={{ background: '#FEF3C7' }}>
-                      <span>🔑</span>
+                    <div className="ma-drawer-icon-box" style={{ background: '#FEF3C7', color: '#D97706' }}>
+                      <IconLogIn />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="ma-drawer-row-title">Konekte</div>
@@ -760,8 +861,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   </div>
 
                   <div className="ma-drawer-row" onClick={() => nav('auth')}>
-                    <div className="ma-drawer-icon-box" style={{ background: '#F3E8FF' }}>
-                      <span>✨</span>
+                    <div className="ma-drawer-icon-box" style={{ background: '#F3E8FF', color: '#7C3AED' }}>
+                      <IconUserPlus />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="ma-drawer-row-title">Kreye yon kont</div>
@@ -773,8 +874,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               ) : (
                 <>
                   <div className="ma-drawer-row" onClick={() => nav('profile')}>
-                    <div className="ma-drawer-icon-box" style={{ background: '#EFF6FF' }}>
-                      <span>👤</span>
+                    <div className="ma-drawer-icon-box" style={{ background: '#EFF6FF', color: '#2563EB' }}>
+                      <IconUser />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="ma-drawer-row-title">Pwofil mwen ({user.firstName || 'Kont'})</div>
@@ -784,8 +885,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   </div>
 
                   <div className="ma-drawer-row" onClick={() => nav('orders')}>
-                    <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5' }}>
-                      <span>📦</span>
+                    <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5', color: '#059669' }}>
+                      <IconClipboard />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="ma-drawer-row-title">Kòmann mwen yo</div>
@@ -795,8 +896,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   </div>
 
                   <div className="ma-drawer-row" onClick={() => { setDrawerOpen(false); logout() }}>
-                    <div className="ma-drawer-icon-box" style={{ background: '#FEE2E2' }}>
-                      <span>🚪</span>
+                    <div className="ma-drawer-icon-box" style={{ background: '#FEE2E2', color: '#DC2626' }}>
+                      <IconLogOut />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div className="ma-drawer-row-title" style={{ color: '#DC2626' }}>Dekonekte</div>
@@ -813,8 +914,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   openCart()
                 }}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED' }}>
-                  <span>🛒</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED', color: '#EA580C' }}>
+                  <IconCart />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -848,8 +949,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
                 onClick={goHome}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#FFF1F2' }}>
-                  <span>🛍️</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF1F2', color: '#E11D48' }}>
+                  <IconBag />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Tout pwodwi</div>
@@ -862,8 +963,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'RESTAURANT' ? 'active' : ''}`}
                 onClick={() => filterCat('RESTAURANT')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#FEF2F2' }}>
-                  <span>🍽️</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FEF2F2', color: '#DC2626' }}>
+                  <IconUtensils />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Manje Ayisyen</div>
@@ -876,8 +977,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'FAST_FOOD' ? 'active' : ''}`}
                 onClick={() => filterCat('FAST_FOOD')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#FFFBEB' }}>
-                  <span>🌶️</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFFBEB', color: '#D97706' }}>
+                  <IconFlame />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Epis ak Pwodwi Lakay</div>
@@ -890,8 +991,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'CONSTRUCTION' ? 'active' : ''}`}
                 onClick={() => filterCat('CONSTRUCTION')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#F0FDF4' }}>
-                  <span>👕</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F0FDF4', color: '#059669' }}>
+                  <IconTag />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Rad ak Akseswa</div>
@@ -904,8 +1005,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'BEVERAGE_DEPOT' ? 'active' : ''}`}
                 onClick={() => filterCat('BEVERAGE_DEPOT')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#F5F3FF' }}>
-                  <span>👟</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F5F3FF', color: '#7C3AED' }}>
+                  <IconBox />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Soulye</div>
@@ -918,8 +1019,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
                 onClick={() => filterCat('SUPERMARKET')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5' }}>
-                  <span>🛒</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5', color: '#0D9488' }}>
+                  <IconStore />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Sipèmache & Episri</div>
@@ -932,8 +1033,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className={`ma-drawer-row ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
                 onClick={() => filterCat('PHARMACY')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#E0F2FE' }}>
-                  <span>💊</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#E0F2FE', color: '#0284C7' }}>
+                  <IconPill />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Famasi & Sante</div>
@@ -953,8 +1054,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className="ma-drawer-row"
                 onClick={() => nav('orders')}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED' }}>
-                  <span>🛵</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED', color: '#EA580C' }}>
+                  <IconTruck />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Swiv yon kòmann</div>
@@ -971,7 +1072,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 style={{ textDecoration: 'none' }}
               >
                 <div className="ma-drawer-icon-box" style={{ background: '#DCFCE7' }}>
-                  <span>💬</span>
+                  <IconWhatsApp size={18} color="#16A34A" />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">WhatsApp Sipò</div>
@@ -984,8 +1085,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 className="ma-drawer-row"
                 onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
               >
-                <div className="ma-drawer-icon-box" style={{ background: '#F1F5F9' }}>
-                  <span>❓</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F1F5F9', color: '#475569' }}>
+                  <IconHelp />
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div className="ma-drawer-row-title">Sant Èd & Kesyon Souvan</div>
@@ -1018,11 +1119,11 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)'
                 }}
               >
-                <span style={{ fontSize: '1.1rem' }}>🏪</span>
+                <IconStore />
                 <span>Vin Vandè sou Delivery Lakay</span>
               </button>
               <div style={{ textAlign: 'center', fontSize: '0.625rem', color: '#94A3B8', fontWeight: 600, marginTop: 8 }}>
-                Makèt Ayisyen · Delivery Lakay Haïti
+                Delivery Lakay Haïti · Sèvis Livrezon Rapid
               </div>
             </div>
           </div>
