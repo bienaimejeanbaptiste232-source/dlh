@@ -8112,3 +8112,777 @@ body {
     0 10px 30px rgba(34, 197, 94, 0.25),
     inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
+
+
+/* ════════════════════════════════════════════════════════════════
+   COMPREHENSIVE RESPONSIVE SYSTEM — Mobile · Tablet · Laptop
+   Full responsive adaptation for all pages and components
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── Global overflow prevention ─────────────────────────────── */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ── Navbar brand & subtitle responsive classes ─────────────── */
+.ma-nav-brand-subtitle {
+  display: inline-block;
+}
+
+.ma-nav-logo-img {
+  height: 36px;
+  width: auto;
+  max-width: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* ── ProfilePage inline edit form grid ───────────────────────── */
+.profile-edit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   LAPTOP & DESKTOP — 1025px+
+   ════════════════════════════════════════════════════════════════ */
+@media (min-width: 1025px) {
+  .ma-header-main {
+    padding: 10px 32px;
+  }
+
+  .ma-nav-search-form {
+    max-width: 640px;
+  }
+
+  .ma-pc-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .merchant-glass-card {
+    max-width: 460px;
+    padding: 42px 36px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TABLET — 769px to 1024px
+   ════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .ma-header-main {
+    padding: 10px 20px;
+    gap: 12px;
+  }
+
+  .ma-nav-search-form {
+    max-width: 420px;
+  }
+
+  .ma-pc-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+
+  .checkout-layout {
+    grid-template-columns: 1fr 320px;
+  }
+
+  .ma-hero-maket {
+    grid-template-columns: 1fr 280px;
+  }
+
+  .ma-hero-slider-card,
+  .ma-hero-seller-card {
+    height: 300px;
+  }
+
+  .merchant-glass-card {
+    max-width: 420px;
+    padding: 36px 28px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   TABLET / MOBILE — max-width: 768px
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Navbar main row ── */
+  .ma-header-main {
+    padding: 8px 14px;
+    gap: 10px;
+  }
+
+  /* Search form gets full remaining space */
+  .ma-nav-search-form {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .ma-nav-search-input {
+    font-size: 0.875rem;
+    padding: 8px 10px;
+    min-width: 0;
+  }
+
+  /* Right side: compress gap */
+  .ma-nav-right {
+    gap: 8px !important;
+  }
+
+  /* Merchant register card */
+  .merchant-glass-card {
+    max-width: min(440px, 94vw) !important;
+    padding: 32px 22px !important;
+    border-radius: 28px !important;
+  }
+
+  .merchant-glass-title {
+    font-size: 1.6rem !important;
+  }
+
+  /* Cart drawer — full width on tablet */
+  .cart-drawer {
+    width: min(420px, 100vw) !important;
+    max-width: 100vw !important;
+  }
+
+  /* Product modal responsive */
+  .product-modal-card {
+    width: min(96vw, 480px) !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    border-radius: 20px !important;
+  }
+
+  /* Order detail modal */
+  .order-detail-card {
+    width: min(95vw, 660px) !important;
+    max-height: 92vh !important;
+  }
+
+  /* Order detail overlay padding */
+  .order-detail-overlay {
+    padding: 20px 12px !important;
+  }
+
+  /* Hero slider */
+  .ma-hero-slider-card {
+    height: 240px;
+  }
+
+  .ma-hero-seller-card {
+    height: auto;
+    padding: 24px 20px;
+    min-height: 180px;
+  }
+
+  /* Category rail — touch scrolling */
+  .ma-cat-rail-track {
+    -webkit-overflow-scrolling: touch;
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .ma-cat-rail-wrap {
+    padding: 12px 16px;
+    margin: 10px 0 18px;
+  }
+
+  /* Auth page */
+  .auth-wrapper {
+    padding: 20px 16px;
+    min-height: calc(100dvh - 60px);
+  }
+
+  .auth-card {
+    padding: 28px 20px !important;
+  }
+
+  /* Page padding adjustments */
+  .page {
+    padding: 16px 14px 56px !important;
+  }
+
+  /* Profile edit grid — single column on tablet */
+  .profile-edit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Checkout layout override */
+  .checkout-layout {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .order-summary-card {
+    position: static !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MOBILE — max-width: 640px
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 640px) {
+  /* ── Navbar: compress logo area ── */
+  .ma-nav-logo-img {
+    height: 30px !important;
+    max-width: 46px !important;
+  }
+
+  .ma-nav-brand-main,
+  .ma-nav-brand-accent {
+    font-size: 1rem !important;
+  }
+
+  /* ── Hero ── */
+  .ma-hero-slider-card {
+    height: 200px;
+  }
+
+  .ma-hero-slide-item {
+    padding: 20px 18px;
+  }
+
+  .ma-hero-slide-headline {
+    font-size: 1.2rem;
+  }
+
+  .ma-hero-maket {
+    grid-template-columns: 1fr !important;
+    gap: 12px;
+    margin: 10px 0 18px;
+  }
+
+  .ma-hero-seller-card {
+    height: auto;
+    padding: 20px 18px;
+    min-height: 160px;
+  }
+
+  /* ── Category rail ── */
+  .ma-cat-circle-bubble {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .ma-cat-rail-track {
+    gap: 14px;
+  }
+
+  /* ── Product grid ── */
+  .ma-pc-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* ── Merchant card ── */
+  .merchant-glass-card {
+    max-width: min(400px, 94vw) !important;
+    padding: 28px 18px !important;
+    border-radius: 24px !important;
+  }
+
+  .merchant-glass-title {
+    font-size: 1.45rem !important;
+  }
+
+  /* ── Cart drawer — full width on mobile ── */
+  .cart-drawer {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    border-radius: 0 !important;
+  }
+
+  /* ── Product modal ── */
+  .product-modal-card {
+    width: 97vw !important;
+    max-width: 97vw !important;
+    max-height: 94vh !important;
+    border-radius: 18px !important;
+  }
+
+  .ma-prod-modal-grid {
+    grid-template-columns: 1fr !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .ma-prod-modal-gallery {
+    border-right: none !important;
+    border-bottom: 1px solid #E2E8F0 !important;
+    padding: 14px !important;
+    min-height: 180px !important;
+    height: 200px !important;
+  }
+
+  /* ── Order detail modal ── */
+  .order-detail-card {
+    width: 97vw !important;
+    max-width: 97vw !important;
+    border-radius: 18px !important;
+  }
+
+  .order-detail-grid {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* ── Auth card ── */
+  .auth-wrapper {
+    padding: 16px 12px;
+  }
+
+  .auth-card {
+    padding: 24px 16px !important;
+    border-radius: 20px !important;
+  }
+
+  /* ── Checkout ── */
+  .checkout-section {
+    padding: 18px 16px !important;
+  }
+
+  .payment-opt {
+    padding: 14px 12px !important;
+    gap: 10px !important;
+  }
+
+  /* ── Subnav bar ── */
+  .ma-subnav-bar {
+    padding: 0 12px;
+  }
+
+  .ma-subnav-inner {
+    gap: 16px;
+  }
+
+  .ma-subnav-link {
+    font-size: 0.75rem;
+  }
+
+  /* ── Page padding small screens ── */
+  .page {
+    padding: 12px 12px 72px !important;
+  }
+
+  /* ── Category chips ── */
+  .cat-chip {
+    padding: 7px 14px !important;
+    font-size: 0.8125rem !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   SMALL PHONES — max-width: 480px
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* ── Navbar: hide subtitle on smallest screens ── */
+  .ma-nav-brand-subtitle {
+    display: none !important;
+  }
+
+  .ma-nav-brand-main,
+  .ma-nav-brand-accent {
+    font-size: 0.9375rem !important;
+  }
+
+  .ma-nav-logo-img {
+    height: 28px !important;
+    max-width: 40px !important;
+  }
+
+  /* Search input: smaller placeholder, prevent iOS zoom */
+  .ma-nav-search-input {
+    font-size: 16px !important; /* prevents iOS auto-zoom */
+    padding: 7px 8px !important;
+  }
+
+  .ma-nav-search-input::placeholder {
+    font-size: 0.8125rem !important;
+  }
+
+  /* ── Page ── */
+  .page {
+    padding: 10px 10px 70px !important;
+  }
+
+  /* ── Merchant register card ── */
+  .merchant-glass-card {
+    padding: 24px 16px !important;
+    border-radius: 22px !important;
+  }
+
+  .merchant-glass-title {
+    font-size: 1.3rem !important;
+  }
+
+  /* ── Auth card ── */
+  .auth-card {
+    padding: 20px 14px !important;
+    border-radius: 18px !important;
+  }
+
+  /* ── Forms ── */
+  .input-field {
+    font-size: 16px !important; /* prevents iOS zoom */
+    height: 44px !important;
+    padding: 0 42px 0 42px !important;
+  }
+
+  textarea.input-field {
+    height: auto !important;
+    padding: 12px 14px !important;
+  }
+
+  /* ── Buttons — touch-friendly ── */
+  .btn-submit,
+  .btn-primary,
+  .merchant-glass-submit-btn {
+    height: 48px !important;
+    font-size: 0.9375rem !important;
+    min-height: 44px !important;
+  }
+
+  /* ── Profile edit grid ── */
+  .profile-edit-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* ── Category rail ── */
+  .ma-cat-circle-bubble {
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  .ma-cat-rail-label {
+    font-size: 0.6875rem !important;
+  }
+
+  /* ── Hero ── */
+  .ma-hero-slider-card {
+    height: 180px !important;
+  }
+
+  .ma-hero-slide-headline {
+    font-size: 1.05rem !important;
+  }
+
+  .ma-hero-promo-badge {
+    font-size: 0.6875rem !important;
+    padding: 4px 10px !important;
+  }
+
+  /* ── Subnav bar ── */
+  .ma-subnav-link {
+    font-size: 0.6875rem !important;
+  }
+
+  .ma-subnav-inner {
+    gap: 12px !important;
+    height: 34px !important;
+  }
+
+  /* ── Product modal on tiny phones ── */
+  .product-modal-card {
+    max-height: 96vh !important;
+  }
+
+  /* ── Cart drawer header ── */
+  .cart-header {
+    padding: 14px 16px !important;
+  }
+
+  .cart-title {
+    font-size: 1rem !important;
+  }
+
+  /* ── Progress steps in merchant register ── */
+  .merchant-glass-progress-pill {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* ── Bottom nav label ── */
+  .bottom-nav-label {
+    font-size: 0.65rem !important;
+  }
+
+  /* ── Orders page ── */
+  .order-card {
+    border-radius: 14px !important;
+    padding: 14px 14px !important;
+  }
+
+  .orders-list {
+    gap: 12px !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   MICRO PHONES — max-width: 390px (iPhone SE, etc.)
+   ════════════════════════════════════════════════════════════════ */
+@media (max-width: 390px) {
+  .ma-nav-brand-group {
+    display: none !important;
+  }
+
+  .ma-nav-logo-img {
+    height: 32px !important;
+  }
+
+  .ma-nav-menu-btn {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .ma-nav-cart-btn {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 0 !important;
+  }
+
+  .ma-nav-cart-badge {
+    min-width: 16px !important;
+    height: 16px !important;
+    font-size: 0.6rem !important;
+  }
+
+  .page {
+    padding: 8px 8px 68px !important;
+  }
+
+  .merchant-glass-card {
+    padding: 20px 14px !important;
+    max-width: 97vw !important;
+  }
+
+  .auth-card {
+    padding: 18px 12px !important;
+  }
+
+  .ma-pc-grid {
+    gap: 8px !important;
+  }
+
+  .ma-hero-slider-card {
+    height: 160px !important;
+  }
+
+  .ma-hero-slide-headline {
+    font-size: 0.95rem !important;
+  }
+
+  .ma-subnav-link {
+    font-size: 0.625rem !important;
+  }
+}
+
+/* ════════════════════════════════════════════════════════════════
+   PRINT SAFE — ensure no overflow when printing
+   ════════════════════════════════════════════════════════════════ */
+@media not print {
+  .ma-nav-brand-group,
+  .ma-nav-brand-subtitle,
+  .ma-nav-brand-main,
+  .ma-nav-brand-accent {
+    /* These are handled by screen-size rules above */
+  }
+}
+
+/* ── Safe insets for notched devices ───────────────────────────── */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .mobile-bottom-nav {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    height: calc(60px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .merchant-glass-page {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .cart-drawer {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .app-main {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* ── Touch target minimum enforcement ───────────────────────── */
+.ma-nav-menu-btn,
+.ma-nav-cart-btn,
+.bottom-nav-item,
+.nav-btn,
+.btn-submit,
+.btn-primary,
+.btn-secondary {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.bottom-nav-item {
+  min-height: 60px;
+}
+
+/* ── Horizontal scroll protection ──────────────────────────── */
+.app-container,
+.app-main,
+.page,
+.page-home {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ── Responsive images everywhere ───────────────────────────── */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ── Prevent fixed-width inline elements from overflowing ───── */
+.navbar-wrapper,
+.ma-header-main,
+.ma-subnav-bar {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* ── Responsive merchant register page background ───────────── */
+@media (max-width: 768px) {
+  .merchant-glass-page {
+    padding: 24px 14px 80px !important;
+    background-attachment: scroll !important; /* fixed bg can break on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .merchant-glass-page {
+    padding: 16px 10px 72px !important;
+  }
+}
+
+/* ── Drawer: ensure it doesn't push page on mobile ──────────── */
+@media (max-width: 480px) {
+  .ma-drawer-content {
+    width: min(320px, 90vw) !important;
+    max-width: 90vw !important;
+  }
+}
+
+/* ── Responsive footer adjustments ─────────────────────────── */
+@media (max-width: 480px) {
+  .enterprise-footer {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .footer-brand-name {
+    font-size: 1.1rem !important;
+  }
+}
+
+/* ── Responsive product cards (.ma-pc) ─────────────────────── */
+@media (max-width: 480px) {
+  .ma-pc-img {
+    height: 120px !important;
+  }
+
+  .ma-pc-name {
+    font-size: 0.8125rem !important;
+    -webkit-line-clamp: 1 !important;
+  }
+
+  .ma-pc-price {
+    font-size: 0.875rem !important;
+  }
+
+  .ma-pc-add-btn {
+    width: 30px !important;
+    height: 30px !important;
+  }
+}
+
+/* ── ProfilePage responsive ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .profile-edit-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ── OrdersPage filter chips row ───────────────────────────── */
+@media (max-width: 640px) {
+  .cat-chips-row {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding-bottom: 4px !important;
+  }
+
+  .cat-chips-row::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+/* ── Subnav bar responsive ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .ma-subnav-bar {
+    padding: 0 10px;
+  }
+
+  .ma-subnav-inner {
+    gap: 14px;
+    min-width: max-content;
+  }
+}
+
+/* ── Checkout items list wrap ───────────────────────────────── */
+@media (max-width: 480px) {
+  .summary-item-name {
+    max-width: 55vw !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+}
+
+/* ── Make ma-nav-left & ma-nav-right flex shrink sensibly ───── */
+.ma-nav-left {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+.ma-nav-right {
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* ── Subnav pill CTA button on mobile ───────────────────────── */
+@media (max-width: 480px) {
+  .ma-nav-sell-pill {
+    font-size: 0.6875rem !important;
+    padding: 5px 10px !important;
+  }
+}
+
+/* ── Merchant register progress bar ────────────────────────── */
+@media (max-width: 480px) {
+  .merchant-step-indicator {
+    gap: 8px !important;
+  }
+
+  .merchant-step-pill {
+    font-size: 0.6875rem !important;
+    padding: 4px 10px !important;
+  }
+}

@@ -289,7 +289,7 @@ export default function ProfilePage({
           <div style={{ fontWeight: 800, fontSize: '0.95rem', color: 'var(--text-primary)' }}>
             Modifye Enfòmasyon Pèsonèl
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          <div className="profile-edit-grid" style={{ gap: 12 }}>
             <div>
               <label style={{ fontSize: '0.8125rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: 5 }}>
                 Prenon

@@ -406,7 +406,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
       {/* ── Tier 1: Main Header Row (1:1 Maket Ayisyen Design) ── */}
       <nav className="ma-header-main">
         {/* Left: Menu Drawer Button + Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <div className="ma-nav-left" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
           {/* Hamburger Menu Button (Icon Only - No label) */}
           <button
             ref={menuBtnRef}
@@ -428,18 +428,19 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             <img
               src="/logo.png"
               alt="Delivery Lakay"
+              className="ma-nav-logo-img"
               style={{ height: 36, width: 'auto', objectFit: 'contain' }}
             />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="ma-nav-brand-group" style={{ display: 'flex', flexDirection: 'column' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                <span className="ma-nav-brand-main" style={{ fontSize: '1.15rem', fontWeight: 900, color: '#17191C', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                   DELIVERY
                 </span>
-                <span style={{ fontSize: '1.15rem', fontWeight: 900, color: '#E11D48', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
+                <span className="ma-nav-brand-accent" style={{ fontSize: '1.15rem', fontWeight: 900, color: '#E11D48', letterSpacing: '-0.3px', lineHeight: 1.1 }}>
                   LAKAY
                 </span>
               </div>
-              <span style={{ fontSize: '0.5625rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.3px', textTransform: 'uppercase' }}>
+              <span className="ma-nav-brand-subtitle" style={{ fontSize: '0.5625rem', color: '#64748B', fontWeight: 700, letterSpacing: '0.3px', textTransform: 'uppercase' }}>
                 Makèt Ayisyen · Okap
               </span>
             </div>
@@ -461,7 +462,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
         </form>
 
         {/* Right: Zone Dropdown + Account + Orders + Cart */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+        <div className="ma-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
           {/* Dedicated Zone Selector Dropdown (Does NOT open drawer) */}
           <div ref={zoneRef} style={{ position: 'relative' }}>
             <button

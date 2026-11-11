@@ -813,7 +813,7 @@ export default function OrdersPage({
       <div style={{ background: 'white', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)', padding: '12px 14px', marginBottom: 20, boxShadow: 'var(--shadow-xs)' }}>
         {/* Status Filters */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <div className="cat-chips-row" style={{ display: 'flex', gap: 6 }}>
             {[
               { key: 'all' as const, label: 'Tout' },
               { key: 'active' as const, label: 'Aktif', hasDot: true },
