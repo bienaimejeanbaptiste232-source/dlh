@@ -4,7 +4,7 @@ import { useCart } from '../contexts/CartContext'
 import type { MerchantCategory } from '../App'
 import { showToast } from '../lib/toast'
 
-type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy'
+type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy' | 'merchant-register'
 
 interface NavbarProps {
   page: NavPage
@@ -1086,7 +1086,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 type="button"
                 onClick={() => {
                   setDrawerOpen(false)
-                  setVendorModalOpen(true)
+                  onNavigate('merchant-register')
                 }}
                 className="ma-sell-btn"
               >
@@ -1141,6 +1141,22 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setVendorModalOpen(false)
+                  onNavigate('merchant-register')
+                }}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: 'linear-gradient(135deg, #FF6000 0%, #EA580C 100%)', color: '#FFFFFF', padding: '12px 18px', borderRadius: 10,
+                  fontSize: '0.875rem', fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255, 96, 0, 0.3)'
+                }}
+              >
+                <IconStore />
+                <span>Ale sou Paj Enskripsyon Machann nan</span>
+              </button>
+
               <a
                 href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20ta%20renmen%20vin%20vandè%20ak%20enskri%20boutik%20mwen%20sou%20platfòm%20nan%20nan%20Cap-Haïtien."
                 target="_blank"

@@ -7723,3 +7723,332 @@ body {
 }
 
 
+
+
+/* ── Merchant Glassmorphism Registration Page ──────────────────────── */
+.merchant-glass-page {
+  min-height: 100vh;
+  width: 100%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px 80px 16px;
+  background: 
+    linear-gradient(180deg, rgba(15, 23, 42, 0.72) 0%, rgba(15, 23, 42, 0.88) 100%),
+    url('/banners/dlh_merchant_boutique.jpg') center/cover no-repeat fixed;
+  box-sizing: border-box;
+}
+
+.merchant-glass-container {
+  width: 100%;
+  max-width: 540px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  animation: fadeIn 0.3s ease;
+}
+
+.merchant-glass-card {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.58);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  border-radius: 28px;
+  padding: 36px 30px;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.65),
+    inset 0 1px 1px rgba(255, 255, 255, 0.45);
+  box-sizing: border-box;
+  color: #FFFFFF;
+}
+
+.merchant-glass-header {
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.merchant-glass-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  padding: 8px;
+  margin-bottom: 14px;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.25),
+    inset 0 1px 1px #FFFFFF;
+}
+
+.merchant-glass-title {
+  font-size: 1.75rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  margin: 0 0 6px 0;
+  color: #FFFFFF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.merchant-glass-subtitle {
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Glassmorphism Phone Alert Notice */
+.merchant-phone-alert {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 13px 16px;
+  border-radius: 16px;
+  background: rgba(255, 96, 0, 0.16);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 96, 0, 0.45);
+  box-shadow: 
+    0 4px 14px rgba(255, 96, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  margin-bottom: 24px;
+}
+
+.merchant-phone-alert-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.merchant-phone-alert-content {
+  flex: 1;
+}
+
+.merchant-phone-alert-title {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: #FFB380;
+  margin-bottom: 2px;
+}
+
+.merchant-phone-alert-text {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.45;
+}
+
+.merchant-form-section-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #CBD5E1;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 12px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.merchant-input-group {
+  margin-bottom: 14px;
+}
+
+.merchant-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 5px;
+}
+
+.merchant-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.merchant-glass-input {
+  width: 100%;
+  padding: 12px 42px 12px 15px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
+
+.merchant-glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.merchant-glass-input:focus {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: #FF6000;
+  box-shadow: 
+    0 0 0 3px rgba(255, 96, 0, 0.28),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.merchant-glass-select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.merchant-input-icon {
+  position: absolute;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.merchant-input-icon-btn {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.15s ease;
+}
+
+.merchant-input-icon-btn:hover {
+  color: #FFFFFF;
+}
+
+.merchant-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.4;
+  cursor: pointer;
+  margin: 18px 0 20px 0;
+}
+
+.merchant-checkbox {
+  margin-top: 2px;
+  width: 17px;
+  height: 17px;
+  border-radius: 4px;
+  accent-color: #FF6000;
+  cursor: pointer;
+}
+
+/* Glassmorphism Submit Button */
+.merchant-glass-submit-btn {
+  width: 100%;
+  padding: 14px 20px;
+  background: linear-gradient(135deg, #FF6000 0%, #EA580C 100%);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 16px;
+  color: #FFFFFF;
+  font-size: 0.9375rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 
+    0 10px 28px -3px rgba(255, 96, 0, 0.45),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.merchant-glass-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 14px 34px -4px rgba(255, 96, 0, 0.55),
+    inset 0 1px 2px rgba(255, 255, 255, 0.75);
+}
+
+.merchant-glass-submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.merchant-glass-secondary-btn {
+  width: 100%;
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 14px;
+  color: #FFFFFF;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.merchant-glass-secondary-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.6);
+}
+
+.merchant-glass-footer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.merchant-glass-back-link {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.merchant-glass-back-link:hover {
+  color: #FFFFFF;
+  text-decoration: underline;
+}
+
+/* Success Card */
+.merchant-glass-card.success-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.merchant-success-badge {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(22, 163, 74, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid rgba(34, 197, 94, 0.6);
+  color: #22C55E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 10px 30px rgba(34, 197, 94, 0.25),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}

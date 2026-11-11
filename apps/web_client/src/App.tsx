@@ -14,8 +14,9 @@ import CheckoutPage from './pages/CheckoutPage'
 import ProfilePage from './pages/ProfilePage'
 import OrdersPage from './pages/OrdersPage'
 import LegalPage from './pages/LegalPage'
+import MerchantRegisterPage from './pages/MerchantRegisterPage'
 
-export type Page = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy'
+export type Page = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy' | 'merchant-register'
 export type MerchantCategory = 'ALL' | 'RESTAURANT' | 'FAST_FOOD' | 'SUPERMARKET' | 'PHARMACY' | 'CONSTRUCTION' | 'BEVERAGE_DEPOT'
 
 // ─── Toast ────────────────────────────────────────────────────
@@ -103,7 +104,12 @@ function parseInitialRoute(): {
     return { page: 'privacy' }
   }
 
-  // 9. Category routes: /category/:cat or /kategori/:cat or ?cat=RESTAURANT
+  // 9. Merchant Register: /merchant-register or /vin-vande or /vande
+  if (path === '/merchant-register' || path === '/vin-vande' || path === '/vande') {
+    return { page: 'merchant-register' }
+  }
+
+  // 10. Category routes: /category/:cat or /kategori/:cat or ?cat=RESTAURANT
   const catMatch = window.location.pathname.match(/^\/(?:category|kategori)\/([^/?#]+)/i)
   const catParam = searchParams.get('cat') || searchParams.get('category')
   const rawCat = catMatch ? catMatch[1] : catParam
@@ -196,6 +202,9 @@ function AppInner() {
     } else if (target === 'privacy' || target === '/privacy' || target === '/vi-prive') {
       targetPage = 'privacy'
       targetPath = '/privacy'
+    } else if (target === 'merchant-register' || target === '/merchant-register' || target === '/vin-vande' || target === 'vin-vande') {
+      targetPage = 'merchant-register'
+      targetPath = '/vin-vande'
     } else {
       // Home /
       targetPage = 'home'
@@ -283,6 +292,9 @@ function AppInner() {
             onGoHome={() => navigate('home')}
             onSwitchTab={(tab) => navigate(tab)}
           />
+        )}
+        {page === 'merchant-register' && (
+          <MerchantRegisterPage onGoHome={() => navigate('home')} />
         )}
       </main>
 

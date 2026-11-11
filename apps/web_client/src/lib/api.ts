@@ -288,6 +288,118 @@ export async function apiRegister(body: {
   return null
 }
 
+export async function apiRegisterMerchant(body: {
+  businessName: string
+  businessType: string
+  ownerFirstName: string
+  ownerLastName: string
+  phoneNumber: string
+  password: string
+  email?: string
+  address: string
+}): Promise<{ ok: boolean; msg?: string; merchant?: any }> {
+  const cleanPhone = body.phoneNumber.replace(/\D/g, '')
+  const fullPhone = cleanPhone.startsWith('509') ? `+${cleanPhone}` : `+509${cleanPhone}`
+
+  try {
+    // 1. Tcheke si nimewo a oswa imèl la deja anrejistre nan Supabase
+    const checkQuery = body.email && body.email.trim()
+      ? `or=(phoneNumber.eq.${encodeURIComponent(fullPhone)},email.eq.${encodeURIComponent(body.email.trim())})`
+      : `phoneNumber=eq.${encodeURIComponent(fullPhone)}`
+
+    const checkRes = await fetch(`${SUPABASE_URL}/rest/v1/users?${checkQuery}&limit=1`, {
+      headers: publicHeaders,
+    })
+    if (checkRes.ok) {
+      const existing = await checkRes.json()
+      if (Array.isArray(existing) && existing.length > 0) {
+        return { ok: false, msg: 'Gen yon kont ki deja anrejistre ak nimewo telefòn oswa imèl sa a.' }
+      }
+    }
+
+    // 2. Kreye kont responsab la nan tab users ak wòl RESTAURANT
+    const dummyHash = '$2b$10$MkjfesiA0BLNSK6WvBAx/enRMa5nf0AtTwtrMVPuaHX9rRXnK8eC.'
+    const userPayload = {
+      firstName: body.ownerFirstName.trim(),
+      lastName: body.ownerLastName.trim(),
+      phoneNumber: fullPhone,
+      email: body.email?.trim() || null,
+      passwordHash: dummyHash,
+      role: 'RESTAURANT',
+      isActive: true,
+      isPhoneVerified: true,
+      languagePreference: 'ht',
+    }
+
+    const userRes = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+      method: 'POST',
+      headers: {
+        ...publicHeaders,
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify(userPayload),
+    })
+
+    if (!userRes.ok) {
+      const errText = await userRes.text()
+      console.warn('Erè kreyasyon user machann:', errText)
+      return { ok: false, msg: 'Erè pandan kreyasyon kont itilizatè machann lan.' }
+    }
+
+    const createdUsers = await userRes.json()
+    const newUserId = createdUsers[0]?.id
+
+    // 3. Jwenn yon default zoneId
+    let defaultZoneId: string | null = null
+    try {
+      const zoneRes = await fetch(`${SUPABASE_URL}/rest/v1/delivery_zones?limit=1`, {
+        headers: publicHeaders,
+      })
+      if (zoneRes.ok) {
+        const zList = await zoneRes.json()
+        if (zList.length > 0) defaultZoneId = zList[0].id
+      }
+    } catch (_) {}
+
+    // 4. Kreye pwofil Machann nan tab merchants ak isVerified: false (atann validasyon Admin)
+    const merchantPayload = {
+      ownerId: newUserId,
+      name: body.businessName.trim(),
+      type: body.businessType,
+      phone: fullPhone,
+      address: body.address.trim(),
+      latitude: 19.7595,
+      longitude: -72.2008,
+      zoneId: defaultZoneId,
+      commissionRate: 15.0,
+      avgPrepTimeMinutes: 25,
+      isOpen: false,
+      isVerified: false, // POKO VALIDE - ATANN ADMIN
+    }
+
+    const merchRes = await fetch(`${SUPABASE_URL}/rest/v1/merchants`, {
+      method: 'POST',
+      headers: {
+        ...publicHeaders,
+        Prefer: 'return=representation',
+      },
+      body: JSON.stringify(merchantPayload),
+    })
+
+    if (!merchRes.ok) {
+      const errText = await merchRes.text()
+      console.warn('Erè kreyasyon merchant:', errText)
+      return { ok: false, msg: 'Erè pandan anrejistreman etablisman an nan baz done a.' }
+    }
+
+    const createdMerchants = await merchRes.json()
+    return { ok: true, merchant: createdMerchants[0] }
+  } catch (err: any) {
+    console.error('apiRegisterMerchant error:', err)
+    return { ok: false, msg: err?.message || 'Erè rezo pandan soumisyon anrejistreman an.' }
+  }
+}
+
 // ── Helpers ─────────────────────────────────────────────────────
 /**
  * Known user accounts for Mackby across phone numbers (+50940553636 and +50938642798)
