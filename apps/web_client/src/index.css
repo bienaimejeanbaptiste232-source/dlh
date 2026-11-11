@@ -4708,6 +4708,8 @@ a { text-decoration: none; color: inherit; }
   justify-content: center;
   padding: 16px;
   animation: fadeIn 0.2s ease;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 .product-modal-card {
@@ -4722,6 +4724,7 @@ a { text-decoration: none; color: inherit; }
   display: flex;
   flex-direction: column;
   animation: productModalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: default;
 }
 
 .ma-prod-modal-grid {
@@ -6250,6 +6253,8 @@ a { text-decoration: none; color: inherit; }
   z-index: 9999;
   backdrop-filter: blur(2px);
   animation: fadeIn 0.2s ease;
+  cursor: pointer;
+  touch-action: manipulation;
 }
 
 .ma-drawer-content {
@@ -6265,6 +6270,7 @@ a { text-decoration: none; color: inherit; }
   flex-direction: column;
   box-shadow: 4px 0 24px rgba(0, 0, 0, 0.15);
   animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: default;
 }
 
 @keyframes slideInLeft {
@@ -6510,7 +6516,8 @@ a { text-decoration: none; color: inherit; }
   flex-shrink: 0;
 }
 
-.ma-nav-menu-btn:hover {
+.ma-nav-menu-btn:hover,
+.ma-nav-menu-btn.active {
   background: #FFF7ED;
   border-color: #FF6000;
   color: #FF6000;
@@ -6518,14 +6525,7 @@ a { text-decoration: none; color: inherit; }
   transform: translateY(-1px);
 }
 
-.ma-nav-menu-btn:active {
-  transform: translateY(0);
-}
-
-.ma-nav-menu-btn svg {
-  transition: stroke 0.2s ease, transform 0.2s ease;
-}
-
+.ma-nav-menu-btn.active svg,
 .ma-nav-menu-btn:hover svg {
   stroke: #FF6000;
 }

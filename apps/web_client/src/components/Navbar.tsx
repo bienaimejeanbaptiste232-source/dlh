@@ -146,7 +146,7 @@ const CATEGORY_ITEMS: { cat: MerchantCategory; label: string }[] = [
   { cat: 'ALL', label: 'Tout Kategori' },
   { cat: 'RESTAURANT', label: 'Restoran & Bar' },
   { cat: 'FAST_FOOD', label: 'Fast Food & Fritay' },
-  { cat: 'SUPERMARKET', label: 'Sipèmache & Pwovizyon' },
+  { cat: 'SUPERMARKET', label: 'Sipèmache & Episri' },
   { cat: 'PHARMACY', label: 'Famasi & Sante' },
   { cat: 'CONSTRUCTION', label: 'Materyo Konstriksyon' },
   { cat: 'BEVERAGE_DEPOT', label: 'Dépôt Bwason & Dlo' },
@@ -172,30 +172,68 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
   const [zoneDropdownOpen, setZoneDropdownOpen] = useState(false)
   const accountRef = useRef<HTMLDivElement>(null)
   const zoneRef = useRef<HTMLDivElement>(null)
+  const drawerContentRef = useRef<HTMLDivElement>(null)
+  const menuBtnRef = useRef<HTMLButtonElement>(null)
+  const helpModalCardRef = useRef<HTMLDivElement>(null)
+  const helpSubnavBtnRef = useRef<HTMLButtonElement>(null)
 
-  // Close dropdowns on outside click + listen to global modal triggers
+  // Close dropdowns & modals on outside click/touch + Escape key + listen to global modal triggers
   useEffect(() => {
-    const handleOutside = (e: MouseEvent) => {
-      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+    const handleOutside = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node
+      if (accountRef.current && !accountRef.current.contains(target)) {
         setAccountMenuOpen(false)
       }
-      if (zoneRef.current && !zoneRef.current.contains(e.target as Node)) {
+      if (zoneRef.current && !zoneRef.current.contains(target)) {
+        setZoneDropdownOpen(false)
+      }
+      if (
+        drawerOpen &&
+        drawerContentRef.current &&
+        !drawerContentRef.current.contains(target) &&
+        menuBtnRef.current &&
+        !menuBtnRef.current.contains(target)
+      ) {
+        setDrawerOpen(false)
+      }
+      if (
+        helpModalOpen &&
+        helpModalCardRef.current &&
+        !helpModalCardRef.current.contains(target) &&
+        helpSubnavBtnRef.current &&
+        !helpSubnavBtnRef.current.contains(target)
+      ) {
+        setHelpModalOpen(false)
+      }
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setDrawerOpen(false)
+        setHelpModalOpen(false)
+        setVendorModalOpen(false)
+        setAccountMenuOpen(false)
         setZoneDropdownOpen(false)
       }
     }
+
     const handleOpenVendor = () => setVendorModalOpen(true)
     const handleOpenHelp = () => setHelpModalOpen(true)
 
     document.addEventListener('mousedown', handleOutside)
+    document.addEventListener('touchstart', handleOutside, { passive: true })
+    document.addEventListener('keydown', handleKeyDown)
     window.addEventListener('dlh:open-vendor', handleOpenVendor)
     window.addEventListener('dlh:open-help', handleOpenHelp)
 
     return () => {
       document.removeEventListener('mousedown', handleOutside)
+      document.removeEventListener('touchstart', handleOutside)
+      document.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('dlh:open-vendor', handleOpenVendor)
       window.removeEventListener('dlh:open-help', handleOpenHelp)
     }
-  }, [])
+  }, [drawerOpen, helpModalOpen])
 
   const nav = (p: NavPage) => {
     onNavigate(p)
@@ -293,14 +331,15 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
       <nav className="ma-header-main">
         {/* Left: Menu Drawer Button + Logo */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
-          {/* Hamburger Menu Button (Clearly opens the side drawer) */}
+          {/* Hamburger Menu Button (Toggles the side drawer) */}
           <button
-            onClick={() => setDrawerOpen(true)}
-            aria-label="Louvri Meni Prensipal"
-            className="ma-nav-menu-btn"
+            ref={menuBtnRef}
+            onClick={() => setDrawerOpen(prev => !prev)}
+            aria-label={drawerOpen ? "Fèmen Meni" : "Louvri Meni"}
+            className={`ma-nav-menu-btn ${drawerOpen ? 'active' : ''}`}
           >
-            <IconMenu />
-            <span>Meni</span>
+            {drawerOpen ? <IconX /> : <IconMenu />}
+            <span>{drawerOpen ? 'Fèmen' : 'Meni'}</span>
           </button>
 
           {/* Logo & Brand Name */}
@@ -659,9 +698,10 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           </button>
 
           <button
+            ref={helpSubnavBtnRef}
             type="button"
-            className="ma-subnav-link"
-            onClick={() => setHelpModalOpen(true)}
+            className={`ma-subnav-link ${helpModalOpen ? 'active' : ''}`}
+            onClick={() => setHelpModalOpen(prev => !prev)}
           >
             Èd & Asistans
           </button>
@@ -674,8 +714,9 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           <div
             className="ma-drawer-backdrop"
             onClick={() => setDrawerOpen(false)}
+            onTouchEnd={() => setDrawerOpen(false)}
           />
-          <div className="ma-drawer-content">
+          <div ref={drawerContentRef} className="ma-drawer-content">
             <div className="ma-drawer-head">
               <div className="ma-drawer-title">
                 <img src="/logo.png" alt="Logo" style={{ height: 28 }} />
@@ -821,42 +862,16 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
               <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '10px 0' }} />
 
-              {/* ── 3. ZÒN LIVREZON NAN OKAP ── */}
-              <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 6 }}>
-                Zòn Livrezon nan Okap
-              </div>
-              <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 10, padding: '10px 12px', marginBottom: 4 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 7, fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
-                  <IconMapPin />
-                  <span>Zòn Aktyèl: <strong style={{ color: '#FF6000' }}>{selectedZone}</strong></span>
-                </div>
-                <select
-                  value={selectedZone}
-                  onChange={(e) => handleZoneSelect(e.target.value)}
-                  style={{
-                    width: '100%',
-                    background: '#FFFFFF',
-                    border: '1.5px solid #CBD5E1',
-                    borderRadius: 8,
-                    padding: '8px 12px',
-                    fontSize: '0.8125rem',
-                    fontWeight: 700,
-                    color: '#0F172A',
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  {ZONES.map(z => (
-                    <option key={z} value={z}>{z}</option>
-                  ))}
-                </select>
-              </div>
-
-              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '10px 0' }} />
-
-              {/* ── 4. KONTAKTE & ÈD ── */}
+              {/* ── 3. KONTAKTE & ÈD ── */}
               <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
-                Kontakte & Èd
+                Sipò & Asistans
+              </div>
+              <div
+                className="ma-drawer-item"
+                onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
+              >
+                <IconHelp />
+                <span>Sant Èd & Kesyon Souvan</span>
               </div>
               <a
                 href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20bezwen%20asistans."
@@ -880,13 +895,6 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 </svg>
                 <span>Rele Dispatch · +509 40 55 36 36</span>
               </a>
-              <div
-                className="ma-drawer-item"
-                onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
-              >
-                <IconHelp />
-                <span>Sant Èd & Kesyon Souvan</span>
-              </div>
               <div
                 className="ma-drawer-item"
                 onClick={() => { setDrawerOpen(false); nav('terms') }}
@@ -1105,14 +1113,45 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
       {/* ── MODAL: Èd & Asistans ── */}
       {helpModalOpen && (
-        <div className="product-modal-backdrop" onClick={() => setHelpModalOpen(false)}>
-          <div className="product-modal-card" style={{ maxWidth: 460, padding: 24 }} onClick={e => e.stopPropagation()}>
+        <div
+          className="product-modal-backdrop"
+          onClick={() => setHelpModalOpen(false)}
+          onTouchEnd={(e) => {
+            if (e.target === e.currentTarget) setHelpModalOpen(false)
+          }}
+        >
+          <div
+            ref={helpModalCardRef}
+            className="product-modal-card"
+            style={{ maxWidth: 460, padding: 24, cursor: 'default' }}
+            onClick={e => e.stopPropagation()}
+          >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
               <div>
                 <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#059669', textTransform: 'uppercase' }}>Sipò Kliyan 24/7</span>
                 <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#0F172A' }}>Sant Èd & Asistans DLH</h3>
               </div>
-              <button onClick={() => setHelpModalOpen(false)} className="product-modal-close" style={{ position: 'static' }}>✕</button>
+              <button
+                type="button"
+                onClick={() => setHelpModalOpen(false)}
+                className="product-modal-close"
+                style={{
+                  position: 'static',
+                  background: '#F1F5F9',
+                  border: 'none',
+                  borderRadius: '50%',
+                  width: 32,
+                  height: 32,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  fontWeight: 900,
+                  color: '#475569'
+                }}
+              >
+                ✕
+              </button>
             </div>
 
             <p style={{ fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
@@ -1158,7 +1197,10 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
               <button
                 type="button"
-                onClick={() => nav('orders')}
+                onClick={() => {
+                  setHelpModalOpen(false)
+                  nav('orders')
+                }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 12, background: '#FFF3EB',
                   border: '1px solid #FFEDD5', borderRadius: 10, padding: '12px 14px', cursor: 'pointer', textAlign: 'left'
@@ -1174,7 +1216,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </button>
             </div>
 
-            <div style={{ background: '#F8FAFC', borderRadius: 10, padding: '10px 14px', border: '1px solid #E2E8F0' }}>
+            <div style={{ background: '#F8FAFC', borderRadius: 10, padding: '10px 14px', border: '1px solid #E2E8F0', marginBottom: 14 }}>
               <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 4 }}>Kesyon Moun Poze Souvan:</div>
               <div style={{ fontSize: '0.6875rem', color: '#64748B', lineHeight: 1.5 }}>
                 • <strong>Pri livrezon:</strong> 150 HTG nan tout Cap-Haïtien.<br />
@@ -1182,6 +1224,36 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 • <strong>Delè livrezon:</strong> 20 pou rive 45 minit selon distans la.
               </div>
             </div>
+
+            {/* Bouton Tounen nan Aplikasyon an */}
+            <button
+              type="button"
+              onClick={() => setHelpModalOpen(false)}
+              style={{
+                width: '100%',
+                padding: '12px',
+                background: '#0F172A',
+                color: '#FFFFFF',
+                border: 'none',
+                borderRadius: 10,
+                fontSize: '0.875rem',
+                fontWeight: 800,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: 8,
+                transition: 'background 0.15s ease'
+              }}
+              onMouseEnter={e => (e.currentTarget.style.background = '#1E293B')}
+              onMouseLeave={e => (e.currentTarget.style.background = '#0F172A')}
+            >
+              <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12" />
+                <polyline points="12 19 5 12 12 5" />
+              </svg>
+              <span>Tounen nan Aplikasyon an</span>
+            </button>
           </div>
         </div>
       )}
