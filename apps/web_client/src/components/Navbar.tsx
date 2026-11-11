@@ -296,23 +296,11 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           {/* Hamburger Menu Button (Clearly opens the side drawer) */}
           <button
             onClick={() => setDrawerOpen(true)}
-            aria-label="Louvri Meni Tiwa a"
+            aria-label="Louvri Meni Prensipal"
             className="ma-nav-menu-btn"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 6,
-              background: '#F8FAFC',
-              border: '1px solid #E2E8F0',
-              borderRadius: 8,
-              padding: '6px 12px',
-              cursor: 'pointer'
-            }}
           >
             <IconMenu />
-            <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#1E293B' }}>
-              Meni
-            </span>
+            <span>Meni</span>
           </button>
 
           {/* Logo & Brand Name */}
@@ -702,11 +690,69 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </button>
             </div>
 
+            {/* User Greeting Card in Drawer */}
+            <div style={{
+              background: '#0F172A',
+              padding: '14px 18px',
+              color: '#FFFFFF',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+              borderBottom: '1px solid #1E293B'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+                <div style={{
+                  width: 36,
+                  height: 36,
+                  borderRadius: '50%',
+                  background: user ? 'linear-gradient(135deg, #FF6000, #E11D48)' : '#334155',
+                  color: '#FFFFFF',
+                  fontWeight: 900,
+                  fontSize: '0.875rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0
+                }}>
+                  {user ? (user.firstName ? user.firstName.charAt(0).toUpperCase() : 'K') : <IconUser />}
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#FFFFFF', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                    {user ? `Bonjou, ${user.firstName || 'Kliyan'}!` : 'Byenvini sou DLH!'}
+                  </div>
+                  <div style={{ fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 600 }}>
+                    {user ? (user.phoneNumber || 'Kliyan Delivery Lakay') : 'Konekte pou w kòmande pi vit'}
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setDrawerOpen(false)
+                  nav(user ? 'profile' : 'auth')
+                }}
+                style={{
+                  background: user ? '#334155' : '#FF6000',
+                  color: '#FFFFFF',
+                  border: 'none',
+                  borderRadius: 6,
+                  padding: '6px 12px',
+                  fontSize: '0.75rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  flexShrink: 0
+                }}
+              >
+                {user ? 'Pwofil' : 'Konekte'}
+              </button>
+            </div>
+
             <div className="ma-drawer-body">
 
-              {/* ── 1. NAVIGASYON ── */}
+              {/* ── 1. NAVIGASYON PRENSIPAL ── */}
               <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
-                Navigasyon
+                Navigasyon Prensipal
               </div>
               <div
                 className={`ma-drawer-item ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
@@ -719,9 +765,33 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 <IconStore />
                 <span>Tout Boutik & Etablisman</span>
               </div>
+              <div
+                className="ma-drawer-item"
+                onClick={() => {
+                  setDrawerOpen(false)
+                  openCart()
+                }}
+              >
+                <IconCart />
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                  <span>Panyen Kòmann Mwen</span>
+                  {totalItems > 0 && (
+                    <span style={{
+                      background: '#FF6000',
+                      color: '#FFFFFF',
+                      fontSize: '0.6875rem',
+                      fontWeight: 900,
+                      padding: '2px 7px',
+                      borderRadius: 10
+                    }}>
+                      {totalItems}
+                    </span>
+                  )}
+                </div>
+              </div>
               <div className="ma-drawer-item" onClick={() => nav('orders')}>
                 <IconClipboard />
-                <span>Swiv Kòmann Mwen</span>
+                <span>Swiv Kòmann Mwen yo</span>
               </div>
               <div className="ma-drawer-item" onClick={() => nav(user ? 'profile' : 'auth')}>
                 <IconUser />
@@ -734,7 +804,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 4 }}>
                 Achte pa Kategori
               </div>
-              {CATEGORY_ITEMS.filter(c => c.cat !== 'ALL').map(({ cat, label }) => (
+              {CATEGORY_ITEMS.map(({ cat, label }) => (
                 <div
                   key={cat}
                   className={`ma-drawer-item ${activeCategory === cat && page === 'home' ? 'active' : ''}`}
@@ -751,14 +821,14 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
               <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '10px 0' }} />
 
-              {/* ── 3. ZÒN LIVREZON ── */}
+              {/* ── 3. ZÒN LIVREZON NAN OKAP ── */}
               <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.6px', padding: '0 2px', marginBottom: 6 }}>
-                Zòn Livrezon Ou nan Okap
+                Zòn Livrezon nan Okap
               </div>
               <div style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 10, padding: '10px 12px', marginBottom: 4 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 7, fontSize: '0.75rem', fontWeight: 700, color: '#475569' }}>
                   <IconMapPin />
-                  <span>Kounye a: <strong style={{ color: '#FF6000' }}>{selectedZone}</strong></span>
+                  <span>Zòn Aktyèl: <strong style={{ color: '#FF6000' }}>{selectedZone}</strong></span>
                 </div>
                 <select
                   value={selectedZone}
@@ -817,6 +887,13 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 <IconHelp />
                 <span>Sant Èd & Kesyon Souvan</span>
               </div>
+              <div
+                className="ma-drawer-item"
+                onClick={() => { setDrawerOpen(false); nav('terms') }}
+              >
+                <IconFileText />
+                <span>Kondisyon & Règleman sou Vi Prive</span>
+              </div>
 
             </div>
 
@@ -833,6 +910,9 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 <IconStore />
                 <span>Vin Vandè sou Delivery Lakay</span>
               </button>
+              <div style={{ textAlign: 'center', fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 600 }}>
+                Delivery Lakay Haïti · Sèvis Livrezon Okap
+              </div>
             </div>
           </div>
         </>

@@ -6493,20 +6493,41 @@ a { text-decoration: none; color: inherit; }
 }
 
 .ma-nav-menu-btn {
-  background: none;
-  border: none;
-  color: #17191C;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  color: #0F172A;
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  padding: 6px;
-  border-radius: 6px;
-  transition: background 0.15s;
+  gap: 8px;
+  padding: 7px 14px;
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  flex-shrink: 0;
 }
 
 .ma-nav-menu-btn:hover {
-  background: #F3F4F6;
+  background: #FFF7ED;
+  border-color: #FF6000;
+  color: #FF6000;
+  box-shadow: 0 3px 10px rgba(255, 96, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.ma-nav-menu-btn:active {
+  transform: translateY(0);
+}
+
+.ma-nav-menu-btn svg {
+  transition: stroke 0.2s ease, transform 0.2s ease;
+}
+
+.ma-nav-menu-btn:hover svg {
+  stroke: #FF6000;
 }
 
 .ma-nav-sell-pill {
