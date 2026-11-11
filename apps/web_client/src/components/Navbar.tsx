@@ -717,14 +717,18 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             onTouchEnd={() => setDrawerOpen(false)}
           />
           <div ref={drawerContentRef} className="ma-drawer-content">
-            {/* Header: Maket Ayisyen Red Header with Close Button */}
+            {/* Header: Maket Ayisyen Red Gradient Header */}
             <div className="ma-drawer-head">
               <div>
-                <div style={{ color: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, opacity: 0.95, marginBottom: 2 }}>
-                  Byenveni 👋
+                <div style={{ color: '#FFFFFF', fontSize: '0.8125rem', fontWeight: 600, opacity: 0.92, marginBottom: 2, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <span>Byenveni</span>
+                  <span style={{ fontSize: '1rem' }}>👋</span>
                 </div>
-                <div style={{ color: '#FFFFFF', fontSize: '1.25rem', fontWeight: 900, letterSpacing: '-0.3px' }}>
-                  Maket Ayisyen
+                <div style={{ color: '#FFFFFF', fontSize: '1.28rem', fontWeight: 900, letterSpacing: '-0.3px', lineHeight: 1.15 }}>
+                  Makèt Ayisyen
+                </div>
+                <div style={{ color: 'rgba(255, 255, 255, 0.75)', fontSize: '0.6875rem', fontWeight: 600, marginTop: 2 }}>
+                  Livrezon nan tout Cap-Haïtien
                 </div>
               </div>
               <button
@@ -744,44 +748,96 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
 
               {!user ? (
                 <>
-                  <div className="ma-drawer-item" onClick={() => nav('auth')}>
-                    <span style={{ fontSize: '1.15rem' }}>🔑</span>
-                    <span>Konekte</span>
+                  <div className="ma-drawer-row" onClick={() => nav('auth')}>
+                    <div className="ma-drawer-icon-box" style={{ background: '#FEF3C7' }}>
+                      <span>🔑</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="ma-drawer-row-title">Konekte</div>
+                      <div className="ma-drawer-row-sub">Aksede kont ou pou w kòmande</div>
+                    </div>
+                    <span className="ma-drawer-row-arrow">›</span>
                   </div>
-                  <div className="ma-drawer-item" onClick={() => nav('auth')}>
-                    <span style={{ fontSize: '1.15rem' }}>✨</span>
-                    <span>Kreye yon kont</span>
+
+                  <div className="ma-drawer-row" onClick={() => nav('auth')}>
+                    <div className="ma-drawer-icon-box" style={{ background: '#F3E8FF' }}>
+                      <span>✨</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="ma-drawer-row-title">Kreye yon kont</div>
+                      <div className="ma-drawer-row-sub">Enskri kòm nouvo kliyan</div>
+                    </div>
+                    <span className="ma-drawer-row-arrow">›</span>
                   </div>
                 </>
               ) : (
                 <>
-                  <div className="ma-drawer-item" onClick={() => nav('profile')}>
-                    <span style={{ fontSize: '1.15rem' }}>👤</span>
-                    <span>Pwofil mwen ({user.firstName || 'Kont'})</span>
+                  <div className="ma-drawer-row" onClick={() => nav('profile')}>
+                    <div className="ma-drawer-icon-box" style={{ background: '#EFF6FF' }}>
+                      <span>👤</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="ma-drawer-row-title">Pwofil mwen ({user.firstName || 'Kont'})</div>
+                      <div className="ma-drawer-row-sub">{user.phoneNumber || 'Kliyan Delivery Lakay'}</div>
+                    </div>
+                    <span className="ma-drawer-row-arrow">›</span>
                   </div>
-                  <div className="ma-drawer-item" onClick={() => nav('orders')}>
-                    <span style={{ fontSize: '1.15rem' }}>📦</span>
-                    <span>Kòmann mwen yo</span>
+
+                  <div className="ma-drawer-row" onClick={() => nav('orders')}>
+                    <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5' }}>
+                      <span>📦</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="ma-drawer-row-title">Kòmann mwen yo</div>
+                      <div className="ma-drawer-row-sub">Gade tout kòmand ou pase deja</div>
+                    </div>
+                    <span className="ma-drawer-row-arrow">›</span>
                   </div>
-                  <div className="ma-drawer-item" onClick={() => { setDrawerOpen(false); logout() }}>
-                    <span style={{ fontSize: '1.15rem' }}>🚪</span>
-                    <span>Dekonekte</span>
+
+                  <div className="ma-drawer-row" onClick={() => { setDrawerOpen(false); logout() }}>
+                    <div className="ma-drawer-icon-box" style={{ background: '#FEE2E2' }}>
+                      <span>🚪</span>
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="ma-drawer-row-title" style={{ color: '#DC2626' }}>Dekonekte</div>
+                      <div className="ma-drawer-row-sub">Kite kont ou an sekirite</div>
+                    </div>
                   </div>
                 </>
               )}
 
               <div
-                className="ma-drawer-item"
+                className="ma-drawer-row"
                 onClick={() => {
                   setDrawerOpen(false)
                   openCart()
                 }}
               >
-                <span style={{ fontSize: '1.15rem' }}>🛒</span>
-                <span>Panye ({totalItems})</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED' }}>
+                  <span>🛒</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <span className="ma-drawer-row-title">Panye ({totalItems})</span>
+                    {totalItems > 0 && (
+                      <span style={{
+                        background: '#FF6000',
+                        color: '#FFFFFF',
+                        fontSize: '0.625rem',
+                        fontWeight: 900,
+                        padding: '1px 6px',
+                        borderRadius: 10
+                      }}>
+                        {totalItems}
+                      </span>
+                    )}
+                  </div>
+                  <div className="ma-drawer-row-sub">Wè atik ou seleksyone yo</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
-              <div style={{ height: 1, background: '#F1F5F9', margin: '8px 0' }} />
+              <div style={{ height: 1, background: '#F1F5F9', margin: '6px 0' }} />
 
               {/* ── ACHTE PA KATEGORI ── */}
               <div className="ma-drawer-section-title">
@@ -789,97 +845,157 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </div>
 
               <div
-                className={`ma-drawer-item ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
+                className={`ma-drawer-row ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
                 onClick={goHome}
               >
-                <span style={{ fontSize: '1.15rem' }}>🛍️</span>
-                <span>Tout pwodwi</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF1F2' }}>
+                  <span>🛍️</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Tout pwodwi</div>
+                  <div className="ma-drawer-row-sub">Tout etablisman & machandiz</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'RESTAURANT' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'RESTAURANT' ? 'active' : ''}`}
                 onClick={() => filterCat('RESTAURANT')}
               >
-                <span style={{ fontSize: '1.15rem' }}>🍽️</span>
-                <span>Manje Ayisyen</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FEF2F2' }}>
+                  <span>🍽️</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Manje Ayisyen</div>
+                  <div className="ma-drawer-row-sub">Restoran, bar & repa cho</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'FAST_FOOD' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'FAST_FOOD' ? 'active' : ''}`}
                 onClick={() => filterCat('FAST_FOOD')}
               >
-                <span style={{ fontSize: '1.15rem' }}>🌶️</span>
-                <span>Epis ak Pwodwi Lakay</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFFBEB' }}>
+                  <span>🌶️</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Epis ak Pwodwi Lakay</div>
+                  <div className="ma-drawer-row-sub">Fritay, pate & pwodwi lokal</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'CONSTRUCTION' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'CONSTRUCTION' ? 'active' : ''}`}
                 onClick={() => filterCat('CONSTRUCTION')}
               >
-                <span style={{ fontSize: '1.15rem' }}>👕</span>
-                <span>Rad ak Akseswa</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F0FDF4' }}>
+                  <span>👕</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Rad ak Akseswa</div>
+                  <div className="ma-drawer-row-sub">Boutik mòd & stil Okap</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'BEVERAGE_DEPOT' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'BEVERAGE_DEPOT' ? 'active' : ''}`}
                 onClick={() => filterCat('BEVERAGE_DEPOT')}
               >
-                <span style={{ fontSize: '1.15rem' }}>👟</span>
-                <span>Soulye</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F5F3FF' }}>
+                  <span>👟</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Soulye</div>
+                  <div className="ma-drawer-row-sub">Tenis, sandal & soulye klasik</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
                 onClick={() => filterCat('SUPERMARKET')}
               >
-                <span style={{ fontSize: '1.15rem' }}>🛒</span>
-                <span>Sipèmache & Episri</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#ECFDF5' }}>
+                  <span>🛒</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Sipèmache & Episri</div>
+                  <div className="ma-drawer-row-sub">Pwovizyon, lwil, sik & dlo</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <div
-                className={`ma-drawer-item ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
+                className={`ma-drawer-row ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
                 onClick={() => filterCat('PHARMACY')}
               >
-                <span style={{ fontSize: '1.15rem' }}>💊</span>
-                <span>Famasi & Sante</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#E0F2FE' }}>
+                  <span>💊</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Famasi & Sante</div>
+                  <div className="ma-drawer-row-sub">Medikaman & swen sante</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
-              <div style={{ height: 1, background: '#F1F5F9', margin: '8px 0' }} />
+              <div style={{ height: 1, background: '#F1F5F9', margin: '6px 0' }} />
 
-              {/* ── ASISTANS & ÈD ── */}
+              {/* ── ASISTANS & SIPÒ ── */}
               <div className="ma-drawer-section-title">
                 ÈD & SIPÒ
               </div>
 
               <div
-                className="ma-drawer-item"
+                className="ma-drawer-row"
                 onClick={() => nav('orders')}
               >
-                <span style={{ fontSize: '1.15rem' }}>🛵</span>
-                <span>Swiv yon kòmann</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#FFF7ED' }}>
+                  <span>🛵</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Swiv yon kòmann</div>
+                  <div className="ma-drawer-row-sub">Gade pozisyon livrè w la</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
 
               <a
                 href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20bezwen%20asistans."
                 target="_blank"
                 rel="noopener noreferrer"
-                className="ma-drawer-item"
-                style={{ textDecoration: 'none', color: 'inherit' }}
+                className="ma-drawer-row"
+                style={{ textDecoration: 'none' }}
               >
-                <span style={{ fontSize: '1.15rem' }}>💬</span>
-                <span>WhatsApp Sipò · +509 40 55 36 36</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#DCFCE7' }}>
+                  <span>💬</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">WhatsApp Sipò</div>
+                  <div className="ma-drawer-row-sub">+509 40 55 36 36 · Repons rapid</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </a>
 
               <div
-                className="ma-drawer-item"
+                className="ma-drawer-row"
                 onClick={() => { setDrawerOpen(false); setHelpModalOpen(true) }}
               >
-                <span style={{ fontSize: '1.15rem' }}>❓</span>
-                <span>Sant Èd & Kesyon Souvan</span>
+                <div className="ma-drawer-icon-box" style={{ background: '#F1F5F9' }}>
+                  <span>❓</span>
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="ma-drawer-row-title">Sant Èd & Kesyon Souvan</div>
+                  <div className="ma-drawer-row-sub">Pri livrezon, peman & delè</div>
+                </div>
+                <span className="ma-drawer-row-arrow">›</span>
               </div>
             </div>
 
-            <div className="ma-drawer-footer">
+            <div className="ma-drawer-footer" style={{ padding: '14px 18px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
               <button
                 type="button"
                 onClick={() => {
@@ -887,11 +1003,27 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   setVendorModalOpen(true)
                 }}
                 className="ma-sell-btn"
-                style={{ width: '100%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  borderRadius: 10,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 8,
+                  padding: '11px 16px',
+                  fontWeight: 800,
+                  fontSize: '0.8125rem',
+                  boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)'
+                }}
               >
                 <span style={{ fontSize: '1.1rem' }}>🏪</span>
                 <span>Vin Vandè sou Delivery Lakay</span>
               </button>
+              <div style={{ textAlign: 'center', fontSize: '0.625rem', color: '#94A3B8', fontWeight: 600, marginTop: 8 }}>
+                Makèt Ayisyen · Delivery Lakay Haïti
+              </div>
             </div>
           </div>
         </>
