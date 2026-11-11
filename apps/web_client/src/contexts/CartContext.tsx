@@ -10,6 +10,7 @@ export interface CartItem {
   restaurantName: string
   restaurantCategory?: string
   quantity: number
+  specialInstructions?: string
 }
 
 export interface DeliveryBreakdown {
@@ -106,7 +107,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     setItems(prev => {
       const existing = prev.find(i => i.id === item.id)
-      if (existing) return prev.map(i => i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i)
+      if (existing) {
+        return prev.map(i => i.id === item.id ? {
+          ...i,
+          quantity: i.quantity + 1,
+          specialInstructions: item.specialInstructions || i.specialInstructions
+        } : i)
+      }
       return [...prev, { ...item, quantity: 1 }]
     })
     setOpen(true)

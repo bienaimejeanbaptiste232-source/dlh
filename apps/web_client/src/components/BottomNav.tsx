@@ -13,16 +13,11 @@ export default function BottomNav({ page, onNavigate }: BottomNavProps) {
   const { totalItems, openCart } = useCart()
 
   const handleStoresClick = () => {
-    if (page !== 'home') {
-      onNavigate('home')
-      setTimeout(() => {
-        const el = document.getElementById('merchants-section')
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      }, 100)
-    } else {
+    onNavigate('home')
+    setTimeout(() => {
       const el = document.getElementById('merchants-section')
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
+    }, 100)
   }
 
   return (

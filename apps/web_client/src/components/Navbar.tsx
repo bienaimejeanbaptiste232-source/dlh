@@ -1,9 +1,10 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import type { MerchantCategory } from '../App'
+import { showToast } from '../lib/toast'
 
-type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders'
+type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy'
 
 interface NavbarProps {
   page: NavPage
@@ -71,21 +72,74 @@ const IconChevronDown = () => (
 
 const IconStore = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M3 3h18v4H3z" />
+    <path d="M4 7v13a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7" />
+    <path d="M9 21v-6a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v6" />
+  </svg>
+)
+
+const IconHome = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
     <polyline points="9 22 9 12 15 12 15 22" />
   </svg>
 )
 
+const IconGift = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <polyline points="20 12 20 22 4 22 4 12" />
+    <rect x="2" y="7" width="20" height="5" />
+    <line x1="12" y1="22" x2="12" y2="7" />
+    <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" />
+    <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" />
+  </svg>
+)
+
+const IconShare = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+  </svg>
+)
+
+const IconHelp = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <circle cx="12" cy="12" r="10" />
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+    <line x1="12" y1="17" x2="12.01" y2="17" />
+  </svg>
+)
+
+const IconFileText = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <polyline points="14 2 14 8 20 8" />
+    <line x1="16" y1="13" x2="8" y2="13" />
+    <line x1="16" y1="17" x2="8" y2="17" />
+  </svg>
+)
+
+const IconMapPin = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="13" height="13">
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
+  </svg>
+)
+
 const ZONES = [
-  'Sant Vil',
-  'Vaudreuil',
-  'Haut-du-Cap',
-  'Madan Kolo',
-  'Baryè Boutèy',
-  'Petite Anse',
+  'Tout Zòn',
+  'Sant-Vil Okap',
   'Carenage',
   'Vertières',
-  'Bande du Nord'
+  'Rival',
+  'Barrière-Bouteille',
+  'Madeline',
+  'Petite Anse',
+  'Quartier Morin',
+  'Limonade'
 ]
 
 const CATEGORY_ITEMS: { cat: MerchantCategory; label: string }[] = [
@@ -99,7 +153,7 @@ const CATEGORY_ITEMS: { cat: MerchantCategory; label: string }[] = [
 ]
 
 export default function Navbar({ page, onNavigate, onCategoryFilter, activeCategory = 'ALL' }: NavbarProps) {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const { totalItems, openCart } = useCart()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [selectedZone, setSelectedZone] = useState(() => {
@@ -108,16 +162,110 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
   const [searchQuery, setSearchQuery] = useState('')
   const [searchCategory, setSearchCategory] = useState<MerchantCategory>('ALL')
 
+  // Modals & Menus state
+  const [vendorModalOpen, setVendorModalOpen] = useState(false)
+  const [giftCardModalOpen, setGiftCardModalOpen] = useState(false)
+  const [selectedGiftAmount, setSelectedGiftAmount] = useState(2500)
+  const [inviteModalOpen, setInviteModalOpen] = useState(false)
+  const [helpModalOpen, setHelpModalOpen] = useState(false)
+  const [accountMenuOpen, setAccountMenuOpen] = useState(false)
+  const [zoneDropdownOpen, setZoneDropdownOpen] = useState(false)
+  const accountRef = useRef<HTMLDivElement>(null)
+  const zoneRef = useRef<HTMLDivElement>(null)
+
+  // Close dropdowns on outside click + listen to global modal triggers
+  useEffect(() => {
+    const handleOutside = (e: MouseEvent) => {
+      if (accountRef.current && !accountRef.current.contains(e.target as Node)) {
+        setAccountMenuOpen(false)
+      }
+      if (zoneRef.current && !zoneRef.current.contains(e.target as Node)) {
+        setZoneDropdownOpen(false)
+      }
+    }
+    const handleOpenVendor = () => setVendorModalOpen(true)
+    const handleOpenHelp = () => setHelpModalOpen(true)
+
+    document.addEventListener('mousedown', handleOutside)
+    window.addEventListener('dlh:open-vendor', handleOpenVendor)
+    window.addEventListener('dlh:open-help', handleOpenHelp)
+
+    return () => {
+      document.removeEventListener('mousedown', handleOutside)
+      window.removeEventListener('dlh:open-vendor', handleOpenVendor)
+      window.removeEventListener('dlh:open-help', handleOpenHelp)
+    }
+  }, [])
+
   const nav = (p: NavPage) => {
     onNavigate(p)
     setDrawerOpen(false)
+    setAccountMenuOpen(false)
+    setZoneDropdownOpen(false)
+    setVendorModalOpen(false)
+    setGiftCardModalOpen(false)
+    setInviteModalOpen(false)
+    setHelpModalOpen(false)
   }
 
   const filterCat = (cat: MerchantCategory) => {
     onCategoryFilter?.(cat)
     setDrawerOpen(false)
-    if (page !== 'home') {
-      onNavigate('home')
+    setZoneDropdownOpen(false)
+    onNavigate('home')
+    setTimeout(() => {
+      const el = document.getElementById('merchants-section')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
+
+  const goHome = () => {
+    onCategoryFilter?.('ALL')
+    onNavigate('home')
+    setDrawerOpen(false)
+    setAccountMenuOpen(false)
+    setZoneDropdownOpen(false)
+    setVendorModalOpen(false)
+    setGiftCardModalOpen(false)
+    setInviteModalOpen(false)
+    setHelpModalOpen(false)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  const goToStores = () => {
+    onCategoryFilter?.('ALL')
+    onNavigate('home')
+    setDrawerOpen(false)
+    setZoneDropdownOpen(false)
+    setTimeout(() => {
+      const el = document.getElementById('merchants-section')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
+
+  const handleZoneSelect = (z: string) => {
+    setSelectedZone(z)
+    try { localStorage.setItem('dlh_zone', z) } catch {}
+    window.dispatchEvent(new CustomEvent('dlh:zone-change', { detail: { zone: z } }))
+    setZoneDropdownOpen(false)
+    setDrawerOpen(false)
+    onNavigate('home')
+    setTimeout(() => {
+      const el = document.getElementById('merchants-section')
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 100)
+  }
+
+  const copyInviteLink = () => {
+    const link = typeof window !== 'undefined' ? window.location.origin : 'https://dlh.ht'
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(link).then(() => {
+        showToast('Lyen sit la kopye nan clipboard ou!', 'success')
+      }).catch(() => {
+        showToast('Lyen: ' + link, 'info')
+      })
+    } else {
+      showToast('Lyen: ' + link, 'info')
     }
   }
 
@@ -140,18 +288,31 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
   }
 
   return (
-    <header className="navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000, background: '#FFFFFF', boxShadow: '0 2px 8px rgba(0,0,0,0.06)' }}>
+    <header className="navbar-wrapper" style={{ position: 'sticky', top: 0, zIndex: 1000 }}>
       {/* ── Tier 1: Main Header Row (1:1 Maket Ayisyen Design) ── */}
       <nav className="ma-header-main">
-        {/* Left: Hamburger + Logo + "Vin Vandè" Pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-          {/* Hamburger Icon */}
+        {/* Left: Menu Drawer Button + Logo */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+          {/* Hamburger Menu Button (Clearly opens the side drawer) */}
           <button
             onClick={() => setDrawerOpen(true)}
-            aria-label="Louvri Meni"
+            aria-label="Louvri Meni Tiwa a"
             className="ma-nav-menu-btn"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 6,
+              background: '#F8FAFC',
+              border: '1px solid #E2E8F0',
+              borderRadius: 8,
+              padding: '6px 12px',
+              cursor: 'pointer'
+            }}
           >
             <IconMenu />
+            <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#1E293B' }}>
+              Meni
+            </span>
           </button>
 
           {/* Logo & Brand Name */}
@@ -180,16 +341,6 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </span>
             </div>
           </div>
-
-          {/* "Vin Vandè" Pill Button */}
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ma-nav-sell-pill desktop-only"
-          >
-            Vin Vandè
-          </a>
         </div>
 
         {/* Center: Search Input + Connected Search Button */}
@@ -206,20 +357,230 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           </button>
         </form>
 
-        {/* Right: Account + Orders + Cart Icon */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexShrink: 0 }}>
-          {/* User Account Button */}
-          <button
-            onClick={() => nav(user ? 'profile' : 'auth')}
-            className="ma-nav-account-btn desktop-only"
-          >
-            <span className="ma-nav-sub-label">
-              Bonjou, {user ? (user.firstName || 'zanmi') : 'konekte'}
-            </span>
-            <span className="ma-nav-main-label">
-              Kont ▾
-            </span>
-          </button>
+        {/* Right: Zone Dropdown + Account + Orders + Cart */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          {/* Dedicated Zone Selector Dropdown (Does NOT open drawer) */}
+          <div ref={zoneRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setZoneDropdownOpen(prev => !prev)}
+              className="desktop-only"
+              title="Chanje zòn livrezon nan Cap-Haïtien"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+                background: '#F8FAFC',
+                border: '1.5px solid #CBD5E1',
+                borderRadius: 20,
+                padding: '6px 14px',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                color: '#0F172A',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <IconMapPin />
+              <span>{selectedZone}</span>
+              <IconChevronDown />
+            </button>
+
+            {zoneDropdownOpen && (
+              <div style={{
+                position: 'absolute',
+                top: 'calc(100% + 6px)',
+                right: 0,
+                width: 210,
+                maxHeight: 340,
+                overflowY: 'auto',
+                background: '#FFFFFF',
+                borderRadius: 12,
+                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.18)',
+                border: '1px solid #E2E8F0',
+                padding: '6px',
+                zIndex: 1050,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2
+              }}>
+                <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', padding: '6px 8px' }}>
+                  Chwazi Zòn nan Okap:
+                </div>
+                {ZONES.map(z => (
+                  <button
+                    key={z}
+                    onClick={() => handleZoneSelect(z)}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '8px 10px',
+                      background: selectedZone === z ? '#FFF3EB' : 'none',
+                      color: selectedZone === z ? '#FF6000' : '#1E293B',
+                      border: 'none',
+                      borderRadius: 8,
+                      fontSize: '0.75rem',
+                      fontWeight: selectedZone === z ? 800 : 600,
+                      cursor: 'pointer',
+                      textAlign: 'left'
+                    }}
+                    onMouseEnter={e => { if (selectedZone !== z) e.currentTarget.style.background = '#F8FAFC' }}
+                    onMouseLeave={e => { if (selectedZone !== z) e.currentTarget.style.background = 'none' }}
+                  >
+                    <span>{z}</span>
+                    {selectedZone === z && <span style={{ color: '#FF6000', fontSize: '0.75rem', fontWeight: 900 }}>✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* User Account Button & Dropdown */}
+          <div ref={accountRef} style={{ position: 'relative' }}>
+            <button
+              onClick={() => setAccountMenuOpen(prev => !prev)}
+              className="ma-nav-account-btn desktop-only"
+              style={{ cursor: 'pointer' }}
+            >
+              <span className="ma-nav-sub-label">
+                Bonjou, {user ? (user.firstName || 'zanmi') : 'konekte'}
+              </span>
+              <span className="ma-nav-main-label">
+                Kont ▾
+              </span>
+            </button>
+
+            {accountMenuOpen && (
+              <div style={{
+                position: 'absolute',
+                top: 'calc(100% + 6px)',
+                right: 0,
+                width: 210,
+                background: '#FFFFFF',
+                borderRadius: 12,
+                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.15)',
+                border: '1px solid #E2E8F0',
+                padding: '8px 6px',
+                zIndex: 1050,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2
+              }}>
+                {user ? (
+                  <>
+                    <button
+                      onClick={() => nav('profile')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <IconUser />
+                      <span>Pwofil Mwen</span>
+                    </button>
+                    <button
+                      onClick={() => nav('orders')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <IconClipboard />
+                      <span>Kòmann Mwen</span>
+                    </button>
+                    <button
+                      onClick={() => nav('terms')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 600, color: '#64748B', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <span>Kondisyon & Règleman</span>
+                    </button>
+                    <div style={{ height: 1, background: '#F1F5F9', margin: '4px 6px' }} />
+                    <button
+                      onClick={() => {
+                        logout?.()
+                        setAccountMenuOpen(false)
+                        onNavigate('home')
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 700, color: '#DC2626', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#FEF2F2')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <span>Dekonekte</span>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => nav('auth')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: '#FF6000', color: '#FFFFFF', border: 'none', borderRadius: 8,
+                        fontSize: '0.8125rem', fontWeight: 800, cursor: 'pointer', justifyContent: 'center'
+                      }}
+                    >
+                      Konekte / Enskri
+                    </button>
+                    <button
+                      onClick={() => nav('orders')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 700, color: '#0F172A', cursor: 'pointer', marginTop: 4
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <IconClipboard />
+                      <span>Swiv yon Kòmann</span>
+                    </button>
+                    <button
+                      onClick={() => nav('terms')}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 600, color: '#64748B', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <span>Kondisyon & Règleman</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        setAccountMenuOpen(false)
+                        setHelpModalOpen(true)
+                      }}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 8, padding: '8px 12px',
+                        background: 'none', border: 'none', borderRadius: 8, textAlign: 'left',
+                        fontSize: '0.8125rem', fontWeight: 600, color: '#64748B', cursor: 'pointer'
+                      }}
+                      onMouseEnter={e => (e.currentTarget.style.background = '#F8FAFC')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+                    >
+                      <span>Èd & Asistans</span>
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Returns & Orders Button */}
           <button
@@ -242,56 +603,67 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
         </div>
       </nav>
 
-      {/* ── Tier 2: Subnav Strip (Solid Black Bar #000000 1:1 Maket Ayisyen) ── */}
+      {/* ── Tier 2: Subnav Strip (Solid Black Bar #000000 - Categories & Actions) ── */}
       <div className="ma-subnav-bar">
         <div className="ma-subnav-inner">
           <button
             className={`ma-subnav-link ${activeCategory === 'ALL' && page === 'home' ? 'active' : ''}`}
-            onClick={() => filterCat('ALL')}
+            onClick={goToStores}
           >
-            Pwodwi Tout
+            Tout Pwodwi
           </button>
 
           <button
             className="ma-subnav-link"
-            onClick={() => {
-              if (page !== 'home') nav('home')
-              setTimeout(() => {
-                document.getElementById('stores-section')?.scrollIntoView({ behavior: 'smooth' })
-              }, 100)
-            }}
+            onClick={goToStores}
           >
-            Boutik yo
+            Tout Boutik
           </button>
 
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20yon%20Kat%20Kado%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ma-subnav-link"
+          <button
+            className={`ma-subnav-link ${activeCategory === 'RESTAURANT' ? 'active' : ''}`}
+            onClick={() => filterCat('RESTAURANT')}
           >
-            Kat Kado
-          </a>
-
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20envite%20zanmi%20m%20sou%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ma-subnav-link"
-          >
-            Envite Zanmi
-          </a>
-
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20vann%20sou%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ma-subnav-link"
-          >
-            Vann sou Maket
-          </a>
+            Restoran & Bar
+          </button>
 
           <button
+            className={`ma-subnav-link ${activeCategory === 'FAST_FOOD' ? 'active' : ''}`}
+            onClick={() => filterCat('FAST_FOOD')}
+          >
+            Fast Food & Fritay
+          </button>
+
+          <button
+            className={`ma-subnav-link ${activeCategory === 'SUPERMARKET' ? 'active' : ''}`}
+            onClick={() => filterCat('SUPERMARKET')}
+          >
+            Sipèmache & Episri
+          </button>
+
+          <button
+            className={`ma-subnav-link ${activeCategory === 'PHARMACY' ? 'active' : ''}`}
+            onClick={() => filterCat('PHARMACY')}
+          >
+            Famasi & Sante
+          </button>
+
+          <button
+            className={`ma-subnav-link ${activeCategory === 'CONSTRUCTION' ? 'active' : ''}`}
+            onClick={() => filterCat('CONSTRUCTION')}
+          >
+            Materyo Konstriksyon
+          </button>
+
+          <button
+            className={`ma-subnav-link ${activeCategory === 'BEVERAGE_DEPOT' ? 'active' : ''}`}
+            onClick={() => filterCat('BEVERAGE_DEPOT')}
+          >
+            Dépôt Bwason
+          </button>
+
+          <button
+            type="button"
             className="ma-subnav-link"
             onClick={() => nav('orders')}
           >
@@ -299,31 +671,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           </button>
 
           <button
+            type="button"
             className="ma-subnav-link"
-            onClick={() => setDrawerOpen(true)}
+            onClick={() => setHelpModalOpen(true)}
           >
-            Zòn: {selectedZone} ▾
+            Èd & Asistans
           </button>
-
-          <a
-            href="#footer-info"
-            onClick={(e) => {
-              e.preventDefault()
-              document.getElementById('footer-info')?.scrollIntoView({ behavior: 'smooth' })
-            }}
-            className="ma-subnav-link"
-          >
-            Kiyès Nou Ye
-          </a>
-
-          <a
-            href="https://wa.me/50940553636?text=Bonjou%20mwen%20bezwen%20èd"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="ma-subnav-link"
-          >
-            Èd
-          </a>
         </div>
       </div>
 
@@ -350,24 +703,42 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             </div>
 
             <div className="ma-drawer-body">
+              {/* Primary Navigation */}
+              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>
+                Navigasyon Prensipal
+              </div>
+              <div
+                className={`ma-drawer-item ${page === 'home' && activeCategory === 'ALL' ? 'active' : ''}`}
+                onClick={goHome}
+              >
+                <IconHome />
+                <span>Akèy (Paj Prensipal)</span>
+              </div>
+              <div
+                className="ma-drawer-item"
+                onClick={goToStores}
+              >
+                <IconStore />
+                <span>Tout Boutik & Etablisman</span>
+              </div>
+
+              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '8px 0' }} />
+
               {/* Delivery Zone Selector in Drawer */}
               <div style={{
                 background: '#F8FAFC',
                 border: '1px solid #E2E8F0',
                 borderRadius: 10,
                 padding: '12px 14px',
-                marginBottom: 16
+                marginBottom: 12
               }}>
                 <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ color: '#FF6000' }}>📍</span>
+                  <IconMapPin />
                   <span>Zòn Livrezon ou nan Okap</span>
                 </div>
                 <select
                   value={selectedZone}
-                  onChange={(e) => {
-                    setSelectedZone(e.target.value)
-                    try { localStorage.setItem('dlh_zone', e.target.value) } catch {}
-                  }}
+                  onChange={(e) => handleZoneSelect(e.target.value)}
                   style={{
                     width: '100%',
                     background: '#FFFFFF',
@@ -387,13 +758,13 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 </select>
               </div>
 
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
+              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>
                 Achte pa Kategori
               </div>
               {CATEGORY_ITEMS.map(({ cat, label }) => (
                 <div
                   key={cat}
-                  className={`ma-drawer-item ${activeCategory === cat ? 'active' : ''}`}
+                  className={`ma-drawer-item ${activeCategory === cat && page === 'home' ? 'active' : ''}`}
                   onClick={() => filterCat(cat)}
                 >
                   <span style={{ width: 8, height: 8, borderRadius: '50%', background: activeCategory === cat ? '#FF6000' : '#CBD5E1', display: 'inline-block', marginRight: 6 }} />
@@ -401,43 +772,343 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 </div>
               ))}
 
-              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '12px 0' }} />
+              <hr style={{ border: 'none', borderTop: '1px solid #E2E8F0', margin: '8px 0' }} />
 
-              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 6 }}>
-                Sèvis Kliyan
+              <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: 4 }}>
+                Sèvis Kliyan & Opsyon
               </div>
               <div className="ma-drawer-item" onClick={() => nav('orders')}>
                 <IconClipboard />
                 <span>Swiv Kòmann Ou</span>
               </div>
-              <div className="ma-drawer-item" onClick={() => nav('profile')}>
+              <div className="ma-drawer-item" onClick={() => nav(user ? 'profile' : 'auth')}>
                 <IconUser />
-                <span>Kont & Pwofil Mwen</span>
+                <span>{user ? 'Kont & Pwofil Mwen' : 'Konekte / Kreye Kont'}</span>
               </div>
-              <a
+              <div
                 className="ma-drawer-item"
-                href="https://wa.me/50940553636?text=Mwen%20bezwen%20asistans%20sou%20Delivery%20Lakay"
-                target="_blank"
-                rel="noopener noreferrer"
+                onClick={() => {
+                  setDrawerOpen(false)
+                  setGiftCardModalOpen(true)
+                }}
               >
-                <IconWhatsApp size={16} color="#25D366" />
-                <span>💬 Asistans WhatsApp</span>
-              </a>
+                <IconGift />
+                <span>Kat Kado DLH</span>
+              </div>
+              <div
+                className="ma-drawer-item"
+                onClick={() => {
+                  setDrawerOpen(false)
+                  setInviteModalOpen(true)
+                }}
+              >
+                <IconShare />
+                <span>Envite Zanmi</span>
+              </div>
+              <div
+                className="ma-drawer-item"
+                onClick={() => {
+                  setDrawerOpen(false)
+                  setHelpModalOpen(true)
+                }}
+              >
+                <IconHelp />
+                <span>Sant Èd & Sipò 24/7</span>
+              </div>
+              <div className="ma-drawer-item" onClick={() => nav('terms')}>
+                <IconFileText />
+                <span>Kondisyon & Règleman</span>
+              </div>
+              <div className="ma-drawer-item" onClick={() => nav('privacy')}>
+                <IconFileText />
+                <span>Règ sou Vi Prive</span>
+              </div>
             </div>
 
             <div className="ma-drawer-footer">
-              <a
-                href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
-                target="_blank"
-                rel="noopener noreferrer"
+              <button
+                type="button"
+                onClick={() => {
+                  setDrawerOpen(false)
+                  setVendorModalOpen(true)
+                }}
                 className="ma-sell-btn"
+                style={{ width: '100%', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
               >
                 <IconStore />
                 <span>Vin Vandè sou Delivery Lakay</span>
-              </a>
+              </button>
             </div>
           </div>
         </>
+      )}
+
+      {/* ── MODAL: Vin Vandè sou Delivery Lakay ── */}
+      {vendorModalOpen && (
+        <div className="product-modal-backdrop" onClick={() => setVendorModalOpen(false)}>
+          <div className="product-modal-card" style={{ maxWidth: 480, padding: 24 }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ width: 36, height: 36, borderRadius: 10, background: '#FFF3EB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FF6000' }}>
+                  <IconStore />
+                </div>
+                <div>
+                  <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#FF6000', textTransform: 'uppercase' }}>
+                    Patnè Komèsyal · Okap
+                  </span>
+                  <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#0F172A' }}>
+                    Vin Vandè sou Delivery Lakay
+                  </h3>
+                </div>
+              </div>
+              <button onClick={() => setVendorModalOpen(false)} className="product-modal-close" style={{ position: 'static' }}>✕</button>
+            </div>
+
+            <p style={{ fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
+              Ogmante lavant ou nan Cap-Haïtien! Nou delivre pwodwi w yo bay plizyè milye kliyan san w pa bezwen enkyete w pou livrè.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              {[
+                { title: '0 HTG Frè Enskripsyon', desc: 'Enskri boutik ou, restoran w oswa famasi w gratis sou platfòm lan.' },
+                { title: 'Flòt Livrè Pwofesyonèl', desc: 'Chofè nou yo pase pran kòmand yo nan lokal ou epi livre yo rapid.' },
+                { title: 'Peman Garanti & Rapid', desc: 'Resevwa tout lajan lavant ou dirèk sou MonCash, Natcash oswa labank.' },
+                { title: 'Vizibilite nan Tout Okap', desc: 'Pwodwi w yo afiche devan plis pase 10,000 itilizatè aktif.' },
+              ].map((item, idx) => (
+                <div key={idx} style={{ background: '#F8FAFC', border: '1px solid #E2E8F0', borderRadius: 10, padding: '10px 14px' }}>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#0F172A', marginBottom: 2 }}>{item.title}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#64748B', lineHeight: 1.4 }}>{item.desc}</div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <a
+                href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20ta%20renmen%20vin%20vandè%20ak%20enskri%20boutik%20mwen%20sou%20platfòm%20nan%20nan%20Cap-Haïtien."
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: '#25D366', color: '#FFFFFF', padding: '12px 18px', borderRadius: 10,
+                  fontSize: '0.875rem', fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)'
+                }}
+              >
+                <IconWhatsApp size={18} color="#FFFFFF" />
+                <span>Aplike Kounye a sou WhatsApp</span>
+              </a>
+
+              <a
+                href="tel:+50940553636"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                  background: '#F1F5F9', color: '#0F172A', padding: '10px 18px', borderRadius: 10,
+                  fontSize: '0.8125rem', fontWeight: 700, textDecoration: 'none'
+                }}
+              >
+                <span>Rele Dispatch Patnè: +509 40 55 36 36</span>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => nav('terms')}
+                style={{ background: 'none', border: 'none', color: '#64748B', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline', marginTop: 4 }}
+              >
+                Gade Kondisyon Itilizasyon & Règleman Patnè →
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL: Kat Kado ── */}
+      {giftCardModalOpen && (
+        <div className="product-modal-backdrop" onClick={() => setGiftCardModalOpen(false)}>
+          <div className="product-modal-card" style={{ maxWidth: 440, padding: 24 }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <div>
+                <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#FF6000', textTransform: 'uppercase' }}>Kado Espesyal</span>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#0F172A' }}>Kat Kado Delivery Lakay</h3>
+              </div>
+              <button onClick={() => setGiftCardModalOpen(false)} className="product-modal-close" style={{ position: 'static' }}>✕</button>
+            </div>
+
+            <p style={{ fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
+              Fè fanmi oswa zanmi w plezi nan Cap-Haïtien. Yo ka itilize kat kado a pou kòmande nan nenpòt restoran, sipèmache oswa famasi sou Delivery Lakay.
+            </p>
+
+            <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 8 }}>Chwazi Montan Kat la:</div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 20 }}>
+              {[1000, 2500, 5000, 10000].map(amount => (
+                <button
+                  key={amount}
+                  type="button"
+                  onClick={() => setSelectedGiftAmount(amount)}
+                  style={{
+                    padding: '12px 10px',
+                    borderRadius: 10,
+                    border: selectedGiftAmount === amount ? '2px solid #FF6000' : '1px solid #E2E8F0',
+                    background: selectedGiftAmount === amount ? '#FFF3EB' : '#FFFFFF',
+                    color: selectedGiftAmount === amount ? '#FF6000' : '#0F172A',
+                    fontWeight: 900,
+                    fontSize: '0.9375rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease'
+                  }}
+                >
+                  {amount.toLocaleString('fr-HT')} HTG
+                </button>
+              ))}
+            </div>
+
+            <a
+              href={`https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20ta%20renmen%20achte%20yon%20Kat%20Kado%20ki%20vo%20${selectedGiftAmount}%20HTG%20pou%20yon%20moun%20nan%20Cap-Haïtien.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                background: '#FF6000', color: '#FFFFFF', padding: '12px 18px', borderRadius: 10,
+                fontSize: '0.875rem', fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 12px rgba(255, 96, 0, 0.3)'
+              }}
+            >
+              <span>Kòmande Kat Kado sa sou WhatsApp ({selectedGiftAmount.toLocaleString('fr-HT')} HTG)</span>
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL: Envite Zanmi ── */}
+      {inviteModalOpen && (
+        <div className="product-modal-backdrop" onClick={() => setInviteModalOpen(false)}>
+          <div className="product-modal-card" style={{ maxWidth: 440, padding: 24 }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <div>
+                <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#0284C7', textTransform: 'uppercase' }}>Kominote Okap</span>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#0F172A' }}>Envite Fanmi & Zanmi w</h3>
+              </div>
+              <button onClick={() => setInviteModalOpen(false)} className="product-modal-close" style={{ position: 'static' }}>✕</button>
+            </div>
+
+            <p style={{ fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
+              Pataje sit Delivery Lakay la pou zanmi w ak fanmi w ka benefisye livrezon rapid nan Cap-Haïtien!
+            </p>
+
+            <div style={{ display: 'flex', gap: 8, background: '#F8FAFC', border: '1.5px solid #CBD5E1', borderRadius: 10, padding: '8px 12px', alignItems: 'center', marginBottom: 16 }}>
+              <input
+                type="text"
+                readOnly
+                value={typeof window !== 'undefined' ? window.location.origin : 'https://dlh.ht'}
+                style={{ flex: 1, background: 'none', border: 'none', fontSize: '0.8125rem', color: '#0F172A', fontWeight: 700, outline: 'none' }}
+              />
+              <button
+                type="button"
+                onClick={copyInviteLink}
+                style={{
+                  background: '#0F172A', color: '#FFFFFF', border: 'none', borderRadius: 6,
+                  padding: '6px 12px', fontSize: '0.75rem', fontWeight: 800, cursor: 'pointer'
+                }}
+              >
+                Kopye Lyen
+              </button>
+            </div>
+
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Bonjou! M ap envite w itilize Delivery Lakay pou kòmande manje, famasi, ak pwovizyon nan tout Cap-Haïtien ak livrezon rapid: ${typeof window !== 'undefined' ? window.location.origin : 'https://dlh.ht'}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                background: '#25D366', color: '#FFFFFF', padding: '12px 18px', borderRadius: 10,
+                fontSize: '0.875rem', fontWeight: 800, textDecoration: 'none', boxShadow: '0 4px 12px rgba(37, 211, 102, 0.3)'
+              }}
+            >
+              <IconWhatsApp size={18} color="#FFFFFF" />
+              <span>Pataje sou WhatsApp</span>
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* ── MODAL: Èd & Asistans ── */}
+      {helpModalOpen && (
+        <div className="product-modal-backdrop" onClick={() => setHelpModalOpen(false)}>
+          <div className="product-modal-card" style={{ maxWidth: 460, padding: 24 }} onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+              <div>
+                <span style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#059669', textTransform: 'uppercase' }}>Sipò Kliyan 24/7</span>
+                <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 900, color: '#0F172A' }}>Sant Èd & Asistans DLH</h3>
+              </div>
+              <button onClick={() => setHelpModalOpen(false)} className="product-modal-close" style={{ position: 'static' }}>✕</button>
+            </div>
+
+            <p style={{ fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, marginBottom: 16 }}>
+              Ekip sipò nou an baze nan Cap-Haïtien epi disponib 7 jou sou 7 pou ede w ak kòmand ou yo.
+            </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 18 }}>
+              <a
+                href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20bezwen%20èd%20oswa%20asistans%20sou%20sit%20la."
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, background: '#F0FDF4',
+                  border: '1px solid #BBF7D0', borderRadius: 10, padding: '12px 14px', textDecoration: 'none'
+                }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#25D366', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', flexShrink: 0 }}>
+                  <IconWhatsApp size={18} color="#FFFFFF" />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#14532D' }}>Ekri nou sou WhatsApp</div>
+                  <div style={{ fontSize: '0.75rem', color: '#166534' }}>+509 40 55 36 36 · Repons rapid an kèk minit</div>
+                </div>
+              </a>
+
+              <a
+                href="tel:+50940553636"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, background: '#F8FAFC',
+                  border: '1px solid #E2E8F0', borderRadius: 10, padding: '12px 14px', textDecoration: 'none'
+                }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#0F172A', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', flexShrink: 0 }}>
+                  <svg viewBox="0 0 24 24" width={16} height={16} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                  </svg>
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#0F172A' }}>Rele Dispatch Dirèk</div>
+                  <div style={{ fontSize: '0.75rem', color: '#64748B' }}>+509 40 55 36 36 · 8:00 AM – 10:00 PM</div>
+                </div>
+              </a>
+
+              <button
+                type="button"
+                onClick={() => nav('orders')}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12, background: '#FFF3EB',
+                  border: '1px solid #FFEDD5', borderRadius: 10, padding: '12px 14px', cursor: 'pointer', textAlign: 'left'
+                }}
+              >
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: '#FF6000', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', flexShrink: 0 }}>
+                  <IconClipboard />
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#9A3412' }}>Swiv Kòmann Ou</div>
+                  <div style={{ fontSize: '0.75rem', color: '#C2410C' }}>Gade estati kòmand ou an tan reyèl</div>
+                </div>
+              </button>
+            </div>
+
+            <div style={{ background: '#F8FAFC', borderRadius: 10, padding: '10px 14px', border: '1px solid #E2E8F0' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 4 }}>Kesyon Moun Poze Souvan:</div>
+              <div style={{ fontSize: '0.6875rem', color: '#64748B', lineHeight: 1.5 }}>
+                • <strong>Pri livrezon:</strong> 150 HTG nan tout Cap-Haïtien.<br />
+                • <strong>Mwayen Peman:</strong> MonCash, Natcash ak Espès lè kòmand rive.<br />
+                • <strong>Delè livrezon:</strong> 20 pou rive 45 minit selon distans la.
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </header>
   )

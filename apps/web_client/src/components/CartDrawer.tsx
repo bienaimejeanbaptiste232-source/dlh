@@ -182,6 +182,11 @@ export default function CartDrawer({ onCheckout }: { onCheckout: () => void }) {
                   <div className="cart-item-info">
                     <div className="cart-item-name">{item.name}</div>
                     <div className="cart-item-price">{formatHTG(item.price)}</div>
+                    {item.specialInstructions && (
+                      <div style={{ fontSize: '0.6875rem', color: '#D9480F', fontStyle: 'italic', marginTop: 2, background: 'rgba(255, 96, 0, 0.08)', padding: '2px 6px', borderRadius: 4 }}>
+                        Nòt: {item.specialInstructions}
+                      </div>
+                    )}
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 500, marginTop: 1 }}>
                       {item.restaurantName}
                     </div>

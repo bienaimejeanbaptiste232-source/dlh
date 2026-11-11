@@ -75,8 +75,164 @@ const IconMapPin = () => (
   </svg>
 )
 
+const IconTrending = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="#FF6000" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
+    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
+    <polyline points="17 6 23 6 23 12" />
+  </svg>
+)
+
+const IconVerifiedCheck = () => (
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="#0284C7">
+    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+  </svg>
+)
+
+const IconGridView = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" width="15" height="15">
+    <rect x="3" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="3" width="7" height="7" rx="1.5" />
+    <rect x="14" y="14" width="7" height="7" rx="1.5" />
+    <rect x="3" y="14" width="7" height="7" rx="1.5" />
+  </svg>
+)
+
+const IconListView = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" width="15" height="15">
+    <line x1="8" y1="6" x2="21" y2="6" />
+    <line x1="8" y1="12" x2="21" y2="12" />
+    <line x1="8" y1="18" x2="21" y2="18" />
+    <line x1="3" y1="6" x2="3.01" y2="6" />
+    <line x1="3" y1="12" x2="3.01" y2="12" />
+    <line x1="3" y1="18" x2="3.01" y2="18" />
+  </svg>
+)
+
+const IconInfo = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+    <circle cx="12" cy="12" r="10" />
+    <line x1="12" y1="8" x2="12" y2="8.01" strokeWidth={3} />
+    <line x1="12" y1="12" x2="12" y2="16" />
+  </svg>
+)
+
+const IconCheckSmall = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="#059669" strokeWidth={2.8} strokeLinecap="round" strokeLinejoin="round" width="12" height="12">
+    <polyline points="20 6 9 17 4 12" />
+  </svg>
+)
+
+const CAP_ZONES = [
+  'Tout Zòn',
+  'Sant-Vil Okap',
+  'Carenage',
+  'Vertières',
+  'Rival',
+  'Barrière-Bouteille',
+  'Madeline',
+  'Petite Anse',
+  'Quartier Morin',
+  'Limonade'
+]
+
+function getMerchantZone(m: Merchant): string {
+  if (!m.address) return 'Sant-Vil Okap'
+  const addr = m.address.toLowerCase()
+  if (addr.includes('carenage')) return 'Carenage'
+  if (addr.includes('vertieres') || addr.includes('vertières')) return 'Vertières'
+  if (addr.includes('rival')) return 'Rival'
+  if (addr.includes('barrière') || addr.includes('bouteille')) return 'Barrière-Bouteille'
+  if (addr.includes('madeline')) return 'Madeline'
+  if (addr.includes('morin')) return 'Quartier Morin'
+  if (addr.includes('limonade')) return 'Limonade'
+  if (addr.includes('milot')) return 'Milot'
+  if (addr.includes('vaudreuil')) return 'Vaudreuil'
+  if (addr.includes('petite anse') || addr.includes('petit-anse')) return 'Petite Anse'
+  return m.address.length > 20 ? m.address.slice(0, 18) + '...' : m.address
+}
+
 // ─── Helpers ──────────────────────────────────────────────────
 const formatHTG = (n: number) => `${Math.round(n).toLocaleString('fr-HT')} HTG`
+
+// ── Verified Merchant Criteria ─────────────────────────────────
+// A merchant is "verified" if they meet ALL of the following:
+// 1. Has a phone number on file
+// 2. Has a registered address
+// 3. Customer rating >= 4.0
+// 4. isOpen status is defined (profile complete)
+function isMerchantVerified(m: Merchant): boolean {
+  return !!(
+    m.phone &&
+    m.address &&
+    m.rating !== undefined &&
+    m.rating !== null &&
+    m.rating >= 4.0
+  )
+}
+
+const VERIFIED_CRITERIA = [
+  { label: 'Nimewo telefòn konfime pa DLH' },
+  { label: 'Adrès boutik verifye sou kat' },
+  { label: 'Nòt kliyan 4.0 oswa plis' },
+  { label: 'Pwofil konplè ak orè operasyon' },
+]
+
+// ── Special Note Placeholder by Product Category / Store Type ───
+function getNoteHint(categoryName?: string, storeType?: string): string {
+  const cat = (categoryName || '').toLowerCase()
+  const type = (storeType || '').toUpperCase()
+
+  // Rad / Konfeksyon / Vêtement
+  if (
+    cat.includes('rad') || cat.includes('vêtement') || cat.includes('vetement') ||
+    cat.includes('chemiz') || cat.includes('pantlon') || cat.includes('soulye') ||
+    cat.includes('akseswa') || cat.includes('bijou')
+  ) {
+    return 'Egz: Tay L · Koulè nwa · Pa pase nan dlo cho · Mete nan sachè'
+  }
+
+  // Siman / Konstriksyon / Materyo
+  if (
+    cat.includes('siman') || cat.includes('kons') || cat.includes('fè') ||
+    cat.includes('bwa') || cat.includes('materyo') || cat.includes('block') ||
+    type === 'CONSTRUCTION'
+  ) {
+    return 'Egz: Livrezon nan chantye · Mande Mèt Jacques · 50 sak · Rele avan'
+  }
+
+  // Famasi / Medikaman / Sante
+  if (
+    cat.includes('medikaman') || cat.includes('famasi') || cat.includes('sante') ||
+    cat.includes('vitamine') || cat.includes('krem') || cat.includes('parfum') ||
+    type === 'PHARMACY'
+  ) {
+    return 'Egz: Jennerik oswa mak · Ordonans disponib · Pou timoun 5 an'
+  }
+
+  // Bwason / Dlo / Depot
+  if (
+    cat.includes('bwason') || cat.includes('dlo') || cat.includes('jus') ||
+    cat.includes('bèl') || type === 'BEVERAGE_DEPOT'
+  ) {
+    return 'Egz: Dlo fre anpil · Kas ranvwaye · 2 flakon vid disponib'
+  }
+
+  // Boulanjri / Patisserie
+  if (
+    cat.includes('pen') || cat.includes('gato') || cat.includes('boul') ||
+    cat.includes('patisseri') || type === 'BAKERY'
+  ) {
+    return 'Egz: San sik · Chode anpil · Mete nan bwat · Kuit byen'
+  }
+
+  // Episri / Sipèmache / Pwovizyon
+  if (type === 'GROCERY' || type === 'SUPERMARKET') {
+    return 'Egz: Pran nan kès 3 · Fre ak bon kalite · Pa vle pouri'
+  }
+
+  // Manje / Restoran / Fast Food (défaut)
+  return 'Egz: Sòs apa · San piman · Dlo fre anpil · Kuit fò'
+}
 
 const TYPE_META: Record<string, { label: string }> = {
   RESTAURANT:      { label: 'Restoran & Bar' },
@@ -199,24 +355,6 @@ const HERO_SLIDES = [
   }
 ]
 
-// ── Flash Countdown Timer Hook ──────────────────────────────────
-function useFlashCountdown() {
-  const [timeLeft, setTimeLeft] = useState({ hours: 4, minutes: 22, seconds: 15 })
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 }
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 }
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 }
-        return { hours: 4, minutes: 0, seconds: 0 }
-      })
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [])
-
-  return `${String(timeLeft.hours).padStart(2, '0')}:${String(timeLeft.minutes).padStart(2, '0')}:${String(timeLeft.seconds).padStart(2, '0')}`
-}
 
 export default function HomePage({
   initialFilter = 'ALL',
@@ -238,6 +376,10 @@ export default function HomePage({
   const [search, setSearch] = useState('')
   const [filterType, setFilterType] = useState(initialFilter)
   const [sortBy, setSortBy] = useState<'all' | 'open' | 'rating' | 'fast'>('all')
+  const [selectedZone, setSelectedZone] = useState('Tout Zòn')
+  const [productViewMode, setProductViewMode] = useState<'grid' | 'list'>('grid')
+  const [specialNote, setSpecialNote] = useState('')
+  const [verifiedTooltipId, setVerifiedTooltipId] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   // Store Detail View State
@@ -259,15 +401,7 @@ export default function HomePage({
   const [currentSlide, setCurrentSlide] = useState(0)
   const sliderTimerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
-  const flashRailRef = useRef<HTMLDivElement>(null)
   const catRailRef = useRef<HTMLDivElement>(null)
-  const countdown = useFlashCountdown()
-
-  const scrollFlashRail = (dir: 'left' | 'right') => {
-    if (flashRailRef.current) {
-      flashRailRef.current.scrollBy({ left: dir === 'left' ? -260 : 260, behavior: 'smooth' })
-    }
-  }
 
   const scrollCatRail = (dir: 'left' | 'right') => {
     if (catRailRef.current) {
@@ -280,7 +414,7 @@ export default function HomePage({
     setFilterType(initialFilter)
   }, [initialFilter])
 
-  // ── Listen to custom navbar search event ──────────────────────
+  // ── Listen to custom navbar search & zone events ──────────────
   useEffect(() => {
     const handleDlhSearch = (e: any) => {
       if (e.detail?.query !== undefined) {
@@ -288,8 +422,18 @@ export default function HomePage({
         listRef.current?.scrollIntoView({ behavior: 'smooth' })
       }
     }
+    const handleDlhZone = (e: any) => {
+      if (e.detail?.zone !== undefined) {
+        setSelectedZone(e.detail.zone)
+        listRef.current?.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
     window.addEventListener('dlh:search', handleDlhSearch)
-    return () => window.removeEventListener('dlh:search', handleDlhSearch)
+    window.addEventListener('dlh:zone-change', handleDlhZone)
+    return () => {
+      window.removeEventListener('dlh:search', handleDlhSearch)
+      window.removeEventListener('dlh:zone-change', handleDlhZone)
+    }
   }, [])
 
   // ── Load Merchants and All Products from Supabase ─────────────
@@ -380,7 +524,8 @@ export default function HomePage({
       const matchSearch = !search ||
         m.name.toLowerCase().includes(search.toLowerCase()) ||
         (m.address && m.address.toLowerCase().includes(search.toLowerCase()))
-      return matchType && matchSearch
+      const matchZone = selectedZone === 'Tout Zòn' || getMerchantZone(m) === selectedZone
+      return matchType && matchSearch && matchZone
     })
 
     if (sortBy === 'open') {
@@ -391,7 +536,7 @@ export default function HomePage({
       result.sort((a, b) => (a.avgPrepTimeMinutes || 25) - (b.avgPrepTimeMinutes || 25))
     }
     return result
-  }, [merchants, filterType, search, sortBy])
+  }, [merchants, filterType, search, sortBy, selectedZone])
 
   // ── Popular / Trending Products (from allProducts) ───────────
   const trendingProducts = useMemo(() => {
@@ -408,15 +553,6 @@ export default function HomePage({
     return [...list, ...list]
   }, [trendingProducts])
 
-  // ── Flash Deal Products (simulated discount & progress) ───────
-  const flashProducts = useMemo(() => {
-    return allProducts.slice(0, 6).map((p, idx) => ({
-      ...p,
-      discount: idx % 2 === 0 ? 20 : 15,
-      oldPrice: Math.round(p.price * (idx % 2 === 0 ? 1.25 : 1.18)),
-      soldPercent: 65 + (idx * 5) % 30
-    }))
-  }, [allProducts])
 
   // ── Find merchant name for a product ──────────────────────────
   const getStoreNameForProduct = (prod: Product): string => {
@@ -441,6 +577,21 @@ export default function HomePage({
       restaurantId: product.merchantId || (selectedMerchant?.id ?? 'dlh-marketplace'),
       restaurantName: merchantName,
       restaurantCategory: product.category?.name || 'Pwodwi Lokal'
+    })
+    showToast(`Ajoute nan panyen: ${product.name}`, 'success')
+  }
+
+  // ── Add to cart with special note ────────────────────────────
+  const handleAddToCartWithNote = (product: Product, merchantName = 'Delivery Lakay', note = '') => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageUrl: getProductImage(product),
+      restaurantId: product.merchantId || (selectedMerchant?.id ?? 'dlh-marketplace'),
+      restaurantName: merchantName,
+      restaurantCategory: product.category?.name || 'Pwodwi Lokal',
+      specialInstructions: note.trim() || undefined
     })
     showToast(`Ajoute nan panyen: ${product.name}`, 'success')
   }
@@ -596,7 +747,8 @@ export default function HomePage({
                     boxShadow: '0 2px 8px rgba(37, 211, 102, 0.3)'
                   }}
                 >
-                  <span>💬 WhatsApp Boutik la</span>
+                  <IconWhatsApp size={15} color="#FFFFFF" />
+                  <span>WhatsApp Boutik la</span>
                 </a>
               )}
             </div>
@@ -622,40 +774,81 @@ export default function HomePage({
                 <span>Preparasyon: {selectedMerchant.avgPrepTimeMinutes || 25}–{(selectedMerchant.avgPrepTimeMinutes || 25) + 15} min</span>
               </span>
               <span className="ma-store-meta-item" style={{ color: '#FF6000', fontWeight: 800 }}>
-                🛵 Livrezon 150 HTG nan tout Cap-Haïtien
+                Livrezon 150 HTG nan tout Cap-Haïtien
               </span>
               <span className="ma-store-meta-item">
-                💳 MonCash, Natcash & Espès
+                MonCash, Natcash & Espès
               </span>
             </div>
           </div>
         </div>
 
-        {/* Menu Categories Pills */}
-        <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 12, marginBottom: 20, scrollbarWidth: 'none' }}>
-          {categories.map(cat => (
+        {/* Menu Categories Pills + View Toggle */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+          <div style={{ display: 'flex', gap: 8, overflowX: 'auto', flex: 1, paddingBottom: 4, scrollbarWidth: 'none' }}>
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveMenuCat(cat)}
+                style={{
+                  flexShrink: 0,
+                  background: activeMenuCat === cat ? '#FF6000' : '#FFFFFF',
+                  color: activeMenuCat === cat ? '#FFFFFF' : '#334155',
+                  border: activeMenuCat === cat ? '1px solid #FF6000' : '1px solid #E2E8F0',
+                  borderRadius: 20,
+                  padding: '6px 16px',
+                  fontSize: '0.8125rem',
+                  fontWeight: 800,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          {/* Grid / List Toggle */}
+          <div style={{ display: 'flex', gap: 4, flexShrink: 0, background: '#F1F5F9', borderRadius: 8, padding: 3 }}>
             <button
-              key={cat}
-              onClick={() => setActiveMenuCat(cat)}
+              onClick={() => setProductViewMode('grid')}
+              title="Vue grille"
               style={{
-                flexShrink: 0,
-                background: activeMenuCat === cat ? '#FF6000' : '#FFFFFF',
-                color: activeMenuCat === cat ? '#FFFFFF' : '#334155',
-                border: activeMenuCat === cat ? '1px solid #FF6000' : '1px solid #E2E8F0',
-                borderRadius: 20,
-                padding: '6px 16px',
-                fontSize: '0.8125rem',
-                fontWeight: 800,
+                background: productViewMode === 'grid' ? '#FFFFFF' : 'transparent',
+                border: 'none',
+                borderRadius: 6,
+                padding: '5px 8px',
                 cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                color: productViewMode === 'grid' ? '#FF6000' : '#94A3B8',
+                boxShadow: productViewMode === 'grid' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
                 transition: 'all 0.15s ease'
               }}
             >
-              {cat}
+              <IconGridView />
             </button>
-          ))}
+            <button
+              onClick={() => setProductViewMode('list')}
+              title="Vue lis"
+              style={{
+                background: productViewMode === 'list' ? '#FFFFFF' : 'transparent',
+                border: 'none',
+                borderRadius: 6,
+                padding: '5px 8px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                color: productViewMode === 'list' ? '#FF6000' : '#94A3B8',
+                boxShadow: productViewMode === 'list' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <IconListView />
+            </button>
+          </div>
         </div>
 
-        {/* Menu Items Grid */}
+        {/* Menu Items — Grid or List View */}
         {storeProdLoading ? (
           <div style={{ textAlign: 'center', padding: '60px 0', color: '#64748B' }}>
             Chaje meni ak pwodwi yo...
@@ -671,27 +864,95 @@ export default function HomePage({
           }}>
             Pa gen atik disponib nan kategori sa a pou kounye a.
           </div>
-        ) : (
-          <div className="ma-pc-grid">
-            {displayedProducts.map(p => {
+        ) : productViewMode === 'list' ? (
+          /* ── LIST VIEW ── */
+          <div className="ma-pc-list">
+            {displayedProducts.map((p, idx) => {
               const img = getProductImage(p, selectedMerchant.type)
               const qty = getQty(p.id)
+              const badge = idx < 3 ? 'Pi Mande' : p.name.toLowerCase().includes('nouvo') ? 'Nouvo' : null
+              return (
+                <div
+                  key={p.id}
+                  className="ma-pc-list-item"
+                  onClick={() => openProductModal(p, selectedMerchant.name)}
+                >
+                  <div className="ma-pc-list-info">
+                    {badge && (
+                      <span style={{
+                        display: 'inline-block',
+                        background: badge === 'Pi Mande' ? '#FF6000' : '#0284C7',
+                        color: '#FFFFFF',
+                        fontSize: '0.625rem',
+                        fontWeight: 800,
+                        padding: '2px 7px',
+                        borderRadius: 4,
+                        marginBottom: 4,
+                        textTransform: 'uppercase'
+                      }}>{badge}</span>
+                    )}
+                    <div className="ma-pc-list-title">{p.name}</div>
+                    {p.description && <p className="ma-pc-list-desc">{p.description}</p>}
+                    <div className="ma-pc-list-price">{formatHTG(p.price)}</div>
+                  </div>
+                  <div className="ma-pc-list-media" onClick={e => e.stopPropagation()}>
+                    <img src={img} alt={p.name} className="ma-pc-list-img" />
+                    {qty > 0 ? (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 4, background: '#FFF3EB', borderRadius: 8, padding: '3px 6px', border: '1px solid #FF6000', marginTop: 6 }}>
+                        <button onClick={() => updateQty(p.id, qty - 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}><IconMinus /></button>
+                        <span style={{ fontWeight: 900, fontSize: '0.75rem', color: '#FF6000', minWidth: 14, textAlign: 'center' }}>{qty}</span>
+                        <button onClick={() => updateQty(p.id, qty + 1)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}><IconPlus /></button>
+                      </div>
+                    ) : (
+                      <button
+                        className="ma-pc-btn"
+                        style={{ marginTop: 6, width: '100%', justifyContent: 'center' }}
+                        onClick={() => handleAddToCart(p, selectedMerchant.name)}
+                      >
+                        <IconPlus />
+                        <span>Ajoute</span>
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        ) : (
+          /* ── GRID VIEW ── */
+          <div className="ma-pc-grid">
+            {displayedProducts.map((p, idx) => {
+              const img = getProductImage(p, selectedMerchant.type)
+              const qty = getQty(p.id)
+              const badge = idx < 3 ? 'Pi Mande' : p.name.toLowerCase().includes('nouvo') ? 'Nouvo' : null
               return (
                 <div
                   key={p.id}
                   className={`ma-pc ${clickedId === p.id ? 'is-clicked' : ''}`}
                   onClick={() => openProductModal(p, selectedMerchant.name)}
                 >
-                  <div
-                    className="ma-pc-media"
-                  >
+                  <div className="ma-pc-media">
                     <img src={img} alt={p.name} className="ma-pc-img" />
-                    <span className="ma-pc-badge">Detay</span>
+                    {badge ? (
+                      <span style={{
+                        position: 'absolute',
+                        top: 8,
+                        left: 8,
+                        background: badge === 'Pi Mande' ? '#FF6000' : '#0284C7',
+                        color: '#FFFFFF',
+                        fontSize: '0.5625rem',
+                        fontWeight: 800,
+                        padding: '3px 7px',
+                        borderRadius: 4,
+                        textTransform: 'uppercase',
+                        boxShadow: '0 1px 4px rgba(0,0,0,0.2)'
+                      }}>{badge}</span>
+                    ) : (
+                      <span className="ma-pc-badge">Detay</span>
+                    )}
                   </div>
                   <div className="ma-pc-body">
-                    <div
-                      className="ma-pc-title"
-                    >
+                    <div className="ma-pc-title">
                       {p.name}
                     </div>
                     {p.description && (
@@ -764,6 +1025,11 @@ export default function HomePage({
     const qty = getQty(product.id)
     const effectiveQty = qty > 0 ? qty : 1
     const totalItemPrice = product.price * effectiveQty
+
+    // Determine store type for smart note hint
+    const merchantForModal = merchantId ? merchants.find(m => m.id === merchantId) : selectedMerchant
+    const storeType = merchantForModal?.type || selectedMerchant?.type || ''
+    const noteHint = getNoteHint(product.category?.name, storeType)
 
     const productFullDesc = product.description ||
       `Atik bon jan kalite espesyal ${product.name} prepare pa patnè nou an "${storeName}" nan Cap-Haïtien. Tout engredyan yo chwazi ak swen pou garanti fraîcheur ak gou otantik. Kòmande li kounye a pou livrezon dirèk devan baryè w.`
@@ -880,6 +1146,34 @@ export default function HomePage({
               <span>Tan preparasyon: <strong>20–30 minit</strong></span>
             </div>
 
+            {/* Special Instructions Textarea */}
+            <div style={{ marginBottom: 12 }}>
+              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 5 }}>
+                Nòt Espesyal (pou chèf la / boutik la):
+              </label>
+              <textarea
+                value={specialNote}
+                onChange={e => setSpecialNote(e.target.value)}
+                placeholder={noteHint}
+                rows={2}
+                style={{
+                  width: '100%',
+                  padding: '8px 10px',
+                  border: '1.5px solid #E2E8F0',
+                  borderRadius: 8,
+                  fontSize: '0.8125rem',
+                  resize: 'none',
+                  outline: 'none',
+                  fontFamily: 'inherit',
+                  boxSizing: 'border-box',
+                  color: '#1E293B',
+                  transition: 'border-color 0.15s'
+                }}
+                onFocus={e => { e.target.style.borderColor = '#FF6000' }}
+                onBlur={e => { e.target.style.borderColor = '#E2E8F0' }}
+              />
+            </div>
+
             {/* Action Bar: Quantity Controls + Add To Cart */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {qty > 0 && (
@@ -912,7 +1206,8 @@ export default function HomePage({
 
               <button
                 onClick={() => {
-                  handleAddToCart(product, storeName)
+                  handleAddToCartWithNote(product, storeName, specialNote)
+                  setSpecialNote('')
                   setPreviewProduct(null)
                 }}
                 className="product-modal-add-btn"
@@ -961,7 +1256,7 @@ export default function HomePage({
               <div className="ma-hero-slide-overlay" />
               <div className="ma-hero-slide-content">
                 <span className="ma-hero-promo-badge">
-                  🏷️ {slide.tag}
+                  {slide.tag}
                 </span>
                 <h1 className="ma-hero-slide-headline">{slide.title}</h1>
                 <button
@@ -1003,25 +1298,25 @@ export default function HomePage({
           </div>
           <span className="ma-seller-tag-pill">POU VANDÈ</span>
           <h2 className="ma-seller-card-title">Vin vandè sou Delivery Lakay</h2>
-          <a
-            href="https://wa.me/50940553636?text=Mwen%20vle%20vin%20vande%20sou%20Delivery%20Lakay"
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent('dlh:open-vendor'))}
             className="ma-seller-card-cta-btn"
+            style={{ border: 'none', cursor: 'pointer', textAlign: 'center', width: '100%', display: 'inline-block' }}
           >
             Vin Vandè →
-          </a>
+          </button>
 
           {/* Bottom Chat / Help Bubble (Exact Maket Ayisyen Widget) */}
           <div className="ma-seller-bottom-widget">
-            <a
-              href="https://wa.me/50940553636?text=Bonjou%20mwen%20bezwen%20ede"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent('dlh:open-help'))}
               className="ma-seller-chat-bubble"
+              style={{ border: 'none', cursor: 'pointer', textAlign: 'center', width: '100%', display: 'inline-block' }}
             >
               <span>How can we help? · Kijan nou ka ede w?</span>
-            </a>
+            </button>
           </div>
         </div>
       </section>
@@ -1082,131 +1377,14 @@ export default function HomePage({
         </div>
       </section>
 
-      {/* ── 4. ⚡ Ofri Flash (Live Countdown Deals Rail — Ultra-Clean) ── */}
-      {flashProducts.length > 0 && (
-        <section id="flash-offers" className="ma-flash-box" aria-label="Ofri Flash">
-          <div className="ma-flash-header">
-            <div className="ma-flash-title-wrap">
-              <h2 className="ma-sec-title" style={{ margin: 0 }}>⚡ Ofri Flash</h2>
-              <span className="ma-flash-badge">Rabè Espesyal</span>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-              <div className="ma-flash-timer">
-                <span className="ma-flash-timer-dot" />
-                <span>Fini nan: {countdown}</span>
-              </div>
-
-              {/* Smooth Scroll Navigation Arrows */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }} className="desktop-only">
-                <button
-                  className="ma-rail-nav-btn"
-                  onClick={() => scrollFlashRail('left')}
-                  aria-label="Anvan"
-                >
-                  ‹
-                </button>
-                <button
-                  className="ma-rail-nav-btn"
-                  onClick={() => scrollFlashRail('right')}
-                  aria-label="Apre"
-                >
-                  ›
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="ma-flash-rail" ref={flashRailRef}>
-            {flashProducts.map(fp => {
-              const img = getProductImage(fp)
-              const sName = getStoreNameForProduct(fp)
-              const qty = getQty(fp.id)
-              return (
-                <div
-                  key={fp.id}
-                  className={`ma-pc ${clickedId === fp.id ? 'is-clicked' : ''}`}
-                  style={{ width: 160, flexShrink: 0 }}
-                  onClick={() => openProductModal(fp, sName)}
-                >
-                  <div
-                    className="ma-pc-media"
-                  >
-                    <img src={img} alt={fp.name} className="ma-pc-img" />
-                    <span className="ma-pc-badge">-{fp.discount}%</span>
-                  </div>
-                  <div className="ma-pc-body">
-                    <div
-                      className="ma-pc-title"
-                    >
-                      {fp.name}
-                    </div>
-
-                    {/* Sleek Minimal Stock Indicator */}
-                    <div style={{ margin: '4px 0 10px' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.6875rem', color: '#64748B', fontWeight: 700, marginBottom: 4 }}>
-                        <span>⚡ Rete sèlman kèk</span>
-                        <span style={{ color: '#FF6000' }}>{fp.soldPercent}% vann</span>
-                      </div>
-                      <div style={{ height: 4, background: '#F1F5F9', borderRadius: 2, overflow: 'hidden' }}>
-                        <div style={{ width: `${fp.soldPercent}%`, height: '100%', background: '#FF6000', borderRadius: 2 }} />
-                      </div>
-                    </div>
-
-                    <div className="ma-pc-foot">
-                      <div className="ma-pc-price-wrap">
-                        <span className="ma-pc-price">{formatHTG(fp.price)}</span>
-                        <span className="ma-pc-old-price">{formatHTG(fp.oldPrice)}</span>
-                      </div>
-                      {qty > 0 ? (
-                        <div
-                          style={{ display: 'flex', alignItems: 'center', gap: 5, background: '#FFF3EB', borderRadius: 8, padding: '2px 5px', border: '1px solid #FF6000' }}
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <button
-                            onClick={() => updateQty(fp.id, qty - 1)}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
-                          >
-                            <IconMinus />
-                          </button>
-                          <span style={{ fontWeight: 900, fontSize: '0.75rem', color: '#FF6000', minWidth: 14, textAlign: 'center' }}>
-                            {qty}
-                          </span>
-                          <button
-                            onClick={() => updateQty(fp.id, qty + 1)}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex', padding: 2 }}
-                          >
-                            <IconPlus />
-                          </button>
-                        </div>
-                      ) : (
-                        <button
-                          className="ma-pc-btn"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            handleAddToCart(fp, sName)
-                          }}
-                        >
-                          <IconPlus />
-                          <span>Ajoute</span>
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </section>
-      )}
-
-      {/* ── 5. 🔥 Pi popilè kounye a (Animated Smooth Marquee: Adwat pou Agoch) ── */}
+      {/* ── 3. Pi Popilè Kounye a (Animated Smooth Marquee: Adwat pou Agoch) ── */}
       {trendingProducts.length > 0 && (
         <section style={{ marginBottom: 36 }}>
           <div className="ma-sec-header">
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <h2 className="ma-sec-title">🔥 Pi popilè kounye a</h2>
+                <IconTrending />
+                <h2 className="ma-sec-title" style={{ margin: 0 }}>Pi Popilè Kounye a</h2>
                 <span style={{
                   fontSize: '0.6875rem',
                   fontWeight: 800,
@@ -1263,7 +1441,7 @@ export default function HomePage({
                       </div>
 
                       <div className="ma-pc-meta-row">
-                        <span>⏱ Livrezon Okap</span>
+                        <span>Livrezon Okap</span>
                         <span>·</span>
                         <span style={{ color: '#059669', fontWeight: 700 }}>Disponib</span>
                       </div>
@@ -1315,11 +1493,11 @@ export default function HomePage({
         </section>
       )}
 
-      {/* ── 6. 🏪 Boutik & Restoran Rekòmande (Stores Grid) ── */}
+      {/* ── 4. Boutik & Restoran Rekòmande (Stores Grid) ── */}
       <section ref={listRef} id="merchants-section" style={{ marginBottom: 40 }}>
         <div className="ma-sec-header" style={{ flexWrap: 'wrap', gap: 12 }}>
           <h2 className="ma-sec-title">
-            🏪 {filterType === 'ALL' ? 'Boutik & Restoran Rekòmande' : getMeta(filterType).label}
+            {filterType === 'ALL' ? 'Boutik & Restoran Rekòmande' : getMeta(filterType).label}
           </h2>
           <div style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 700 }}>
             {filteredMerchants.length} etablisman disponib
@@ -1357,8 +1535,8 @@ export default function HomePage({
           {[
             { key: 'all' as const, label: 'Tout Etablisman' },
             { key: 'open' as const, label: '● Ouvè Kounye a' },
-            { key: 'rating' as const, label: '★ Pi Bon Nòt' },
-            { key: 'fast' as const, label: '⏱ Livrezon Rapid' },
+            { key: 'rating' as const, label: 'Pi Bon Nòt' },
+            { key: 'fast' as const, label: 'Livrezon Rapid' },
           ].map(item => {
             const active = sortBy === item.key
             return (
@@ -1379,6 +1557,37 @@ export default function HomePage({
                 }}
               >
                 {item.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Zone Filter Row */}
+        <div style={{ display: 'flex', gap: 7, overflowX: 'auto', paddingBottom: 12, marginBottom: 20, scrollbarWidth: 'none' }}>
+          {CAP_ZONES.map(zone => {
+            const zActive = selectedZone === zone
+            return (
+              <button
+                key={zone}
+                onClick={() => setSelectedZone(zone)}
+                style={{
+                  flexShrink: 0,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 4,
+                  background: zActive ? '#0F172A' : '#F8FAFC',
+                  color: zActive ? '#FFFFFF' : '#475569',
+                  border: zActive ? '1px solid #0F172A' : '1px solid #CBD5E1',
+                  borderRadius: 20,
+                  padding: '5px 13px',
+                  fontSize: '0.75rem',
+                  fontWeight: zActive ? 800 : 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease'
+                }}
+              >
+                <IconMapPin />
+                {zone}
               </button>
             )
           })}
@@ -1429,6 +1638,9 @@ export default function HomePage({
             {filteredMerchants.map(m => {
               const banner = getMerchantBanner(m)
               const meta = getMeta(m.type)
+              const zone = getMerchantZone(m)
+              const previewItems = allProducts.filter(p => p.merchantId === m.id).slice(0, 3)
+              const verified = isMerchantVerified(m)
               return (
                 <div
                   key={m.id}
@@ -1503,9 +1715,90 @@ export default function HomePage({
                     <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', marginBottom: 3 }}>
                       {meta.label}
                     </div>
-                    <div style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0F172A', marginBottom: 6 }}>
-                      {m.name}
+                    {/* Store Name + Verified Badge */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 4 }}>
+                      <div style={{ fontSize: '0.95rem', fontWeight: 900, color: '#0F172A' }}>
+                        {m.name}
+                      </div>
+                      {verified && (
+                        <div style={{ position: 'relative', display: 'inline-flex' }}>
+                          <span
+                            onMouseEnter={() => setVerifiedTooltipId(m.id)}
+                            onMouseLeave={() => setVerifiedTooltipId(null)}
+                            style={{ display: 'inline-flex', alignItems: 'center', gap: 3, cursor: 'help' }}
+                          >
+                            <IconVerifiedCheck />
+                            <span style={{ fontSize: '0.5625rem', fontWeight: 800, color: '#0284C7' }}>Verifye</span>
+                            <span style={{ color: '#94A3B8', display: 'flex' }}><IconInfo /></span>
+                          </span>
+                          {/* Tooltip with criteria */}
+                          {verifiedTooltipId === m.id && (
+                            <div style={{
+                              position: 'absolute',
+                              bottom: '120%',
+                              left: '50%',
+                              transform: 'translateX(-50%)',
+                              background: '#0F172A',
+                              color: '#FFFFFF',
+                              borderRadius: 10,
+                              padding: '10px 14px',
+                              width: 220,
+                              fontSize: '0.6875rem',
+                              lineHeight: 1.5,
+                              boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
+                              zIndex: 999,
+                              pointerEvents: 'none'
+                            }}>
+                              <div style={{ fontWeight: 800, marginBottom: 6, color: '#38BDF8' }}>
+                                Kritè Boutik Verifye DLH:
+                              </div>
+                              {VERIFIED_CRITERIA.map((c, i) => (
+                                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 5, marginBottom: 3 }}>
+                                  <span style={{ marginTop: 1 }}><IconCheckSmall /></span>
+                                  <span>{c.label}</span>
+                                </div>
+                              ))}
+                              {/* Arrow */}
+                              <div style={{
+                                position: 'absolute',
+                                top: '100%',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                width: 0,
+                                height: 0,
+                                borderLeft: '6px solid transparent',
+                                borderRight: '6px solid transparent',
+                                borderTop: '6px solid #0F172A'
+                              }} />
+                            </div>
+                          )}
+                        </div>
+                      )}
                     </div>
+                    {/* Zone label */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: '0.6875rem', color: '#475569', fontWeight: 600, marginBottom: 7 }}>
+                      <IconMapPin />
+                      <span>{zone}</span>
+                    </div>
+                    {/* Popular items preview */}
+                    {previewItems.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 8 }}>
+                        {previewItems.map(p => (
+                          <span key={p.id} style={{
+                            background: '#F8FAFC',
+                            border: '1px solid #E2E8F0',
+                            borderRadius: 4,
+                            padding: '2px 7px',
+                            fontSize: '0.625rem',
+                            fontWeight: 700,
+                            color: '#334155',
+                            whiteSpace: 'nowrap'
+                          }}>
+                            {p.name.length > 18 ? p.name.slice(0, 16) + '…' : p.name}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#64748B' }}>
                       <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                         <IconClock />
@@ -1523,104 +1816,8 @@ export default function HomePage({
         )}
       </section>
 
-      {/* ── 7. ⭐ Temwayaj Kliyan Okap & Zòn Kouvri (Social Proof & Coverage) ── */}
+      {/* ── 5. Zòn & Katye Nou Kouvri nan Cap-Haïtien ── */}
       <section style={{ marginBottom: 40 }}>
-        <div className="ma-sec-header">
-          <div>
-            <h2 className="ma-sec-title">⭐ Kliyan Okap yo bay avi yo</h2>
-            <div style={{ fontSize: '0.8125rem', color: '#64748B', marginTop: 2 }}>
-              Plis pase 10,000 kòmand livre ak satisfaksyon nan Nò a
-            </div>
-          </div>
-          <span style={{ fontSize: '0.8125rem', color: '#059669', fontWeight: 800 }}>
-            ★ 4.9 / 5 (850+ kòmantè)
-          </span>
-        </div>
-
-        {/* 3 Review Cards */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: 16,
-          marginBottom: 20
-        }}>
-          {[
-            {
-              name: 'Patrick S.',
-              zone: 'Vertières, Okap',
-              stars: 5,
-              text: 'Manje a te rive cho anndan 25 minit! Kousye a te trè politi. Mwen te peye ak MonCash san pyès tèt chaje.',
-              avatar: 'PS',
-              bg: '#FFF3EB',
-              color: '#FF6000'
-            },
-            {
-              name: 'Marie-Ange D.',
-              zone: 'Carenage, Okap',
-              stars: 5,
-              text: 'Mwen te bezwen medikaman nan famasi ta lannwit pou pitit mwen. Livrè a te rive rapid devan baryè a. Yon vrè delivrans!',
-              avatar: 'MD',
-              bg: '#ECFDF5',
-              color: '#059669'
-            },
-            {
-              name: 'Jean-Baptiste F.',
-              zone: 'Champ de Mars, Okap',
-              stars: 5,
-              text: 'Pi bon sèvis livrezon nan vil la. Pri yo klè, pa gen frè kache, epi kòmand la rive egzakteman sa m te mande a.',
-              avatar: 'JF',
-              bg: '#EFF6FF',
-              color: '#2563EB'
-            }
-          ].map((t, idx) => (
-            <div
-              key={idx}
-              style={{
-                background: '#FFFFFF',
-                border: '1px solid #E2E8F0',
-                borderRadius: 14,
-                padding: '18px 20px',
-                display: 'flex',
-                flexDirection: 'column',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <div style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: '50%',
-                    background: t.bg,
-                    color: t.color,
-                    fontWeight: 900,
-                    fontSize: '0.8125rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                  }}>
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: 800, fontSize: '0.875rem', color: '#0F172A' }}>{t.name}</div>
-                    <div style={{ fontSize: '0.6875rem', color: '#64748B' }}>{t.zone}</div>
-                  </div>
-                </div>
-                <div style={{ color: '#F59E0B', fontSize: '0.8125rem', fontWeight: 800 }}>
-                  {'★'.repeat(t.stars)}
-                </div>
-              </div>
-              <p style={{ margin: 0, fontSize: '0.8125rem', color: '#475569', lineHeight: 1.5, fontStyle: 'italic' }}>
-                « {t.text} »
-              </p>
-              <div style={{ marginTop: 'auto', paddingTop: 10, fontSize: '0.6875rem', color: '#059669', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <span>✓ Kliyan Verifye Okap</span>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Cap-Haïtien Neighborhoods Coverage Strip */}
         <div style={{
           background: '#F8FAFC',
           border: '1px solid #E2E8F0',
@@ -1628,8 +1825,9 @@ export default function HomePage({
           padding: '16px 20px'
         }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
-            <span style={{ fontWeight: 800, fontSize: '0.8125rem', color: '#0F172A' }}>
-              📍 Zòn & Katye Nou Kouvri nan Cap-Haïtien:
+            <span style={{ fontWeight: 800, fontSize: '0.8125rem', color: '#0F172A', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <IconMapPin />
+              <span>Zòn & Katye Nou Kouvri nan Cap-Haïtien:</span>
             </span>
             <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 800 }}>
               ● Livrezon aktif 7/7
@@ -1665,73 +1863,6 @@ export default function HomePage({
               </span>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ── 8. How It Works (4 Clean Steps) ── */}
-      <section style={{ margin: '36px 0 20px', textAlign: 'center' }}>
-        <h2 className="ma-sec-title" style={{ justifyContent: 'center', marginBottom: 24 }}>
-          Kijan Sèvis la Travay
-        </h2>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-          gap: 20
-        }}>
-          {[
-            { step: '01', title: 'Chwazi Meni Ou', desc: 'Eksplore pi bon restoran ak komès nan Cap-Haïtien', icon: '🍽️' },
-            { step: '02', title: 'Pase Kòmand', desc: 'Chwazi MonCash, Natcash, oswa peye nan livrezon', icon: '📱' },
-            { step: '03', title: 'Kousye an Wout', desc: 'Yon livrè dedye pran kòmand lan imedyatman', icon: '🛵' },
-            { step: '04', title: 'Resevwa Lakay Ou', desc: 'Resevwa lòd ou cho e fre devan pòt ou', icon: '🏠' },
-          ].map(s => (
-            <div
-              key={s.step}
-              style={{
-                background: '#FFFFFF',
-                border: '1px solid #E2E8F0',
-                borderRadius: 14,
-                padding: '24px 18px',
-                textAlign: 'center',
-                boxShadow: '0 1px 3px rgba(0,0,0,0.03)'
-              }}
-            >
-              <div style={{ fontSize: '2rem', marginBottom: 8 }}>{s.icon}</div>
-              <div style={{ color: '#FF6000', fontWeight: 900, fontSize: '0.75rem', marginBottom: 4 }}>ETAP {s.step}</div>
-              <h4 style={{ margin: '0 0 6px 0', fontSize: '1rem', fontWeight: 800, color: '#0F172A' }}>{s.title}</h4>
-              <p style={{ margin: 0, fontSize: '0.8125rem', color: '#64748B', lineHeight: 1.4 }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 9. DLH Mobile App Download Banner (Pro Commercial Feature) ── */}
-      <section className="ma-app-banner" aria-label="Aplikasyon Mobil Delivery Lakay">
-        <div className="ma-app-banner-content">
-          <span className="ma-app-tag">📱 APLIKASYON MOBIL OFISYÈL</span>
-          <h3 className="ma-app-title">Kòmande Pi Rapid Sou Telefòn Ou</h3>
-          <p className="ma-app-desc">
-            Enstale aplikasyon Android Delivery Lakay la pou resevwa notifikasyon an dirèk lè kousye w la sou wout epi pwofite tout rabè espesyal yo nan Okap.
-          </p>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <a
-              href="https://wa.me/50940553636?text=Mwen%20vle%20lyen%20telechaje%20aplikasyon%20Delivery%20Lakay%20sou%20Android"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ma-app-download-btn"
-            >
-              <span>🤖 Telechaje APK Android (Gratis)</span>
-            </a>
-            <span style={{ fontSize: '0.75rem', color: '#94A3B8', fontWeight: 600 }}>
-              Konpatib ak tout telefòn Android · Cap-Haïtien
-            </span>
-          </div>
-        </div>
-        <div className="ma-app-mockup-wrap">
-          <img
-            src="/banners/dlh_courier_hero.jpg"
-            alt="Delivery Lakay App"
-            className="ma-app-mockup-img"
-          />
         </div>
       </section>
 

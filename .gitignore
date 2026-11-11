@@ -53,4 +53,6 @@ logs/
 
 # Scratch
 scratch/
+release_apks/
+*.apk
 

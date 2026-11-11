@@ -1,6 +1,4 @@
-import { useState } from 'react'
-
-type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders'
+type NavPage = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy'
 
 interface FooterProps {
   onNavigate: (p: NavPage) => void
@@ -15,23 +13,14 @@ const IconWhatsApp = ({ size = 15, color = '#25D366' }: { size?: number; color?:
 )
 
 const IconPhone = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width={14} height={14}>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
   </svg>
 )
 
-const IconX = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" width={18} height={18}>
-    <line x1="18" y1="6" x2="6" y2="18" />
-    <line x1="6" y1="6" x2="18" y2="18" />
-  </svg>
-)
-
 export default function Footer({ onNavigate, user }: FooterProps) {
-  const [modalType, setModalType] = useState<'terms' | 'privacy' | null>(null)
-
   return (
-    <footer style={{ background: '#17191C', color: '#9CA3AF', paddingTop: 48, paddingBottom: 24, borderTop: '4px solid #FF6000' }}>
+    <footer id="footer-info" style={{ background: '#17191C', color: '#9CA3AF', paddingTop: 48, paddingBottom: 24, borderTop: '4px solid #FF6000' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
         {/* Main Grid */}
         <div style={{
@@ -79,9 +68,10 @@ export default function Footer({ onNavigate, user }: FooterProps) {
               Kategori Sèvis
             </h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10, fontSize: '0.8125rem' }}>
-              <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Restoran & Gastronomi</button></li>
+              <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Restoran & Bar</button></li>
+              <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Fast Food & Fritay</button></li>
               <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Sipèmache & Pwovizyon</button></li>
-              <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Famasi & Medikaman</button></li>
+              <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Famasi & Sante</button></li>
               <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Materyo Konstriksyon</button></li>
               <li><button onClick={() => onNavigate('home')} style={{ background: 'none', border: 'none', color: '#D1D5DB', cursor: 'pointer', padding: 0 }}>Dépôt Bwason & Dlo</button></li>
             </ul>
@@ -144,7 +134,7 @@ export default function Footer({ onNavigate, user }: FooterProps) {
               </span>
             </div>
             <p style={{ fontSize: '0.78125rem', color: '#9CA3AF', lineHeight: 1.5 }}>
-              Kouvèti: Sant-Vil Cap-Haïtien, Barrière-Bouteille,Petit-Anse,Madeline, Quartier Morin, Limonade, Milot.
+              Kouvèti: Sant-Vil Cap-Haïtien, Barrière-Bouteille, Petite Anse, Madeline, Vertières, Carenage, Quartier Morin, Limonade, Milot.
             </p>
           </div>
         </div>
@@ -165,15 +155,37 @@ export default function Footer({ onNavigate, user }: FooterProps) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
             <button
-              onClick={() => setModalType('terms')}
-              style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+              onClick={() => onNavigate('terms')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#9CA3AF',
+                cursor: 'pointer',
+                padding: 0,
+                fontSize: 'inherit',
+                fontWeight: 600,
+                transition: 'color 0.15s ease'
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+              onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
             >
               Kondisyon Itilizasyon
             </button>
             <span>&bull;</span>
             <button
-              onClick={() => setModalType('privacy')}
-              style={{ background: 'none', border: 'none', color: '#9CA3AF', cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+              onClick={() => onNavigate('privacy')}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#9CA3AF',
+                cursor: 'pointer',
+                padding: 0,
+                fontSize: 'inherit',
+                fontWeight: 600,
+                transition: 'color 0.15s ease'
+              }}
+              onMouseEnter={e => e.currentTarget.style.color = '#FFFFFF'}
+              onMouseLeave={e => e.currentTarget.style.color = '#9CA3AF'}
             >
               Règleman Vi Prive
             </button>
@@ -182,63 +194,6 @@ export default function Footer({ onNavigate, user }: FooterProps) {
           </div>
         </div>
       </div>
-
-      {/* Modal */}
-      {modalType && (
-        <div
-          onClick={() => setModalType(null)}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            zIndex: 9999,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 20
-          }}
-        >
-          <div
-            onClick={e => e.stopPropagation()}
-            style={{
-              background: '#FFFFFF',
-              borderRadius: 12,
-              maxWidth: 500,
-              width: '100%',
-              padding: 24,
-              color: '#17191C',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.2)'
-            }}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16, borderBottom: '1px solid #E8E8E8', paddingBottom: 10 }}>
-              <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 800 }}>
-                {modalType === 'terms' ? 'Kondisyon Itilizasyon' : 'Règleman sou Vi Prive'}
-              </h3>
-              <button
-                onClick={() => setModalType(null)}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280' }}
-              >
-                <IconX />
-              </button>
-            </div>
-            <div style={{ fontSize: '0.875rem', lineHeight: 1.6, color: '#4B5563', maxHeight: 300, overflowY: 'auto' }}>
-              {modalType === 'terms' ? (
-                <>
-                  <p><strong>1. Sèvis:</strong> Delivery Lakay se yon platfòm livrezon an tan reyèl nan Cap-Haïtien ki konekte kliyan, patnè komèsyal ak kousye dedye.</p>
-                  <p><strong>2. Kòmand:</strong> Chak kòmand trete san pèdi tan. Pri livrezon kalkile dapre distans ak volim.</p>
-                  <p><strong>3. Peman:</strong> Nou aksepte MonCash, Natcash ak lajan kach lè livrezon an rive.</p>
-                </>
-              ) : (
-                <>
-                  <p><strong>1. Done Kliyan:</strong> Done w yo (non, adrès, telefòn) itilize sèlman pou asire livrezon an rive nan bon men.</p>
-                  <p><strong>2. Konfidansyalite:</strong> Nou respekte vi prive tout itilizatè nou yo. Done w yo pa janm vann oswa transfere bay twazyèm pati.</p>
-                  <p><strong>3. Sipò:</strong> Pou sipò teknik oswa kesyon sou kont ou, kontakte liy ofisyèl WhatsApp la.</p>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </footer>
   )
 }

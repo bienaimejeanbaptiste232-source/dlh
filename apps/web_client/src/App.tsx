@@ -13,8 +13,9 @@ import HomePage from './pages/HomePage'
 import CheckoutPage from './pages/CheckoutPage'
 import ProfilePage from './pages/ProfilePage'
 import OrdersPage from './pages/OrdersPage'
+import LegalPage from './pages/LegalPage'
 
-export type Page = 'home' | 'checkout' | 'profile' | 'auth' | 'orders'
+export type Page = 'home' | 'checkout' | 'profile' | 'auth' | 'orders' | 'terms' | 'privacy'
 export type MerchantCategory = 'ALL' | 'RESTAURANT' | 'FAST_FOOD' | 'SUPERMARKET' | 'PHARMACY' | 'CONSTRUCTION' | 'BEVERAGE_DEPOT'
 
 // ─── Toast ────────────────────────────────────────────────────
@@ -92,10 +93,22 @@ function parseInitialRoute(): {
     return { page: 'auth' }
   }
 
-  // Category in query param: ?cat=RESTAURANT
-  const cat = searchParams.get('cat') || searchParams.get('category')
+  // 7. Legal pages: /terms or /kondisyon
+  if (path === '/terms' || path === '/kondisyon') {
+    return { page: 'terms' }
+  }
+
+  // 8. Privacy: /privacy or /vi-prive
+  if (path === '/privacy' || path === '/vi-prive') {
+    return { page: 'privacy' }
+  }
+
+  // 9. Category routes: /category/:cat or /kategori/:cat or ?cat=RESTAURANT
+  const catMatch = window.location.pathname.match(/^\/(?:category|kategori)\/([^/?#]+)/i)
+  const catParam = searchParams.get('cat') || searchParams.get('category')
+  const rawCat = catMatch ? catMatch[1] : catParam
   const validCategories: MerchantCategory[] = ['ALL', 'RESTAURANT', 'FAST_FOOD', 'SUPERMARKET', 'PHARMACY', 'CONSTRUCTION', 'BEVERAGE_DEPOT']
-  const matchedCat = cat ? validCategories.find(c => c.toLowerCase() === cat.toLowerCase()) : undefined
+  const matchedCat = rawCat ? validCategories.find(c => c.toLowerCase() === rawCat.toLowerCase()) : undefined
 
   return { page: 'home', category: matchedCat }
 }
@@ -158,6 +171,13 @@ function AppInner() {
       newTrackNumber = parts[2] || null
       targetPage = 'orders'
       targetPath = target
+    } else if (target.startsWith('/category/') || target.startsWith('/kategori/')) {
+      const parts = target.split('/')
+      const catKey = parts[2]?.toUpperCase() as MerchantCategory
+      targetPage = 'home'
+      targetPath = target
+      if (catKey) setNavCategory(catKey)
+      newStoreId = null
     } else if (target === 'orders' || target === '/orders') {
       targetPage = 'orders'
       targetPath = '/orders'
@@ -170,14 +190,20 @@ function AppInner() {
     } else if (target === 'auth' || target === '/auth' || target === '/login') {
       targetPage = 'auth'
       targetPath = '/auth'
+    } else if (target === 'terms' || target === '/terms' || target === '/kondisyon') {
+      targetPage = 'terms'
+      targetPath = '/terms'
+    } else if (target === 'privacy' || target === '/privacy' || target === '/vi-prive') {
+      targetPage = 'privacy'
+      targetPath = '/privacy'
     } else {
       // Home /
       targetPage = 'home'
       targetPath = '/'
     }
 
-    // Auth guards
-    if ((targetPage === 'profile' || targetPage === 'orders') && !user) {
+    // Auth guards (Profile and Checkout require login; Orders allows tracking without login)
+    if (targetPage === 'profile' && !user) {
       targetPage = 'auth'
       targetPath = '/auth'
     }
@@ -198,11 +224,13 @@ function AppInner() {
 
   const handleCategoryFilter = (cat: MerchantCategory) => {
     setNavCategory(cat)
-    navigate('home')
+    setStoreId(null)
+    const targetPath = cat === 'ALL' ? '/' : `/category/${cat.toLowerCase()}`
+    navigate(targetPath)
     setTimeout(() => {
       const el = document.getElementById('merchants-section')
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }, 80)
+    }, 120)
   }
 
   const handleLogout = () => {
@@ -247,6 +275,13 @@ function AppInner() {
             initialTrackNumber={trackNumber}
             onSelectOrder={(num) => navigate(num ? `/track/${num}` : '/orders')}
             onGoHome={() => navigate('home')}
+          />
+        )}
+        {(page === 'terms' || page === 'privacy') && (
+          <LegalPage
+            initialTab={page === 'privacy' ? 'privacy' : 'terms'}
+            onGoHome={() => navigate('home')}
+            onSwitchTab={(tab) => navigate(tab)}
           />
         )}
       </main>
