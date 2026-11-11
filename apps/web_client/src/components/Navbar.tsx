@@ -794,24 +794,9 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           />
           <div ref={drawerContentRef} className="ma-drawer-content">
             {/* Header: Delivery Lakay Official Brand Header with Logo */}
-            <div className="ma-drawer-head" style={{
-              background: 'linear-gradient(135deg, #0F172A 0%, #1E293B 100%)',
-              padding: '16px 18px',
-              borderBottom: '1px solid #334155'
-            }}>
+            <div className="ma-drawer-head">
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <div style={{
-                  width: 44,
-                  height: 44,
-                  borderRadius: 12,
-                  background: '#FFFFFF',
-                  padding: 4,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.2)',
-                  flexShrink: 0
-                }}>
+                <div className="ma-drawer-logo-badge">
                   <img
                     src="/logo.png"
                     alt="Delivery Lakay"
@@ -1096,7 +1081,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </div>
             </div>
 
-            <div className="ma-drawer-footer" style={{ padding: '14px 18px', background: '#F8FAFC', borderTop: '1px solid #E2E8F0' }}>
+            <div className="ma-drawer-footer">
               <button
                 type="button"
                 onClick={() => {
@@ -1104,25 +1089,11 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                   setVendorModalOpen(true)
                 }}
                 className="ma-sell-btn"
-                style={{
-                  width: '100%',
-                  border: 'none',
-                  borderRadius: 10,
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 8,
-                  padding: '11px 16px',
-                  fontWeight: 800,
-                  fontSize: '0.8125rem',
-                  boxShadow: '0 2px 8px rgba(220, 38, 38, 0.25)'
-                }}
               >
                 <IconStore />
                 <span>Vin Vandè sou Delivery Lakay</span>
               </button>
-              <div style={{ textAlign: 'center', fontSize: '0.625rem', color: '#94A3B8', fontWeight: 600, marginTop: 8 }}>
+              <div style={{ textAlign: 'center', fontSize: '0.625rem', color: '#64748B', fontWeight: 600, marginTop: 10 }}>
                 Delivery Lakay Haïti · Sèvis Livrezon Rapid
               </div>
             </div>

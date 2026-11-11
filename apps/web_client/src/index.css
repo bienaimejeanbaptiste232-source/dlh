@@ -6245,14 +6245,15 @@ a { text-decoration: none; color: inherit; }
   box-shadow: 0 6px 20px rgba(255, 96, 0, 0.45);
 }
 
-/* ── Maket Ayisyen Category Drawer Overlay ──────────────────────────── */
+/* ── Maket Ayisyen Category Drawer Overlay (Glassmorphism & Morphism Design) ──── */
 .ma-drawer-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(15, 23, 42, 0.45);
   z-index: 9999;
-  backdrop-filter: blur(2px);
-  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(8px) saturate(140%);
+  -webkit-backdrop-filter: blur(8px) saturate(140%);
+  animation: fadeIn 0.22s ease;
   cursor: pointer;
   touch-action: manipulation;
 }
@@ -6262,14 +6263,19 @@ a { text-decoration: none; color: inherit; }
   top: 0;
   left: 0;
   bottom: 0;
-  width: 340px;
+  width: 345px;
   max-width: 88vw;
-  background: #FFFFFF;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border-right: 1px solid rgba(255, 255, 255, 0.7);
   z-index: 10000;
   display: flex;
   flex-direction: column;
-  box-shadow: 8px 0 36px rgba(15, 23, 42, 0.22);
-  animation: slideInLeft 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    16px 0 48px -10px rgba(15, 23, 42, 0.22),
+    inset 1px 0 0 rgba(255, 255, 255, 0.85);
+  animation: slideInLeft 0.26s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: default;
 }
 
@@ -6284,35 +6290,69 @@ a { text-decoration: none; color: inherit; }
 }
 
 .ma-drawer-head {
-  padding: 20px 20px 18px 20px;
-  background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+  padding: 16px 18px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.92) 100%);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   color: #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.18),
+    inset 0 1px 1px rgba(255, 255, 255, 0.15);
+}
+
+.ma-drawer-logo-badge {
+  width: 44px;
+  height: 44px;
+  border-radius: 13px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 14px rgba(0, 0, 0, 0.2),
+    inset 0 1px 1px #FFFFFF,
+    inset 0 -1px 2px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.ma-drawer-logo-badge:hover {
+  transform: scale(1.05) rotate(-2deg);
 }
 
 .ma-drawer-close {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.22);
-  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   color: #FFFFFF;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.25);
 }
 
 .ma-drawer-close:hover {
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.4);
   color: #FFFFFF;
-  transform: rotate(90deg);
+  transform: rotate(90deg) scale(1.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.4);
 }
 
 .ma-drawer-body {
@@ -6332,24 +6372,42 @@ a { text-decoration: none; color: inherit; }
   padding: 14px 20px 6px 20px;
 }
 
+/* Glassmorphism Morphic Tile Rows */
 .ma-drawer-row {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 9px 18px;
+  margin: 3px 12px;
+  padding: 9px 12px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow: 
+    0 2px 6px -1px rgba(15, 23, 42, 0.03),
+    inset 0 1px 1px rgba(255, 255, 255, 0.85);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
-  border-left: 3px solid transparent;
 }
 
 .ma-drawer-row:hover {
-  background: #F8FAFC;
+  background: rgba(255, 255, 255, 0.85);
+  border-color: rgba(255, 255, 255, 0.95);
+  box-shadow: 
+    0 6px 18px -3px rgba(15, 23, 42, 0.09),
+    inset 0 1px 1px #FFFFFF,
+    inset 0 -1px 2px rgba(0, 0, 0, 0.02);
+  transform: translateX(3px);
 }
 
 .ma-drawer-row.active {
-  background: #FEF2F2;
-  border-left-color: #DC2626;
+  background: rgba(254, 242, 242, 0.9);
+  border-color: rgba(220, 38, 38, 0.3);
+  box-shadow: 
+    0 6px 16px -3px rgba(220, 38, 38, 0.16),
+    inset 0 1px 1px #FFFFFF;
 }
 
 .ma-drawer-row.active .ma-drawer-row-title {
@@ -6357,21 +6415,31 @@ a { text-decoration: none; color: inherit; }
   font-weight: 800;
 }
 
+/* Glassmorphic Neumorphic Icon Boxes */
 .ma-drawer-icon-box {
-  width: 36px;
-  height: 36px;
-  border-radius: 9px;
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.15rem;
   flex-shrink: 0;
-  background: #F1F5F9;
-  transition: transform 0.18s ease;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 
+    0 3px 8px -1px rgba(15, 23, 42, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ma-drawer-row:hover .ma-drawer-icon-box {
-  transform: scale(1.06);
+  transform: scale(1.08) translateY(-1px);
+  box-shadow: 
+    0 6px 14px -2px rgba(15, 23, 42, 0.14),
+    inset 0 1px 1px #FFFFFF;
 }
 
 .ma-drawer-row-title {
@@ -6390,14 +6458,14 @@ a { text-decoration: none; color: inherit; }
 }
 
 .ma-drawer-row-arrow {
-  color: #CBD5E1;
+  color: #94A3B8;
   transition: transform 0.18s ease, color 0.18s ease;
   flex-shrink: 0;
 }
 
 .ma-drawer-row:hover .ma-drawer-row-arrow {
   color: #DC2626;
-  transform: translateX(2px);
+  transform: translateX(3px);
 }
 
 .ma-drawer-item {
@@ -6579,8 +6647,10 @@ a { text-decoration: none; color: inherit; }
 }
 
 .ma-nav-menu-btn {
-  background: #F8FAFC;
-  border: 1.5px solid #E2E8F0;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(12px) saturate(160%);
+  -webkit-backdrop-filter: blur(12px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.85);
   color: #0F172A;
   cursor: pointer;
   display: inline-flex;
@@ -6589,19 +6659,24 @@ a { text-decoration: none; color: inherit; }
   width: 40px;
   height: 40px;
   padding: 0;
-  border-radius: 10px;
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  border-radius: 12px;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 
+    0 4px 14px -2px rgba(15, 23, 42, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.95),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.03);
   flex-shrink: 0;
 }
 
 .ma-nav-menu-btn:hover,
 .ma-nav-menu-btn.active {
-  background: #FFF7ED;
-  border-color: #FF6000;
+  background: rgba(255, 247, 237, 0.92);
+  border-color: rgba(255, 96, 0, 0.4);
   color: #FF6000;
-  box-shadow: 0 3px 10px rgba(255, 96, 0, 0.15);
-  transform: translateY(-1px);
+  box-shadow: 
+    0 8px 20px -3px rgba(255, 96, 0, 0.24),
+    inset 0 1px 1px #FFFFFF;
+  transform: translateY(-1.5px) scale(1.03);
 }
 
 .ma-nav-menu-btn.active svg,
