@@ -122,6 +122,47 @@ const IconCheckSmall = () => (
   </svg>
 )
 
+const IconZoom = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <circle cx="11" cy="11" r="8" />
+    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    <line x1="11" y1="8" x2="11" y2="14" />
+    <line x1="8" y1="11" x2="14" y2="11" />
+  </svg>
+)
+
+const IconShare = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+  </svg>
+)
+
+const IconTag = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+    <line x1="7" y1="7" x2="7.01" y2="7" />
+  </svg>
+)
+
+const IconShield = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+  </svg>
+)
+
+const IconTruck = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" width="14" height="14">
+    <rect x="1" y="3" width="15" height="13" />
+    <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+    <circle cx="5.5" cy="18.5" r="2.5" />
+    <circle cx="18.5" cy="18.5" r="2.5" />
+  </svg>
+)
+
 const CAP_ZONES = [
   'Tout Zòn',
   'Sant-Vil Okap',
@@ -1018,7 +1059,8 @@ export default function HomePage({
     )
   }
 
-  // ── Render Global Product Modal ───────────────────────────────
+  // ── Render Global Product Modal ─────────────────────────────────────
+  // Pro 2-column visualization: Image gallery (left) + Details panel (right)
   function renderProductModal() {
     if (!previewProduct) return null
     const { product, img, storeName, merchantId } = previewProduct
@@ -1026,213 +1068,295 @@ export default function HomePage({
     const effectiveQty = qty > 0 ? qty : 1
     const totalItemPrice = product.price * effectiveQty
 
-    // Determine store type for smart note hint
     const merchantForModal = merchantId ? merchants.find(m => m.id === merchantId) : selectedMerchant
     const storeType = merchantForModal?.type || selectedMerchant?.type || ''
     const noteHint = getNoteHint(product.category?.name, storeType)
 
-    const productFullDesc = product.description ||
-      `Atik bon jan kalite espesyal ${product.name} prepare pa patnè nou an "${storeName}" nan Cap-Haïtien. Tout engredyan yo chwazi ak swen pou garanti fraîcheur ak gou otantik. Kòmande li kounye a pou livrezon dirèk devan baryè w.`
+    const shareText = `Bonjou! Gade bèl pwodwi sa sou Delivery Lakay: ${product.name} pa "${storeName}" pou sèlman ${formatHTG(product.price)}. Kòmande dirèk nan Okap!`
 
     return (
-      <div
-        className="product-modal-backdrop"
-        onClick={() => setPreviewProduct(null)}
-      >
-        <div
-          className="product-modal-card"
-          onClick={e => e.stopPropagation()}
-        >
-          {/* Close Button */}
+      <div className="product-modal-backdrop" onClick={() => setPreviewProduct(null)}>
+        <div className="product-modal-card" onClick={e => e.stopPropagation()}>
+
+          {/* Close Button – floats above both columns */}
           <button
             className="product-modal-close"
             onClick={() => setPreviewProduct(null)}
             aria-label="Fèmen"
+            style={{ zIndex: 20 }}
           >
-            ✕
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.8} strokeLinecap="round" width="14" height="14">
+              <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
           </button>
 
-          {/* Contained Image Frame (Zero Overflow) */}
-          <div className="ma-prod-modal-wrap">
-            <img
-              src={img}
-              alt={product.name}
-              className="ma-prod-modal-img"
-            />
-            {product.category?.name && (
-              <span style={{
-                position: 'absolute',
-                top: 14,
-                left: 14,
-                background: '#FF6000',
-                color: '#FFFFFF',
-                fontSize: '0.6875rem',
-                fontWeight: 800,
-                padding: '4px 10px',
-                borderRadius: 6,
-                textTransform: 'uppercase',
-                boxShadow: '0 2px 6px rgba(0,0,0,0.2)'
-              }}>
-                {product.category.name}
-              </span>
-            )}
-          </div>
+          {/* ── 2-Column Grid ── */}
+          <div className="ma-prod-modal-grid">
 
-          {/* Modal Information Body */}
-          <div style={{ padding: '14px 18px' }}>
-            {/* Store link badge */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-              <span
+            {/* ── LEFT: Image Gallery ── */}
+            <div className="ma-prod-modal-gallery">
+              {/* Category chip on image */}
+              {product.category?.name && (
+                <span style={{
+                  position: 'absolute', top: 14, left: 14, zIndex: 5,
+                  background: '#FF6000', color: '#FFFFFF',
+                  fontSize: '0.6875rem', fontWeight: 800,
+                  padding: '4px 10px', borderRadius: 20,
+                  textTransform: 'uppercase', letterSpacing: '0.4px',
+                  boxShadow: '0 2px 10px rgba(255,96,0,0.35)'
+                }}>
+                  {product.category.name}
+                </span>
+              )}
+
+              {/* Main product image */}
+              <div className="ma-prod-modal-img-container">
+                <img
+                  src={img}
+                  alt={product.name}
+                  className="ma-prod-modal-hero-img"
+                />
+              </div>
+
+              {/* Zoom hint */}
+              <div className="ma-prod-zoom-btn" style={{ cursor: 'default' }}>
+                <IconZoom />
+                <span>Pase souri pou zoome</span>
+              </div>
+
+              {/* Trust badges row */}
+              <div style={{
+                display: 'flex', gap: 8, flexWrap: 'wrap',
+                justifyContent: 'center', marginTop: 14
+              }}>
+                {[
+                  { icon: <IconShield />, label: 'Kalite garanti' },
+                  { icon: <IconTruck />, label: 'Livrezon Okap' },
+                  { icon: <IconCheckSmall />, label: 'Fre & Otantik' },
+                ].map(({ icon, label }) => (
+                  <span key={label} style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5,
+                    fontSize: '0.6875rem', fontWeight: 700, color: '#475569',
+                    background: '#FFFFFF', border: '1px solid #E2E8F0',
+                    borderRadius: 20, padding: '4px 10px',
+                    boxShadow: '0 1px 4px rgba(15,23,42,0.06)'
+                  }}>
+                    {icon}{label}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* ── RIGHT: Product Details Panel ── */}
+            <div className="ma-prod-modal-details">
+
+              {/* Store breadcrumb */}
+              <button
                 onClick={() => handleSelectStoreById(merchantId)}
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 800,
-                  color: '#FF6000',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 4
-                }}
+                className="ma-prod-chip"
+                style={{ marginBottom: 14, alignSelf: 'flex-start', border: 'none', cursor: 'pointer' }}
               >
                 <IconStore />
-                <span>{storeName}</span>
-                <span style={{ textDecoration: 'underline' }}>Wè boutik la →</span>
-              </span>
+                <span style={{ color: '#FF6000', fontWeight: 800 }}>{storeName}</span>
+                <span style={{ color: '#94A3B8', fontSize: '0.6875rem' }}>→ Wè boutik</span>
+              </button>
 
-              <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 800 }}>
-                ● Disponib
-              </span>
-            </div>
+              {/* Product name */}
+              <h2 style={{
+                margin: '0 0 6px 0',
+                fontSize: '1.3125rem',
+                fontWeight: 900,
+                color: '#0F172A',
+                lineHeight: 1.25,
+                letterSpacing: '-0.3px'
+              }}>
+                {product.name}
+              </h2>
 
-            {/* Title */}
-            <h3 style={{ margin: '0 0 4px 0', fontSize: '1.0625rem', fontWeight: 800, color: '#0F172A', lineHeight: 1.3 }}>
-              {product.name}
-            </h3>
+              {/* Price + availability */}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 14 }}>
+                <span style={{ fontSize: '1.625rem', fontWeight: 900, color: '#FF6000', letterSpacing: '-0.5px' }}>
+                  {formatHTG(product.price)}
+                </span>
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5,
+                  fontSize: '0.75rem', fontWeight: 700,
+                  color: '#059669', background: '#F0FDF4',
+                  border: '1px solid #BBF7D0', borderRadius: 20, padding: '3px 10px'
+                }}>
+                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
+                  Disponib kounye a
+                </span>
+              </div>
 
-            {/* Price Row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-              <span style={{ fontSize: '1.1875rem', fontWeight: 900, color: '#0F172A' }}>
-                {formatHTG(product.price)}
-              </span>
-              <span style={{ fontSize: '0.6875rem', color: '#059669', fontWeight: 700 }}>
-                ● Pri transparan · Livrezon rapid Okap
-              </span>
-            </div>
+              {/* Divider */}
+              <div style={{ height: 1, background: '#F1F5F9', marginBottom: 14 }} />
 
-            {/* Clean Product Description */}
-            <p style={{
-              margin: '0 0 10px 0',
-              fontSize: '0.8125rem',
-              lineHeight: 1.45,
-              color: '#475569',
-              background: '#F8FAFC',
-              padding: '8px 12px',
-              borderRadius: 8,
-              border: '1px solid #E2E8F0'
-            }}>
-              {product.description || `Pwodwi fre ak bon kalite prepare pa ${storeName}. Disponib pou livrezon rapid nan Cap-Haïtien.`}
-            </p>
-
-            {/* Delivery / Prep Notice */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              fontSize: '0.6875rem',
-              color: '#64748B',
-              marginBottom: 14
-            }}>
-              <IconClock />
-              <span>Tan preparasyon: <strong>20–30 minit</strong></span>
-            </div>
-
-            {/* Special Instructions Textarea */}
-            <div style={{ marginBottom: 12 }}>
-              <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 5 }}>
-                Nòt Espesyal (pou chèf la / boutik la):
-              </label>
-              <textarea
-                value={specialNote}
-                onChange={e => setSpecialNote(e.target.value)}
-                placeholder={noteHint}
-                rows={2}
-                style={{
-                  width: '100%',
-                  padding: '8px 10px',
-                  border: '1.5px solid #E2E8F0',
-                  borderRadius: 8,
-                  fontSize: '0.8125rem',
-                  resize: 'none',
-                  outline: 'none',
-                  fontFamily: 'inherit',
-                  boxSizing: 'border-box',
-                  color: '#1E293B',
-                  transition: 'border-color 0.15s'
-                }}
-                onFocus={e => { e.target.style.borderColor = '#FF6000' }}
-                onBlur={e => { e.target.style.borderColor = '#E2E8F0' }}
-              />
-            </div>
-
-            {/* Action Bar: Quantity Controls + Add To Cart */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              {qty > 0 && (
-                <div style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  background: '#FFF3EB',
-                  border: '1.5px solid #FF6000',
+              {/* Product description */}
+              <div style={{ marginBottom: 16 }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#64748B', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: 7 }}>
+                  Deskripsyon Pwodwi
+                </div>
+                <p style={{
+                  margin: 0,
+                  fontSize: '0.875rem',
+                  lineHeight: 1.6,
+                  color: '#334155',
+                  background: '#F8FAFC',
+                  padding: '10px 14px',
                   borderRadius: 10,
-                  padding: '6px 12px'
+                  border: '1px solid #E2E8F0'
+                }}>
+                  {product.description || `Pwodwi fre ak bon kalite soti nan boutik ${storeName}. Disponib pou livrezon rapid nan tout Cap-Haïtien — livrezon sou lòd kounye a!`}
+                </p>
+              </div>
+
+              {/* Delivery meta row */}
+              <div style={{
+                display: 'grid', gridTemplateColumns: '1fr 1fr',
+                gap: 8, marginBottom: 18
+              }}>
+                {[
+                  { icon: <IconClock />, label: 'Delè Livrezon', value: '20–45 minit' },
+                  { icon: <IconTag />, label: 'Frè Livrezon', value: '150 HTG sèlman' },
+                ].map(({ icon, label, value }) => (
+                  <div key={label} style={{
+                    background: '#F8FAFC', border: '1px solid #E2E8F0',
+                    borderRadius: 10, padding: '10px 12px',
+                    display: 'flex', flexDirection: 'column', gap: 4
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.6875rem', color: '#64748B', fontWeight: 700 }}>
+                      {icon}{label}
+                    </div>
+                    <div style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#0F172A' }}>{value}</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Special note textarea */}
+              <div style={{ marginBottom: 16 }}>
+                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#0F172A', marginBottom: 6 }}>
+                  Nòt Espesyal pou Boutik / Chèf la:
+                </label>
+                <textarea
+                  value={specialNote}
+                  onChange={e => setSpecialNote(e.target.value)}
+                  placeholder={noteHint}
+                  rows={2}
+                  style={{
+                    width: '100%',
+                    padding: '9px 12px',
+                    border: '1.5px solid #E2E8F0',
+                    borderRadius: 10,
+                    fontSize: '0.8125rem',
+                    resize: 'none',
+                    outline: 'none',
+                    fontFamily: 'inherit',
+                    boxSizing: 'border-box',
+                    color: '#1E293B',
+                    lineHeight: 1.5,
+                    transition: 'border-color 0.15s, box-shadow 0.15s'
+                  }}
+                  onFocus={e => {
+                    e.target.style.borderColor = '#FF6000'
+                    e.target.style.boxShadow = '0 0 0 3px rgba(255,96,0,0.1)'
+                  }}
+                  onBlur={e => {
+                    e.target.style.borderColor = '#E2E8F0'
+                    e.target.style.boxShadow = 'none'
+                  }}
+                />
+              </div>
+
+              {/* Quantity + Add to cart row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                {/* Quantity stepper */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: 0,
+                  border: '1.5px solid #E2E8F0', borderRadius: 10,
+                  overflow: 'hidden', flexShrink: 0
                 }}>
                   <button
-                    onClick={() => updateQty(product.id, qty - 1)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex' }}
+                    onClick={() => updateQty(product.id, Math.max(0, qty - 1))}
+                    style={{
+                      width: 36, height: 44,
+                      background: qty > 0 ? '#FFF3EB' : '#F8FAFC',
+                      border: 'none', cursor: 'pointer',
+                      color: qty > 0 ? '#FF6000' : '#94A3B8',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.1rem', fontWeight: 700, transition: 'all 0.15s'
+                    }}
                   >
                     <IconMinus />
                   </button>
-                  <span style={{ fontWeight: 900, fontSize: '0.9375rem', color: '#FF6000', minWidth: 20, textAlign: 'center' }}>
-                    {qty}
+                  <span style={{
+                    minWidth: 36, textAlign: 'center',
+                    fontSize: '0.9375rem', fontWeight: 900,
+                    color: qty > 0 ? '#FF6000' : '#94A3B8',
+                    background: '#FFFFFF', padding: '0 4px', lineHeight: '44px'
+                  }}>
+                    {qty || 1}
                   </span>
                   <button
-                    onClick={() => updateQty(product.id, qty + 1)}
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#FF6000', display: 'flex' }}
+                    onClick={() => updateQty(product.id, qty > 0 ? qty + 1 : 1)}
+                    style={{
+                      width: 36, height: 44,
+                      background: '#FFF3EB',
+                      border: 'none', cursor: 'pointer',
+                      color: '#FF6000',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: '1.1rem', fontWeight: 700, transition: 'all 0.15s'
+                    }}
                   >
                     <IconPlus />
                   </button>
                 </div>
-              )}
 
-              <button
-                onClick={() => {
-                  handleAddToCartWithNote(product, storeName, specialNote)
-                  setSpecialNote('')
-                  setPreviewProduct(null)
+                {/* Add to cart CTA */}
+                <button
+                  onClick={() => {
+                    handleAddToCartWithNote(product, storeName, specialNote)
+                    setSpecialNote('')
+                    setPreviewProduct(null)
+                  }}
+                  className="product-modal-add-btn"
+                  style={{ flex: 1, height: 44, fontSize: '0.875rem' }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" width="15" height="15">
+                    <circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" />
+                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                  </svg>
+                  <span>
+                    {qty > 0
+                      ? `Ajoute Plis — ${formatHTG(totalItemPrice)}`
+                      : `Ajoute nan Panyen — ${formatHTG(product.price)}`}
+                  </span>
+                </button>
+              </div>
+
+              {/* WhatsApp share */}
+              <a
+                href={`https://wa.me/?text=${encodeURIComponent(shareText)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 8,
+                  padding: '9px 14px', borderRadius: 10,
+                  background: '#F0FDF4', border: '1px solid #BBF7D0',
+                  textDecoration: 'none', fontSize: '0.8125rem',
+                  fontWeight: 700, color: '#15803D',
+                  transition: 'all 0.15s ease'
                 }}
-                className="product-modal-add-btn"
-                style={{ flex: 1 }}
+                onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#DCFCE7' }}
+                onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.background = '#F0FDF4' }}
               >
-                <IconPlus />
-                <span>
-                  {qty > 0
-                    ? `Ajoute Plis (${formatHTG(totalItemPrice)})`
-                    : `Ajoute nan Panyen (${formatHTG(product.price)})`}
-                </span>
-              </button>
-            </div>
+                <IconWhatsApp size={16} color="#16A34A" />
+                <span>Pataje pwodwi sa sou WhatsApp</span>
+                <IconShare />
+              </a>
 
-            {/* Viral WhatsApp Share Link */}
-            <a
-              href={`https://wa.me/?text=${encodeURIComponent(`Bonjou! Gade bèl pwodwi sa sou Delivery Lakay: ${product.name} pa "${storeName}" pou sèlman ${formatHTG(product.price)}. Kòmande dirèk nan Okap sou http://localhost:5173/`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ma-modal-wa-share"
-            >
-              <IconWhatsApp size={16} color="#16A34A" />
-              <span>Pataje pwodwi sa ak yon zanmi sou WhatsApp</span>
-            </a>
-          </div>
+            </div>{/* end details panel */}
+          </div>{/* end grid */}
         </div>
       </div>
     )
