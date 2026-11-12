@@ -8,6 +8,7 @@ export default function LoginPage() {
   const router = useRouter();
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -19,7 +20,7 @@ export default function LoginPage() {
       await login(identifier, password);
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'Erreur de connexion');
+      setError(err.message || 'Erè koneksyon. Tanpri verifye idantifyan ou.');
     } finally {
       setLoading(false);
     }
@@ -29,62 +30,89 @@ export default function LoginPage() {
     <div className="login-page">
       <div className="login-card fade-in-up">
         <div className="login-logo">
-          <div className="login-logo-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth={2.2} width={28} height={28} strokeLinecap="round" strokeLinejoin="round">
-              <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
-              <rect x="9" y="11" width="14" height="10" rx="2"/>
-              <circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-            </svg>
+          <div className="login-logo-icon" style={{ overflow: 'hidden', padding: 2, background: '#FFFFFF' }}>
+            <img
+              src="/logo.png"
+              alt="Delivery Lakay"
+              style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              onError={(e) => {
+                // Fallback SVG if logo image is not found
+                e.currentTarget.style.display = 'none';
+              }}
+            />
           </div>
-          <h1>Delivery Haiti</h1>
-          <p>Tableau de bord administrateur</p>
+          <h1 style={{ letterSpacing: '-0.5px' }}>Delivery Lakay</h1>
+          <p>Panèl Kontwòl Administrasyon</p>
         </div>
 
         {error && <div className="error-message">⚠️ {error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label" htmlFor="identifier">Téléphone ou Email</label>
+            <label className="form-label" htmlFor="identifier">
+              Non Itilizatè / Email
+            </label>
             <input
               id="identifier"
               className="form-input"
               type="text"
-              placeholder="+50940553636 ou admin@..."
+              placeholder="admin"
               value={identifier}
-              onChange={e => setIdentifier(e.target.value)}
+              onChange={(e) => setIdentifier(e.target.value)}
               required
               autoComplete="username"
+              autoFocus
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="password">Mot de passe</label>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <label className="form-label" htmlFor="password">
+                Modpas
+              </label>
+              <button
+                type="button"
+                onClick={() => setShowPassword((p) => !p)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: 'var(--text-muted)',
+                  fontSize: 12,
+                  cursor: 'pointer',
+                  padding: 0,
+                  marginBottom: 6,
+                }}
+              >
+                {showPassword ? 'Kache' : 'Montre'}
+              </button>
+            </div>
             <input
               id="password"
               className="form-input"
-              type="password"
-              placeholder="••••••••••"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               autoComplete="current-password"
             />
           </div>
 
-          <button type="submit" className="btn-login" disabled={loading}>
+          <button type="submit" className="btn-login" disabled={loading} style={{ marginTop: 8 }}>
             {loading ? (
               <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                <span className="spinner" /> Connexion...
+                <span className="spinner" /> Ap konekte...
               </span>
-            ) : '🔐 Se connecter'}
+            ) : (
+              'Konekte sou Panèl la'
+            )}
           </button>
         </form>
 
-        <div style={{ marginTop: 24, padding: 14, background: 'var(--surface-3)', borderRadius: 12, border: '1px solid var(--border-subtle)' }}>
-          <p style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 8, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Comptes de test</p>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>👑 Super Admin: <strong>+50940553636</strong></p>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)' }}>💰 Finance: <strong>+50937000002</strong></p>
-          <p style={{ fontSize: 12, color: 'var(--text-secondary)', marginTop: 4 }}>Mot de passe: <strong>Password123!</strong></p>
+        <div style={{ marginTop: 24, textAlign: 'center' }}>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
+            Delivery Lakay &copy; 2026 &bull; Aksè Sekirize
+          </p>
         </div>
       </div>
     </div>

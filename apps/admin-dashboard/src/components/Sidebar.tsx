@@ -53,6 +53,7 @@ const NAV_ITEMS = [
     items: [
       { href: '/dashboard/zones', Icon: IconZones, label: 'Zones de livraison' },
       { href: '/dashboard/pricing', Icon: IconPricing, label: 'Tarification' },
+      { href: '/dashboard/settings', Icon: IconSettings, label: 'Paramètres & Sekirite' },
       { href: '/dashboard/settings/content', Icon: IconSettings, label: 'Kontni & Mesaj Platfòm' },
     ],
   },
@@ -181,7 +182,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           </div>
           <div className="sidebar-user-info">
             <div className="name">{user?.firstName} {user?.lastName}</div>
-            <div className="role">{roleLabel[user?.role] || user?.role}</div>
+            <div className="role">{(user?.role && roleLabel[user.role]) || user?.role || 'Admin'}</div>
           </div>
           <button
             onClick={handleLogout}
