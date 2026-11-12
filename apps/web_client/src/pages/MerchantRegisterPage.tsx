@@ -1,6 +1,13 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { apiRegisterMerchant } from '../lib/api'
 import { showToast } from '../lib/toast'
+import {
+  requestDeviceLocation,
+  resolveLocationFromCoordinates,
+  resolveLocationFromZoneId,
+  type LocationResolveResult,
+} from '../lib/locationResolver'
+import { getClientCoverage, type ServiceArea } from '../lib/coverage'
 
 interface MerchantRegisterPageProps {
   onGoHome: () => void
@@ -23,6 +30,55 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
   const [businessName, setBusinessName] = useState('')
   const [businessType, setBusinessType] = useState('RESTAURANT')
   const [address, setAddress] = useState('')
+
+  // Location during vendor registration
+  const [allAreas, setAllAreas] = useState<ServiceArea[]>([])
+  const [selectedDeptCode, setSelectedDeptCode] = useState('HTI-N')
+  const [selectedZoneId, setSelectedZoneId] = useState('')
+  const [detectedLocation, setDetectedLocation] = useState<LocationResolveResult | null>(null)
+  const [gpsLoading, setGpsLoading] = useState(false)
+  const [gpsNotice, setGpsNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    getClientCoverage().then(({ areas }) => {
+      setAllAreas(areas)
+      const defaultZone = areas.find(a => a.type === 'ZONE' && a.isActive)
+      if (defaultZone) {
+        setSelectedZoneId(defaultZone.id)
+        resolveLocationFromZoneId(defaultZone.id).then(setDetectedLocation).catch(() => {})
+      }
+    }).catch(() => {})
+  }, [])
+
+  const handleDetectGPS = async () => {
+    setGpsLoading(true)
+    setGpsNotice(null)
+    const result = await requestDeviceLocation()
+    setGpsLoading(false)
+
+    if (!result.ok || result.latitude === undefined || result.longitude === undefined) {
+      setGpsNotice(result.error || 'GPS pa t disponib. Chwazi zòn nan lis anba a.')
+      return
+    }
+
+    const resolved = await resolveLocationFromCoordinates(result.latitude, result.longitude)
+    setDetectedLocation(resolved)
+    if (resolved.area) {
+      setSelectedZoneId(resolved.area.id)
+      if (resolved.department) setSelectedDeptCode(resolved.department.code)
+      if (!address.trim()) setAddress(`${resolved.area.name}, Cap-Haïtien`)
+      setGpsNotice(null)
+    }
+  }
+
+  const handleZoneSelect = async (zoneId: string) => {
+    setSelectedZoneId(zoneId)
+    const resolved = await resolveLocationFromZoneId(zoneId)
+    setDetectedLocation(resolved)
+    if (resolved.area && !address.trim()) {
+      setAddress(`${resolved.area.name}, Cap-Haïtien`)
+    }
+  }
 
   // Step 2: Responsab & Sekirite
   const [fullName, setFullName] = useState('')
@@ -92,7 +148,11 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
         ownerLastName: lastName,
         phoneNumber: phoneNumber.trim(),
         password,
-        address: address.trim(),
+        address: address.trim() || (detectedLocation?.area ? `${detectedLocation.area.name}, Cap-Haïtien` : 'Cap-Haïtien'),
+        zoneId: selectedZoneId || undefined,
+        latitude: detectedLocation?.latitude,
+        longitude: detectedLocation?.longitude,
+        departmentCode: selectedDeptCode,
       })
 
       if (res.ok) {
@@ -266,12 +326,98 @@ export default function MerchantRegisterPage({ onGoHome }: MerchantRegisterPageP
               </span>
             </div>
 
+            {/* Lokalizasyon ak Zòn Kouvèti Etablisman an */}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#E2E8F0' }}>
+                  Lokalizasyon & Zòn Sèvis *
+                </span>
+                <button
+                  type="button"
+                  onClick={handleDetectGPS}
+                  disabled={gpsLoading}
+                  style={{
+                    background: 'rgba(255, 96, 0, 0.15)',
+                    border: '1px solid #FF6000',
+                    color: '#FF8A00',
+                    padding: '4px 10px',
+                    borderRadius: 8,
+                    fontSize: '0.75rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                  }}
+                >
+                  {gpsLoading ? '📡 Ap detekte...' : '📍 Pran GPS Etablisman an'}
+                </button>
+              </div>
+
+              {gpsNotice && (
+                <div style={{ fontSize: '0.75rem', color: '#FCD34D', background: 'rgba(245, 158, 11, 0.12)', padding: '6px 10px', borderRadius: 8, marginBottom: 8, border: '1px solid rgba(245, 158, 11, 0.3)' }}>
+                  {gpsNotice}
+                </div>
+              )}
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+                <div>
+                  <div style={{ fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 700, marginBottom: 4 }}>
+                    Depatman
+                  </div>
+                  <select
+                    value={selectedDeptCode}
+                    onChange={e => setSelectedDeptCode(e.target.value)}
+                    className="merchant-glass-input"
+                    style={{ padding: '8px 10px', fontSize: '0.8125rem' }}
+                  >
+                    <option value="HTI-N" style={{ background: '#0F172A', color: '#FFFFFF' }}>Nord (Nò) — Aktif</option>
+                    <option value="HTI-O" disabled style={{ background: '#0F172A', color: '#94A3B8' }}>Ouest — Bento</option>
+                    <option value="HTI-S" disabled style={{ background: '#0F172A', color: '#94A3B8' }}>Sud — Bento</option>
+                    <option value="HTI-A" disabled style={{ background: '#0F172A', color: '#94A3B8' }}>Artibonite — Bento</option>
+                  </select>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '0.6875rem', color: '#94A3B8', fontWeight: 700, marginBottom: 4 }}>
+                    Zòn Livrezon (Okap)
+                  </div>
+                  <select
+                    value={selectedZoneId}
+                    onChange={e => handleZoneSelect(e.target.value)}
+                    className="merchant-glass-input"
+                    style={{ padding: '8px 10px', fontSize: '0.8125rem' }}
+                  >
+                    {allAreas.filter(a => a.type === 'ZONE').map(z => (
+                      <option key={z.id} value={z.id} style={{ background: '#0F172A', color: '#FFFFFF' }}>
+                        {z.name} {!z.isActive ? '(Dezaktive)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {detectedLocation && (
+                <div
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    marginBottom: 8,
+                    background: detectedLocation.isAvailable ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)',
+                    color: detectedLocation.isAvailable ? '#34D399' : '#F87171',
+                    border: `1px solid ${detectedLocation.isAvailable ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)'}`,
+                  }}
+                >
+                  {detectedLocation.statusMessage}
+                </div>
+              )}
+            </div>
+
             {/* Adrès nan Cap-Haïtien */}
             <div className="merchant-input-wrapper">
               <input
                 type="text"
                 className="merchant-glass-input"
-                placeholder="Adrès nan Cap-Haïtien (eg. Rue 18 H, Sant-Vil)"
+                placeholder="Lari, blòk oswa repè nan Okap (eg. Rue 18 H, Sant-Vil)"
                 value={address}
                 onChange={(e) => setAddress(e.target.value)}
                 required

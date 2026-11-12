@@ -182,6 +182,10 @@ export async function apiRegister(body: {
   email?: string
   languagePreference?: string
   address?: string
+  zoneId?: string
+  latitude?: number
+  longitude?: number
+  departmentCode?: string
 }) {
   const cleanPhone = body.phoneNumber.replace(/\D/g, '')
   const fullPhone = cleanPhone.startsWith('509') ? `+${cleanPhone}` : `+509${cleanPhone}`
@@ -241,9 +245,11 @@ export async function apiRegister(body: {
               userId: createdUser['id'],
               title: 'Adrès Prensipal',
               fullAddress: body.address.trim(),
+              streetAddress: body.address.trim(),
+              zoneId: body.zoneId || null,
+              latitude: body.latitude || 19.7576,
+              longitude: body.longitude || -72.2048,
               isDefault: true,
-              latitude: 19.7550,
-              longitude: -72.2050,
             }),
           }).catch(() => {})
         }
@@ -297,6 +303,10 @@ export async function apiRegisterMerchant(body: {
   password: string
   email?: string
   address: string
+  zoneId?: string
+  latitude?: number
+  longitude?: number
+  departmentCode?: string
 }): Promise<{ ok: boolean; msg?: string; merchant?: any }> {
   const cleanPhone = body.phoneNumber.replace(/\D/g, '')
   const fullPhone = cleanPhone.startsWith('509') ? `+${cleanPhone}` : `+509${cleanPhone}`
@@ -368,9 +378,9 @@ export async function apiRegisterMerchant(body: {
       type: body.businessType,
       phone: fullPhone,
       address: body.address.trim(),
-      latitude: 19.7595,
-      longitude: -72.2008,
-      zoneId: defaultZoneId,
+      latitude: body.latitude || 19.7595,
+      longitude: body.longitude || -72.2008,
+      zoneId: body.zoneId || defaultZoneId,
       commissionRate: 15.0,
       avgPrepTimeMinutes: 25,
       isOpen: false,

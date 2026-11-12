@@ -32,6 +32,10 @@ interface RegisterData {
   email?: string
   languagePreference?: string
   address?: string
+  zoneId?: string
+  latitude?: number
+  longitude?: number
+  departmentCode?: string
 }
 
 const AuthCtx = createContext<AuthContextType | null>(null)

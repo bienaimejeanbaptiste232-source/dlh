@@ -51,8 +51,9 @@ const NAV_ITEMS = [
   {
     section: 'Configuration',
     items: [
+      { href: '/dashboard/coverage', Icon: IconZones, label: 'Kouvèti & Zòn Ayiti', badge: 'NOUVO' },
       { href: '/dashboard/dispatchers', Icon: IconCustomers, label: 'Ekip Dispatchers', badge: 'ADMIN' },
-      { href: '/dashboard/zones', Icon: IconZones, label: 'Zones de livraison' },
+      { href: '/dashboard/zones', Icon: IconZones, label: 'Zones de livraison (Lokal)' },
       { href: '/dashboard/pricing', Icon: IconPricing, label: 'Tarification' },
       { href: '/dashboard/settings', Icon: IconSettings, label: 'Paramètres & Sekirite' },
       { href: '/dashboard/settings/content', Icon: IconSettings, label: 'Kontni & Mesaj Platfòm' },

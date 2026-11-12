@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart, DELIVERY_FEE } from '../contexts/CartContext'
 import { createOrder, initMoncashPayment, verifyMoncashPayment } from '../lib/api'
+import { validateCustomerLocation, getActiveDeliveryZones, type ServiceArea } from '../lib/coverage'
 import { showToast } from '../lib/toast'
 
 // Icons
@@ -70,6 +71,32 @@ export default function CheckoutPage({
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState<string | null>(null)
 
+  // Location coverage & hierarchical validation
+  const [coverageValidation, setCoverageValidation] = useState<{
+    isCovered: boolean;
+    isAvailable: boolean;
+    area: ServiceArea | null;
+    pricing: any | null;
+    isPricingConfigured: boolean;
+    message: string;
+  } | null>(null)
+  const [activeZones, setActiveZones] = useState<ServiceArea[]>([])
+
+  useEffect(() => {
+    getActiveDeliveryZones().then(setActiveZones).catch(() => {})
+  }, [])
+
+  useEffect(() => {
+    if (!address.trim()) {
+      setCoverageValidation(null)
+      return
+    }
+    const timer = setTimeout(() => {
+      validateCustomerLocation(address).then(setCoverageValidation).catch(() => {})
+    }, 250)
+    return () => clearTimeout(timer)
+  }, [address])
+
   // MonCash verify
   const [moncashUrl, setMoncashUrl] = useState<string | null>(null)
   const [txId, setTxId]             = useState('')
@@ -96,6 +123,14 @@ export default function CheckoutPage({
 
   const handlePlaceOrder = async () => {
     if (!address.trim()) { setError('Tanpri antre adrès livrezon ou.'); return }
+
+    // Enforce hierarchical coverage & pricing validation
+    const cov = await validateCustomerLocation(address)
+    if (!cov.isAvailable) {
+      setError(cov.message || 'Sèvis livrezon pa disponib kounye a nan zòn sa a.')
+      return
+    }
+
     const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('dh_token') : null) || 'sb-token-217712d7-1f9a-49cc-b1b4-50b163fa22a6'
 
     setLoading(true); setError(null)
@@ -454,7 +489,7 @@ export default function CheckoutPage({
               Enfòmasyon Livrezon
             </div>
             <label className="field-label">Adrès Livrezon *</label>
-            <div className="input-wrap" style={{ marginBottom: 16 }}>
+            <div className="input-wrap" style={{ marginBottom: 8 }}>
               <div className="input-icon" style={{ padding: '0 12px' }}><IconMapPin /></div>
               <input
                 id="checkout-address"
@@ -464,6 +499,84 @@ export default function CheckoutPage({
                 onChange={e => setAddress(e.target.value)}
               />
             </div>
+
+            {/* Quick Active Zone Selector Chips */}
+            {activeZones.length > 0 && (
+              <div style={{ marginBottom: 12 }}>
+                <div style={{ fontSize: '0.6875rem', fontWeight: 800, color: 'var(--text-secondary)', marginBottom: 6 }}>
+                  ZÒN AKTIFF NAN OKAP (Klike pou w chwazi rapid):
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {activeZones.map(z => {
+                    const isSelected = address.toLowerCase().includes(z.name.toLowerCase()) || address.toLowerCase().includes(z.nameKr.toLowerCase());
+                    return (
+                      <button
+                        key={z.id}
+                        type="button"
+                        onClick={() => setAddress(`${z.name}, Cap-Haïtien`)}
+                        style={{
+                          padding: '4px 10px',
+                          borderRadius: 20,
+                          fontSize: '0.75rem',
+                          fontWeight: isSelected ? 800 : 600,
+                          border: isSelected ? '1px solid #FF6000' : '1px solid #E2E8F0',
+                          background: isSelected ? '#FFF3EB' : '#FFFFFF',
+                          color: isSelected ? '#FF6000' : '#475569',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 4,
+                          transition: 'all 0.15s ease',
+                        }}
+                      >
+                        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10B981' }} />
+                        <span>{z.name}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* Realtime Coverage Validation Feedback */}
+            {coverageValidation && (
+              <div
+                style={{
+                  marginBottom: 16,
+                  padding: '8px 12px',
+                  borderRadius: 10,
+                  fontSize: '0.75rem',
+                  fontWeight: 700,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  background: coverageValidation.isAvailable ? '#ECFDF5' : '#FEF2F2',
+                  color: coverageValidation.isAvailable ? '#065F46' : '#991B1B',
+                  border: `1px solid ${coverageValidation.isAvailable ? '#A7F3D0' : '#FECACA'}`,
+                }}
+              >
+                <span>{coverageValidation.isAvailable ? '🟢' : '🔴'}</span>
+                <div>
+                  {coverageValidation.isAvailable ? (
+                    <div>
+                      <span>Zòn Kouvri: <strong>{coverageValidation.area?.name}</strong></span>
+                      {coverageValidation.isPricingConfigured ? (
+                        <span style={{ marginLeft: 6, color: '#047857' }}>
+                          • Tarif baz: {coverageValidation.pricing?.baseFee} HTG
+                          {coverageValidation.pricing?.estimatedDeliveryMinutes && ` • ~${coverageValidation.pricing.estimatedDeliveryMinutes} min`}
+                        </span>
+                      ) : (
+                        <span style={{ marginLeft: 6, color: '#B45309' }}>
+                          • (Tarif espesifik poko konfigire — tarif estanda aplike)
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    <span>{coverageValidation.message}</span>
+                  )}
+                </div>
+              </div>
+            )}
 
             <label className="field-label">Nimewo Telefòn</label>
             <div className="input-wrap" style={{ marginBottom: 16 }}>

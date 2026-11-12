@@ -1,5 +1,12 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
+import {
+  requestDeviceLocation,
+  resolveLocationFromCoordinates,
+  resolveLocationFromZoneId,
+  type LocationResolveResult,
+} from '../lib/locationResolver'
+import { getClientCoverage, type ServiceArea } from '../lib/coverage'
 
 // ── SVG Icons (inline, no extra dep) ────────────────────────────
 const IconTruck = () => (
@@ -95,6 +102,57 @@ export default function AuthPage() {
   const [rLang, setRLang]       = useState('ht')
   const [terms, setTerms]       = useState(true)
 
+  // Location during registration state
+  const [allAreas, setAllAreas] = useState<ServiceArea[]>([])
+  const [selectedDeptCode, setSelectedDeptCode] = useState('HTI-N')
+  const [selectedZoneId, setSelectedZoneId] = useState('')
+  const [detectedLocation, setDetectedLocation] = useState<LocationResolveResult | null>(null)
+  const [gpsLoading, setGpsLoading] = useState(false)
+  const [gpsNotice, setGpsNotice] = useState<string | null>(null)
+
+  useEffect(() => {
+    getClientCoverage().then(({ areas }) => {
+      setAllAreas(areas)
+      // Pick first active delivery zone in Nord as default
+      const defaultZone = areas.find(a => a.type === 'ZONE' && a.isActive)
+      if (defaultZone) {
+        setSelectedZoneId(defaultZone.id)
+        resolveLocationFromZoneId(defaultZone.id).then(setDetectedLocation).catch(() => {})
+      }
+    }).catch(() => {})
+  }, [])
+
+  const handleDetectGPS = async () => {
+    setGpsLoading(true)
+    setGpsNotice(null)
+    const result = await requestDeviceLocation()
+    setGpsLoading(false)
+
+    if (!result.ok || result.latitude === undefined || result.longitude === undefined) {
+      setGpsNotice(result.error || 'Lokalizasyon GPS pa t posib. Tanpri chwazi zòn ou anba a.')
+      return
+    }
+
+    // Resolve GPS coordinates to nearest coverage zone
+    const resolved = await resolveLocationFromCoordinates(result.latitude, result.longitude)
+    setDetectedLocation(resolved)
+    if (resolved.area) {
+      setSelectedZoneId(resolved.area.id)
+      if (resolved.department) setSelectedDeptCode(resolved.department.code)
+      if (!rAddr.trim()) setRAddr(`${resolved.area.name}, Cap-Haïtien`)
+      setGpsNotice(null)
+    }
+  }
+
+  const handleZoneSelect = async (zoneId: string) => {
+    setSelectedZoneId(zoneId)
+    const resolved = await resolveLocationFromZoneId(zoneId)
+    setDetectedLocation(resolved)
+    if (resolved.area && !rAddr.trim()) {
+      setRAddr(`${resolved.area.name}, Cap-Haïtien`)
+    }
+  }
+
   const switchTab = (t: 'login' | 'register') => {
     setTab(t); setError(null); setSuccess(null)
   }
@@ -116,16 +174,36 @@ export default function AuthPage() {
     if (rPwd.length < 6) { setError('Modpas la dwe gen omwen 6 karaktè.'); return }
     if (rPwd !== rPwd2) { setError('Modpas yo pa idantik.'); return }
     if (!terms) { setError('Ou dwe aksepte kondisyon itilizasyon yo.'); return }
+
+    // Check location
+    if (!selectedZoneId && !rAddr.trim()) {
+      setError('Tanpri chwazi zòn livrezon ou oswa detekte pozisyon w.');
+      return;
+    }
+
     setLoading(true); setError(null)
     const res = await register({
       firstName: rFirst, lastName: rLast,
       phoneNumber: rPhone, password: rPwd,
       email: rEmail || undefined, languagePreference: rLang,
-      address: rAddr || undefined,
+      address: rAddr.trim() || (detectedLocation?.area ? `${detectedLocation.area.name}, Cap-Haïtien` : undefined),
+      zoneId: selectedZoneId || undefined,
+      latitude: detectedLocation?.latitude,
+      longitude: detectedLocation?.longitude,
+      departmentCode: selectedDeptCode,
     })
     setLoading(false)
     if (!res.ok) setError(res.msg ?? 'Erè enskripyon.')
-    else setSuccess(`Byenvini ${rFirst}! Kont ou kreye avèk siksè.`)
+    else {
+      // Synchronize active zone across app
+      if (detectedLocation?.area?.name) {
+        try {
+          localStorage.setItem('dlh_zone', detectedLocation.area.name);
+          window.dispatchEvent(new CustomEvent('dlh:zone-change', { detail: { zone: detectedLocation.area.name } }));
+        } catch (_) {}
+      }
+      setSuccess(`Byenvini ${rFirst}! Kont ou kreye avèk siksè.`)
+    }
   }
 
   return (
@@ -260,10 +338,106 @@ export default function AuthPage() {
               <input id="reg-pwd2" className="input-field" type={showPwd ? 'text' : 'password'} placeholder="••••••••" value={rPwd2} onChange={e => setRPwd2(e.target.value)} />
             </div>
 
-            <label className="field-label">Adrès Livrezon (Opsyonèl)</label>
-            <div className="input-wrap">
-              <div className="input-icon"><IconMapPin /></div>
-              <input id="reg-addr" className="input-field" placeholder="Boulevard du Cap, Cap-Haïtien" value={rAddr} onChange={e => setRAddr(e.target.value)} />
+            {/* Location & Coverage during Registration */}
+            <div style={{ marginTop: 6, marginBottom: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <label className="field-label" style={{ marginBottom: 0 }}>Lokalizasyon & Zòn Livrezon *</label>
+                <button
+                  type="button"
+                  onClick={handleDetectGPS}
+                  disabled={gpsLoading}
+                  style={{
+                    background: 'none',
+                    border: '1px solid #FF6000',
+                    color: '#FF6000',
+                    padding: '3px 8px',
+                    borderRadius: 6,
+                    fontSize: '0.6875rem',
+                    fontWeight: 800,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4,
+                  }}
+                >
+                  <span>{gpsLoading ? '📡 Ap detekte...' : '📍 Detekte ak GPS'}</span>
+                </button>
+              </div>
+
+              {gpsNotice && (
+                <div style={{ fontSize: '0.6875rem', color: '#B45309', background: '#FFFBEB', padding: '6px 10px', borderRadius: 8, marginBottom: 8, border: '1px solid #FDE68A' }}>
+                  {gpsNotice}
+                </div>
+              )}
+
+              {/* Department & Zone Selector */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+                <div>
+                  <div style={{ fontSize: '0.6875rem', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 4 }}>
+                    Depatman
+                  </div>
+                  <select
+                    value={selectedDeptCode}
+                    onChange={e => setSelectedDeptCode(e.target.value)}
+                    className="input-field"
+                    style={{ width: '100%', padding: '8px 10px', fontSize: '0.8125rem', borderRadius: 8 }}
+                  >
+                    <option value="HTI-N">Nord (Nò) — Aktif</option>
+                    <option value="HTI-O" disabled>Ouest (Lwès) — Bento</option>
+                    <option value="HTI-S" disabled>Sud (Sid) — Bento</option>
+                    <option value="HTI-A" disabled>Artibonite — Bento</option>
+                    <option value="HTI-C" disabled>Centre — Bento</option>
+                  </select>
+                </div>
+
+                <div>
+                  <div style={{ fontSize: '0.6875rem', color: 'var(--text-secondary)', fontWeight: 700, marginBottom: 4 }}>
+                    Zòn Sèvis (Okap)
+                  </div>
+                  <select
+                    value={selectedZoneId}
+                    onChange={e => handleZoneSelect(e.target.value)}
+                    className="input-field"
+                    style={{ width: '100%', padding: '8px 10px', fontSize: '0.8125rem', borderRadius: 8 }}
+                  >
+                    {allAreas.filter(a => a.type === 'ZONE').map(z => (
+                      <option key={z.id} value={z.id}>
+                        {z.name} {!z.isActive ? '(Dezaktive)' : ''}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Real-time Coverage & Pricing Feedback */}
+              {detectedLocation && (
+                <div
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: 8,
+                    fontSize: '0.75rem',
+                    fontWeight: 700,
+                    marginBottom: 8,
+                    background: detectedLocation.isAvailable ? '#ECFDF5' : '#FEF2F2',
+                    color: detectedLocation.isAvailable ? '#065F46' : '#991B1B',
+                    border: `1px solid ${detectedLocation.isAvailable ? '#A7F3D0' : '#FECACA'}`,
+                  }}
+                >
+                  {detectedLocation.statusMessage}
+                </div>
+              )}
+
+              {/* Specific Street Address / Repère */}
+              <div className="input-wrap">
+                <div className="input-icon"><IconMapPin /></div>
+                <input
+                  id="reg-addr"
+                  className="input-field"
+                  placeholder="Lari, nimewo kay oswa repè (eg: Boulevard, Rue 18 L)"
+                  value={rAddr}
+                  onChange={e => setRAddr(e.target.value)}
+                />
+              </div>
             </div>
 
             <label className="field-label" style={{ marginBottom: 8 }}>Preferans Lang</label>

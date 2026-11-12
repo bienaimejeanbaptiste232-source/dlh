@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
+import { getActiveDeliveryZones } from '../lib/coverage'
 import type { MerchantCategory } from '../App'
 import { showToast } from '../lib/toast'
 
@@ -235,7 +236,20 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
   const [selectedZone, setSelectedZone] = useState(() => {
     return (typeof window !== 'undefined' && localStorage.getItem('dlh_zone')) || 'Sant Vil'
   })
+  const [dynamicZones, setDynamicZones] = useState<string[]>(ZONES)
   const [searchQuery, setSearchQuery] = useState('')
+
+  // Chaje zòn ki aktif ak disponib yo selon règ yerachik yo
+  useEffect(() => {
+    getActiveDeliveryZones()
+      .then(activeAreas => {
+        if (activeAreas && activeAreas.length > 0) {
+          const names = ['Tout Zòn', ...activeAreas.map(a => a.name)]
+          setDynamicZones(names)
+        }
+      })
+      .catch(() => {})
+  }, [])
   const [searchCategory, setSearchCategory] = useState<MerchantCategory>('ALL')
 
   // Modals & Menus state
@@ -510,7 +524,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
                 <div style={{ fontSize: '0.625rem', fontWeight: 800, color: '#94A3B8', textTransform: 'uppercase', padding: '6px 8px' }}>
                   Chwazi Zòn nan Okap:
                 </div>
-                {ZONES.map(z => (
+                {dynamicZones.map(z => (
                   <button
                     key={z}
                     onClick={() => handleZoneSelect(z)}
