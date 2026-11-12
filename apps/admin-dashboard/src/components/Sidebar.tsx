@@ -51,10 +51,23 @@ const NAV_ITEMS = [
   {
     section: 'Configuration',
     items: [
+      { href: '/dashboard/dispatchers', Icon: IconCustomers, label: 'Ekip Dispatchers', badge: 'ADMIN' },
       { href: '/dashboard/zones', Icon: IconZones, label: 'Zones de livraison' },
       { href: '/dashboard/pricing', Icon: IconPricing, label: 'Tarification' },
       { href: '/dashboard/settings', Icon: IconSettings, label: 'Paramètres & Sekirite' },
       { href: '/dashboard/settings/content', Icon: IconSettings, label: 'Kontni & Mesaj Platfòm' },
+    ],
+  },
+];
+
+const DISPATCHER_NAV_ITEMS = [
+  {
+    section: 'Operasyon Dispatch',
+    items: [
+      { href: '/dashboard/dispatch', Icon: IconOrders, label: 'Centre Dispatch', badge: 'LIVE' },
+      { href: '/dashboard/live-map', Icon: IconLiveMap, label: 'Carte en direct', badge: 'LIVE' },
+      { href: '/dashboard/orders', Icon: IconOrders, label: 'Commandes' },
+      { href: '/dashboard/drivers', Icon: IconDrivers, label: 'Livreurs Flotte' },
     ],
   },
 ];
@@ -78,10 +91,14 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     ? `${user.firstName?.[0] || ''}${user.lastName?.[0] || ''}`.toUpperCase()
     : 'A';
 
+  const isDispatcher = user?.role === 'DISPATCHER';
+  const navSections = isDispatcher ? DISPATCHER_NAV_ITEMS : NAV_ITEMS;
+
   const roleLabel: Record<string, string> = {
     SUPER_ADMIN: 'Super Admin',
     ADMIN: 'Administrateur',
     FINANCE: 'Équipe Finance',
+    DISPATCHER: 'Operatè Dispatch',
   };
 
   return (
@@ -95,7 +112,9 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           />
           <div className="sidebar-logo-text">
             <h1>Delivery Lakay</h1>
-            <span>ADMIN CONSOLE</span>
+            <span style={{ color: isDispatcher ? '#FF6000' : 'var(--text-muted)' }}>
+              {isDispatcher ? 'DISPATCH CONSOLE' : 'ADMIN CONSOLE'}
+            </span>
           </div>
         </div>
 
@@ -123,7 +142,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       </div>
 
       <nav className="sidebar-nav">
-        {NAV_ITEMS.map((section) => (
+        {navSections.map((section) => (
           <div key={section.section}>
             <div className="nav-section-label">{section.section}</div>
             {section.items.map((item) => {

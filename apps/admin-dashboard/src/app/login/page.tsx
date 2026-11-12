@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../../contexts/AuthContext';
@@ -17,8 +17,12 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await login(identifier, password);
-      router.push('/dashboard');
+      const loggedUser = await login(identifier, password);
+      if (loggedUser?.role === 'DISPATCHER') {
+        router.push('/dashboard/dispatch');
+      } else {
+        router.push('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Erè koneksyon. Tanpri verifye idantifyan ou.');
     } finally {

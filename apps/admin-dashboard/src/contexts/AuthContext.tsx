@@ -9,7 +9,7 @@ import {
 interface AuthContextType {
   user: AdminUser | null;
   token: string | null;
-  login: (identifier: string, password: string) => Promise<void>;
+  login: (identifier: string, password: string) => Promise<AdminUser>;
   logout: () => void;
   changeCredentials: (
     currentPass: string,
@@ -41,7 +41,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  async function login(identifier: string, password: string) {
+  async function login(identifier: string, password: string): Promise<AdminUser> {
     const { user: adminUser, token: authToken } = await authenticateAdmin(
       identifier,
       password
@@ -51,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(adminUser);
     localStorage.setItem('admin_token', authToken);
     localStorage.setItem('admin_user', JSON.stringify(adminUser));
+    return adminUser;
   }
 
   async function changeCredentials(

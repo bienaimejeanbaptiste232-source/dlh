@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../../../lib/supabase';
+import { useAuth } from '../../../contexts/AuthContext';
 import { io, Socket } from 'socket.io-client';
 import { IconOrders, IconDrivers, IconRefresh, IconCheck, IconClock } from '../../../components/Icons';
 
@@ -75,6 +76,7 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 export default function DispatchPage() {
+  const { user } = useAuth();
   const [unassigned, setUnassigned] = useState<UnassignedOrder[]>([]);
   const [availableDrivers, setAvailableDrivers] = useState<AvailableDriver[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<UnassignedOrder | null>(null);
@@ -399,6 +401,65 @@ export default function DispatchPage() {
 
       {/* ── PAGE CONTAINER ─────────────────────────── */}
       <div className="page-container">
+        {/* DISPATCHER HERO BANNER (Pou operatè dispatch sèlman) */}
+        {user?.role === 'DISPATCHER' && (
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(255, 96, 0, 0.12) 0%, rgba(225, 29, 72, 0.08) 100%)',
+            border: '1.5px solid rgba(255, 96, 0, 0.3)',
+            borderRadius: 16,
+            padding: '16px 20px',
+            marginBottom: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: 12,
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+              <div style={{
+                width: 44,
+                height: 44,
+                borderRadius: '50%',
+                background: '#FF6000',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '1.25rem',
+                fontWeight: 800,
+                boxShadow: '0 4px 14px rgba(255, 96, 0, 0.3)',
+              }}>
+                🎧
+              </div>
+              <div>
+                <div style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--text-primary)' }}>
+                  Bonjou, {user.firstName || 'Operatè Dispatch'} !
+                </div>
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                  Estasyon Dispatch Cap-Haïtien &bull; Asiyen kòmand ak livreur an dirèk sou teren an
+                </div>
+              </div>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{
+                background: 'rgba(22, 163, 74, 0.15)',
+                color: '#16A34A',
+                border: '1px solid rgba(22, 163, 74, 0.3)',
+                borderRadius: 20,
+                padding: '5px 12px',
+                fontSize: '0.75rem',
+                fontWeight: 800,
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 6,
+              }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#16A34A' }} />
+                <span>Pòs Dispatch Aktif</span>
+              </span>
+            </div>
+          </div>
+        )}
+
         {/* STATS RAPIDES EN-TÊTE */}
         <div style={{
           display: 'grid',

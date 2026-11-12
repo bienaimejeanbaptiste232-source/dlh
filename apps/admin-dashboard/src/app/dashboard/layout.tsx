@@ -18,6 +18,27 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     }
   }, [user, loading, router]);
 
+  // Route protection for dispatchers
+  useEffect(() => {
+    if (!loading && user && user.role === 'DISPATCHER') {
+      const ADMIN_ONLY_PREFIXES = [
+        '/dashboard/finance',
+        '/dashboard/settings',
+        '/dashboard/pricing',
+        '/dashboard/zones',
+        '/dashboard/dispatchers',
+        '/dashboard/merchants',
+        '/dashboard/customers',
+      ];
+      const isRestricted = ADMIN_ONLY_PREFIXES.some(
+        (prefix) => pathname === prefix || pathname.startsWith(prefix + '/')
+      );
+      if (isRestricted || pathname === '/dashboard') {
+        router.replace('/dashboard/dispatch');
+      }
+    }
+  }, [user, loading, pathname, router]);
+
   // Close sidebar on route change
   useEffect(() => {
     setSidebarOpen(false);
