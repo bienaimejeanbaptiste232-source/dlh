@@ -258,7 +258,7 @@ function AppInner() {
       <CartDrawer onCheckout={() => navigate('checkout')} />
 
       <main className="app-main">
-        {page === 'auth'     && <AuthPage />}
+        {page === 'auth'     && <AuthPage onGoHome={() => navigate('home')} onGoMerchantRegister={() => navigate('merchant-register')} />}
         {page === 'home'     && (
           <HomePage
             initialFilter={navCategory}
