@@ -371,10 +371,10 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   <IconTruck />
                 </div>
                 <div>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 900, letterSpacing: '1px', textTransform: 'uppercase', color: '#FF6000' }}>
+                  <span style={{ fontSize: '0.6875rem', fontWeight: 900, letterSpacing: '1px', textTransform: 'uppercase', color: '#FF8A00' }}>
                     Eksperyans Kliyan
                   </span>
-                  <div style={{ fontSize: '1rem', fontWeight: 900, color: '#0F172A', lineHeight: 1 }}>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.1, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
                     Delivery Haïti
                   </div>
                 </div>
@@ -418,13 +418,16 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   alignItems: 'center',
                   gap: 10,
                   padding: '12px 14px',
-                  borderRadius: 12,
-                  background: '#FEF2F2',
-                  border: '1px solid #FECACA',
-                  color: '#DC2626',
+                  borderRadius: 14,
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(239, 68, 68, 0.45)',
+                  color: '#FCA5A5',
                   fontSize: '0.8125rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   marginBottom: 16,
+                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.2)',
                 }}
               >
                 <IconAlert />
@@ -440,13 +443,16 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   alignItems: 'center',
                   gap: 10,
                   padding: '12px 14px',
-                  borderRadius: 12,
-                  background: '#F0FDF4',
-                  border: '1px solid #BBF7D0',
-                  color: '#16A34A',
+                  borderRadius: 14,
+                  background: 'rgba(34, 197, 94, 0.2)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(34, 197, 94, 0.45)',
+                  color: '#86EFAC',
                   fontSize: '0.8125rem',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   marginBottom: 16,
+                  boxShadow: '0 4px 14px rgba(34, 197, 94, 0.2)',
                 }}
               >
                 <IconCheck />
@@ -465,21 +471,23 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     style={{
                       width: '100%',
                       padding: '8px 12px',
-                      borderRadius: 10,
-                      background: '#FFF7ED',
-                      border: '1px dashed #FDBA74',
-                      color: '#C2410C',
+                      borderRadius: 12,
+                      background: 'rgba(255, 96, 0, 0.18)',
+                      backdropFilter: 'blur(10px)',
+                      WebkitBackdropFilter: 'blur(10px)',
+                      border: '1px dashed rgba(255, 138, 0, 0.6)',
+                      color: '#FFB366',
                       fontSize: '0.75rem',
-                      fontWeight: 700,
+                      fontWeight: 800,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
                       gap: 6,
-                      transition: 'background 0.15s ease',
+                      transition: 'all 0.15s ease',
                     }}
-                    onMouseEnter={e => (e.currentTarget.style.background = '#FFEDD5')}
-                    onMouseLeave={e => (e.currentTarget.style.background = '#FFF7ED')}
+                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 96, 0, 0.28)')}
+                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 96, 0, 0.18)')}
                   >
                     <span>🔑</span>
                     <span>Ranpli rapid ak kont demonstrasyon (+509 3700-0007)</span>
@@ -487,7 +495,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 </div>
 
                 <div style={{ marginBottom: 4 }}>
-                  <label htmlFor="login-phone" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 800, color: '#334155', marginBottom: 6 }}>
+                  <label htmlFor="login-phone" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 6 }}>
                     Nimewo Telefòn
                   </label>
                   <div className="auth-pro-input-wrap">
@@ -509,21 +517,21 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 <div style={{ marginBottom: 6 }}>
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <label htmlFor="login-password" style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#334155' }}>
+                    <label htmlFor="login-password" style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
                       Modpas
                     </label>
                     <a
                       href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Haiti,%20mw%20bliye%20modpas%20kont%20mwen"
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ fontSize: '0.75rem', color: '#FF6000', fontWeight: 700, textDecoration: 'none' }}
+                      style={{ fontSize: '0.75rem', color: '#FFB366', fontWeight: 800, textDecoration: 'none' }}
                     >
                       Bliye modpas?
                     </a>
                   </div>
 
                   <div className="auth-pro-input-wrap">
-                    <div style={{ paddingLeft: 14, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                    <div style={{ paddingLeft: 14, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                       <IconLock />
                     </div>
                     <input
@@ -543,7 +551,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                         border: 'none',
                         padding: '0 14px',
                         cursor: 'pointer',
-                        color: '#94A3B8',
+                        color: 'rgba(255, 255, 255, 0.7)',
                         display: 'flex',
                         alignItems: 'center',
                       }}
@@ -577,11 +585,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 {/* Names */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div>
-                    <label htmlFor="reg-first" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                    <label htmlFor="reg-first" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                       Prenon *
                     </label>
                     <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                         <IconUser />
                       </div>
                       <input
@@ -596,11 +604,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
 
                   <div>
-                    <label htmlFor="reg-last" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                    <label htmlFor="reg-last" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                       Non Fanmi *
                     </label>
                     <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                         <IconUser />
                       </div>
                       <input
@@ -617,7 +625,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 {/* Phone */}
                 <div>
-                  <label htmlFor="reg-phone" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                  <label htmlFor="reg-phone" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                     Nimewo Telefòn *
                   </label>
                   <div className="auth-pro-input-wrap">
@@ -638,11 +646,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 {/* Email (Optional) */}
                 <div>
-                  <label htmlFor="reg-email" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                  <label htmlFor="reg-email" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                     Email (Opsyonèl)
                   </label>
                   <div className="auth-pro-input-wrap">
-                    <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                    <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                       <IconMail />
                     </div>
                     <input
@@ -658,11 +666,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 {/* Passwords */}
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                   <div>
-                    <label htmlFor="reg-pwd" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                    <label htmlFor="reg-pwd" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                       Modpas * (6+ karaktè)
                     </label>
                     <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                         <IconLock />
                       </div>
                       <input
@@ -677,11 +685,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
 
                   <div>
-                    <label htmlFor="reg-pwd2" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 4 }}>
+                    <label htmlFor="reg-pwd2" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
                       Konfime Modpas *
                     </label>
                     <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                         <IconLock />
                       </div>
                       <input
@@ -696,19 +704,22 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
                 </div>
 
-                {/* Location & Coverage Section */}
+                {/* Location & Coverage Section (Frosted Glass Tile) */}
                 <div
                   style={{
-                    background: '#F8FAFC',
-                    border: '1.5px solid #E2E8F0',
-                    borderRadius: 14,
-                    padding: '12px 14px',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(16px)',
+                    WebkitBackdropFilter: 'blur(16px)',
+                    border: '1.5px solid rgba(255, 255, 255, 0.25)',
+                    borderRadius: 16,
+                    padding: '14px',
                     marginBottom: 14,
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#0F172A' }}>
-                      <span style={{ color: '#FF6000' }}>📍</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
+                      <span style={{ color: '#FF8A00' }}>📍</span>
                       <span>Lokalizasyon & Zòn Livrezon</span>
                     </div>
 
@@ -717,9 +728,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                       onClick={handleDetectGPS}
                       disabled={gpsLoading}
                       style={{
-                        background: '#FFF7ED',
-                        border: '1px solid #FF8A00',
-                        color: '#EA580C',
+                        background: 'rgba(255, 96, 0, 0.22)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        border: '1px solid rgba(255, 138, 0, 0.6)',
+                        color: '#FFB366',
                         padding: '4px 9px',
                         borderRadius: 8,
                         fontSize: '0.6875rem',
@@ -739,12 +752,14 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     <div
                       style={{
                         fontSize: '0.6875rem',
-                        color: '#B45309',
-                        background: '#FFFBEB',
+                        color: '#FDE68A',
+                        background: 'rgba(180, 83, 9, 0.3)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
                         padding: '6px 10px',
                         borderRadius: 8,
                         marginBottom: 8,
-                        border: '1px solid #FDE68A',
+                        border: '1px solid rgba(245, 158, 11, 0.4)',
                         lineHeight: 1.4,
                       }}
                     >
@@ -755,7 +770,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   {/* Department & Zone Selectors */}
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
                     <div>
-                      <label htmlFor="reg-dept" style={{ display: 'block', fontSize: '0.6875rem', color: '#64748B', fontWeight: 700, marginBottom: 4 }}>
+                      <label htmlFor="reg-dept" style={{ display: 'block', fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', fontWeight: 700, marginBottom: 4 }}>
                         Depatman
                       </label>
                       <select
@@ -764,13 +779,15 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                         onChange={e => setSelectedDeptCode(e.target.value)}
                         style={{
                           width: '100%',
-                          padding: '7px 10px',
+                          padding: '8px 10px',
                           fontSize: '0.75rem',
                           fontWeight: 700,
-                          borderRadius: 8,
-                          border: '1.5px solid #CBD5E1',
-                          background: '#FFFFFF',
-                          color: '#0F172A',
+                          borderRadius: 10,
+                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+                          background: 'rgba(15, 23, 42, 0.75)',
+                          backdropFilter: 'blur(12px)',
+                          WebkitBackdropFilter: 'blur(12px)',
+                          color: '#FFFFFF',
                           outline: 'none',
                         }}
                       >
@@ -783,7 +800,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     </div>
 
                     <div>
-                      <label htmlFor="reg-zone" style={{ display: 'block', fontSize: '0.6875rem', color: '#64748B', fontWeight: 700, marginBottom: 4 }}>
+                      <label htmlFor="reg-zone" style={{ display: 'block', fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', fontWeight: 700, marginBottom: 4 }}>
                         Zòn Sèvis (Okap)
                       </label>
                       <select
@@ -792,13 +809,15 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                         onChange={e => handleZoneSelect(e.target.value)}
                         style={{
                           width: '100%',
-                          padding: '7px 10px',
+                          padding: '8px 10px',
                           fontSize: '0.75rem',
                           fontWeight: 700,
-                          borderRadius: 8,
-                          border: '1.5px solid #CBD5E1',
-                          background: '#FFFFFF',
-                          color: '#0F172A',
+                          borderRadius: 10,
+                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
+                          background: 'rgba(15, 23, 42, 0.75)',
+                          backdropFilter: 'blur(12px)',
+                          WebkitBackdropFilter: 'blur(12px)',
+                          color: '#FFFFFF',
                           outline: 'none',
                         }}
                       >
@@ -816,16 +835,18 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     <div
                       style={{
                         padding: '7px 10px',
-                        borderRadius: 8,
+                        borderRadius: 10,
                         fontSize: '0.6875rem',
                         fontWeight: 700,
                         marginBottom: 8,
                         display: 'flex',
                         alignItems: 'center',
                         gap: 6,
-                        background: detectedLocation.isAvailable ? '#ECFDF5' : '#FEF2F2',
-                        color: detectedLocation.isAvailable ? '#065F46' : '#991B1B',
-                        border: `1px solid ${detectedLocation.isAvailable ? '#A7F3D0' : '#FECACA'}`,
+                        background: detectedLocation.isAvailable ? 'rgba(34, 197, 94, 0.22)' : 'rgba(239, 68, 68, 0.22)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: detectedLocation.isAvailable ? '#86EFAC' : '#FCA5A5',
+                        border: `1px solid ${detectedLocation.isAvailable ? 'rgba(34, 197, 94, 0.45)' : 'rgba(239, 68, 68, 0.45)'}`,
                       }}
                     >
                       <span>{detectedLocation.isAvailable ? '✅' : '⚠️'}</span>
@@ -835,7 +856,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                   {/* Street Address / Landmark */}
                   <div className="auth-pro-input-wrap" style={{ marginBottom: 0 }}>
-                    <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: '#94A3B8' }}>
+                    <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
                       <IconMapPin />
                     </div>
                     <input
@@ -851,7 +872,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 {/* Language Preference */}
                 <div style={{ marginBottom: 10 }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#334155', marginBottom: 6 }}>
+                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 6 }}>
                     Preferans Lang
                   </label>
                   <div style={{ display: 'flex', gap: 8 }}>
@@ -860,18 +881,21 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                       onClick={() => setRLang('ht')}
                       style={{
                         flex: 1,
-                        padding: '7px 12px',
-                        borderRadius: 10,
+                        padding: '8px 12px',
+                        borderRadius: 12,
                         fontSize: '0.75rem',
                         fontWeight: 800,
-                        border: rLang === 'ht' ? '2px solid #FF6000' : '1.5px solid #CBD5E1',
-                        background: rLang === 'ht' ? '#FFF7ED' : '#FFFFFF',
-                        color: rLang === 'ht' ? '#C2410C' : '#64748B',
+                        border: rLang === 'ht' ? '2px solid #FF8A00' : '1.5px solid rgba(255, 255, 255, 0.25)',
+                        background: rLang === 'ht' ? 'rgba(255, 96, 0, 0.24)' : 'rgba(255, 255, 255, 0.08)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: rLang === 'ht' ? '#FFB366' : 'rgba(255, 255, 255, 0.85)',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 6,
+                        boxShadow: rLang === 'ht' ? '0 4px 14px rgba(255, 96, 0, 0.25)' : 'none',
                       }}
                     >
                       <span style={{ fontWeight: 900 }}>🇭🇹</span>
@@ -883,18 +907,21 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                       onClick={() => setRLang('fr')}
                       style={{
                         flex: 1,
-                        padding: '7px 12px',
-                        borderRadius: 10,
+                        padding: '8px 12px',
+                        borderRadius: 12,
                         fontSize: '0.75rem',
                         fontWeight: 800,
-                        border: rLang === 'fr' ? '2px solid #FF6000' : '1.5px solid #CBD5E1',
-                        background: rLang === 'fr' ? '#FFF7ED' : '#FFFFFF',
-                        color: rLang === 'fr' ? '#C2410C' : '#64748B',
+                        border: rLang === 'fr' ? '2px solid #FF8A00' : '1.5px solid rgba(255, 255, 255, 0.25)',
+                        background: rLang === 'fr' ? 'rgba(255, 96, 0, 0.24)' : 'rgba(255, 255, 255, 0.08)',
+                        backdropFilter: 'blur(10px)',
+                        WebkitBackdropFilter: 'blur(10px)',
+                        color: rLang === 'fr' ? '#FFB366' : 'rgba(255, 255, 255, 0.85)',
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
                         gap: 6,
+                        boxShadow: rLang === 'fr' ? '0 4px 14px rgba(255, 96, 0, 0.25)' : 'none',
                       }}
                     >
                       <span style={{ fontWeight: 900 }}>🇫🇷</span>
@@ -912,7 +939,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     onChange={e => setTerms(e.target.checked)}
                     style={{ marginTop: 2, accentColor: '#FF6000', cursor: 'pointer' }}
                   />
-                  <label htmlFor="reg-terms" style={{ fontSize: '0.6875rem', color: '#64748B', lineHeight: 1.4, cursor: 'pointer' }}>
+                  <label htmlFor="reg-terms" style={{ fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.4, cursor: 'pointer' }}>
                     Mwen aksepte kondisyon sèvis ak règleman konfidansyalite Delivery Haïti.
                   </label>
                 </div>
@@ -955,7 +982,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 gap: 6,
                 marginTop: 14,
                 fontSize: '0.6875rem',
-                color: '#94A3B8',
+                color: 'rgba(255, 255, 255, 0.7)',
                 fontWeight: 600,
               }}
             >
