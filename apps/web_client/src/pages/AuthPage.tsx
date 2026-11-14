@@ -386,27 +386,22 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                       value={rEmail} onChange={e => setREmail(e.target.value)} />
                   </div>
 
-                  {/* Passwords side-by-side */}
-                  <div className="auth-ref-grid-2">
-                    <div>
-                      <label className="auth-ref-label" htmlFor="r-pwd">Modpas *</label>
-                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
-                        <span className="auth-ref-input-icon"><IconLock /></span>
-                        <input id="r-pwd" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
-                          placeholder="6+" value={rPwd} onChange={e => setRPwd(e.target.value)} required />
-                        <button type="button" className="auth-ref-show-btn" onClick={() => setShowPwd(p => !p)}>
-                          {showPwd ? 'Kache' : 'Wè'}
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="auth-ref-label" htmlFor="r-pwd2">Konfime *</label>
-                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
-                        <span className="auth-ref-input-icon"><IconLock /></span>
-                        <input id="r-pwd2" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
-                          placeholder="Retype" value={rPwd2} onChange={e => setRPwd2(e.target.value)} required />
-                      </div>
-                    </div>
+                  {/* Passwords */}
+                  <label className="auth-ref-label" htmlFor="r-pwd">Modpas *</label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <span className="auth-ref-input-icon"><IconLock /></span>
+                    <input id="r-pwd" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
+                      placeholder="Omwen 6 karaktè" value={rPwd} onChange={e => setRPwd(e.target.value)} required />
+                    <button type="button" className="auth-ref-show-btn" onClick={() => setShowPwd(p => !p)}>
+                      {showPwd ? 'Kache' : 'Wè'}
+                    </button>
+                  </div>
+
+                  <label className="auth-ref-label" htmlFor="r-pwd2">Konfime modpas *</label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 14 }}>
+                    <span className="auth-ref-input-icon"><IconLock /></span>
+                    <input id="r-pwd2" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
+                      placeholder="Tape menm modpas la ankò" value={rPwd2} onChange={e => setRPwd2(e.target.value)} required />
                   </div>
 
                   <button type="submit" className="auth-ref-primary-btn">

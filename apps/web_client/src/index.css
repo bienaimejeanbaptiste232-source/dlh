@@ -8931,8 +8931,9 @@ img {
 /* Single centered column — no two-pane AI layout */
 .auth-ref-container {
   width: 100%;
-  max-width: 420px;
+  max-width: 440px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 /* Card: white, real border, real shadow — no frosted glass gimmick */
@@ -8943,6 +8944,9 @@ img {
   box-shadow: 0 1px 3px rgba(0,0,0,0.06), 0 8px 24px rgba(0,0,0,0.07);
   padding: 36px 32px 32px;
   display: block;
+  box-sizing: border-box;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* No left panel needed */
@@ -9053,6 +9057,9 @@ img {
   margin-bottom: 14px;
   border: 1px solid #DEDAD6;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
 }
 
 .auth-ref-input-box:focus-within {
@@ -9076,6 +9083,8 @@ img {
 
 .auth-ref-input {
   flex: 1;
+  min-width: 0;
+  width: 100%;
   border: none;
   background: transparent;
   outline: none;
@@ -9272,8 +9281,16 @@ img {
 /* Grid for registration side-by-side fields */
 .auth-ref-grid-2 {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.auth-ref-grid-2 > div {
+  min-width: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Location section — clean inset box */
@@ -9287,6 +9304,8 @@ img {
 
 .auth-ref-select {
   width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   height: 40px;
   background: #FFFFFF;
   border: 1px solid #DEDAD6;
