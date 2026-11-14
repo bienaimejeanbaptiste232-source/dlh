@@ -8,73 +8,50 @@ import {
 } from '../lib/locationResolver'
 import { getClientCoverage, type ServiceArea } from '../lib/coverage'
 
-// ── SVG Icons ──────────────────────────────────────────────────
-const IconTruck = () => (
-  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M5 17H3a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v3"/>
-    <rect x="9" y="11" width="14" height="10" rx="2"/>
-    <circle cx="12" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
-  </svg>
-)
-
+// ── Icons ────────────────────────────────────────────────────────
 const IconLock = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-  </svg>
-)
-
-const IconEye = ({ off }: { off?: boolean }) => (
-  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    {off ? (
-      <>
-        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-        <line x1="1" y1="1" x2="23" y2="23"/>
-      </>
-    ) : (
-      <>
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </>
-    )}
+    <rect x="3" y="11" width="18" height="11" rx="2" />
+    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
   </svg>
 )
 
 const IconUser = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-    <circle cx="12" cy="7" r="4"/>
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
   </svg>
 )
 
 const IconMail = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-    <polyline points="22,6 12,13 2,6"/>
+    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+    <polyline points="22,6 12,13 2,6" />
   </svg>
 )
 
 const IconMapPin = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-    <circle cx="12" cy="10" r="3"/>
+    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+    <circle cx="12" cy="10" r="3" />
   </svg>
 )
 
 const IconAlert = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+    <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
   </svg>
 )
 
 const IconCheck = () => (
   <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="20 6 9 17 4 12"/>
+    <polyline points="20 6 9 17 4 12" />
   </svg>
 )
 
 const IconArrowLeft = () => (
-  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
-    <line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>
+  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round">
+    <line x1="19" y1="12" x2="5" y2="12" /><polyline points="12 19 5 12 12 5" />
   </svg>
 )
 
@@ -92,11 +69,12 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
   const [error, setError]     = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
-  // Login fields
+  // Login state
   const [loginPhone, setLoginPhone] = useState('')
   const [loginPwd, setLoginPwd]     = useState('')
+  const [rememberMe, setRememberMe] = useState(true)
 
-  // Register fields
+  // Register state
   const [rFirst, setRFirst]     = useState('')
   const [rLast, setRLast]       = useState('')
   const [rPhone, setRPhone]     = useState('')
@@ -118,7 +96,6 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
   useEffect(() => {
     getClientCoverage().then(({ areas }) => {
       setAllAreas(areas)
-      // Pick first active delivery zone in Nord as default
       const defaultZone = areas.find(a => a.type === 'ZONE' && a.isActive)
       if (defaultZone) {
         setSelectedZoneId(defaultZone.id)
@@ -138,7 +115,6 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
       return
     }
 
-    // Resolve GPS coordinates to nearest coverage zone
     const resolved = await resolveLocationFromCoordinates(result.latitude, result.longitude)
     setDetectedLocation(resolved)
     if (resolved.area) {
@@ -164,7 +140,8 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
     setSuccess(null)
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     if (loginPhone.replace(/\D/g, '').length < 8) {
       setError('Mete yon nimewo telefòn valab (omwen 8 chif).')
       return
@@ -185,7 +162,8 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
     setLoginPwd('kliyan123')
   }
 
-  const handleRegister = async () => {
+  const handleRegister = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
     if (!rFirst || !rLast) {
       setError('Tanpri antre prenon ak non fanmi ou.')
       return
@@ -243,358 +221,203 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
   }
 
   return (
-    <div className="auth-pro-page">
-      <div className="auth-pro-container">
-        <div className="auth-pro-grid">
+    <div className="auth-ref-page">
+      <div className="auth-ref-container">
+        <div className="auth-ref-card">
 
-          {/* ════ LEFT COLUMN: Brand & Trust Showcase ════ */}
-          <div className="auth-pro-showcase">
-            <div>
-              {/* Back to Home Button */}
+          {/* ════ LEFT BLUE PANEL: 3D Spheres & Welcome Message ════ */}
+          <div className="auth-ref-left">
+            {/* 3D Floating Shaded Spheres from Reference Design */}
+            <div className="auth-ref-orb-top" />
+            <div className="auth-ref-orb-bottom-left" />
+            <div className="auth-ref-orb-main" />
+
+            <div className="auth-ref-left-content">
+              {/* Back to Home Link */}
               {onGoHome && (
                 <button
                   type="button"
                   onClick={onGoHome}
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#E2E8F0',
-                    padding: '8px 14px',
-                    borderRadius: 10,
-                    fontSize: '0.8125rem',
-                    fontWeight: 700,
-                    cursor: 'pointer',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    marginBottom: 24,
-                    transition: 'all 0.18s ease',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.14)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)')}
+                  className="auth-ref-back-link"
                 >
                   <IconArrowLeft />
                   <span>Retounen nan Akèy</span>
                 </button>
               )}
 
-              {/* Verified Badge */}
-              <div className="auth-pro-showcase-badge">
-                <span>🛵</span>
-                <span>Platfòm Livrezon #1 nan Okap</span>
-              </div>
-
-              {/* Hero Title */}
-              <h1 className="auth-pro-showcase-title">
-                Konekte pou w kòmande tout sa w renmen pi vit
-              </h1>
-
-              <p className="auth-pro-showcase-desc">
-                Chwazi nan pi bon restoran, sipèmache ak boutik nan Cap-Haïtien.
-                Kourye verifye livre dirèk devan pòt ou an tan reyèl.
+              {/* WELCOME Headline */}
+              <h1 className="auth-ref-welcome">WELCOME</h1>
+              <div className="auth-ref-headline">DELIVERY HAÏTI</div>
+              <p className="auth-ref-desc">
+                Platfòm livrezon #1 nan Cap-Haïtien. Kòmande manje, pwovizyon ak machandiz nan pi bon etablisman yo avèk kourye verifye.
               </p>
 
-              {/* 4 Feature Highlights */}
-              <div className="auth-pro-features-grid">
-                <div className="auth-pro-feat-card">
-                  <div className="auth-pro-feat-icon">⚡</div>
-                  <div className="auth-pro-feat-title">20–35 Minit</div>
-                  <div className="auth-pro-feat-sub">Livrezon ekstrèmman rapid nan tout zòn kouvri.</div>
+              {/* Merchant link */}
+              {onGoMerchantRegister && (
+                <div style={{ marginTop: 24 }}>
+                  <button
+                    type="button"
+                    onClick={onGoMerchantRegister}
+                    style={{
+                      background: 'none',
+                      border: 'none',
+                      color: '#93C5FD',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      padding: 0,
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    Ou se yon machann? Enskri boutik ou isit la →
+                  </button>
                 </div>
-
-                <div className="auth-pro-feat-card">
-                  <div className="auth-pro-feat-icon">🛵</div>
-                  <div className="auth-pro-feat-title">Kourye Verifye</div>
-                  <div className="auth-pro-feat-sub">100% kourye fòme ak swivi GPS an dirèk.</div>
-                </div>
-
-                <div className="auth-pro-feat-card">
-                  <div className="auth-pro-feat-icon">💰</div>
-                  <div className="auth-pro-feat-title">MonCash & Kach</div>
-                  <div className="auth-pro-feat-sub">Peye an sekirite ak MonCash oswa lè livrezon an rive.</div>
-                </div>
-
-                <div className="auth-pro-feat-card">
-                  <div className="auth-pro-feat-icon">📍</div>
-                  <div className="auth-pro-feat-title">Tout Okap Kouvri</div>
-                  <div className="auth-pro-feat-sub">Sant Vil, Vil Wouj, Madanm Kolo, Bwavè & Haut du Cap.</div>
-                </div>
-              </div>
-
-              {/* Social Proof Quote */}
-              <div className="auth-pro-quote-card">
-                <div style={{ fontSize: '1.75rem' }}>⭐️</div>
-                <div>
-                  <div style={{ color: '#F8FAFC', fontWeight: 800, fontSize: '0.875rem' }}>
-                    4.9 / 5 Zetwal • +15,000 Kòmand Livre
-                  </div>
-                  <div style={{ color: '#94A3B8', fontSize: '0.75rem', marginTop: 2 }}>
-                    Plis pase 8,500 kliyan satisfè nan Gran Nò peyi d Ayiti.
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
-
-            {/* Merchant / Partner invitation */}
-            {onGoMerchantRegister && (
-              <div style={{ marginTop: 28, paddingTop: 20, borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                <div style={{ fontSize: '0.8125rem', color: '#94A3B8', marginBottom: 6 }}>
-                  Ou se yon pwopriyetè restoran oswa yon komèsan?
-                </div>
-                <button
-                  type="button"
-                  onClick={onGoMerchantRegister}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    color: '#FF8A00',
-                    fontWeight: 800,
-                    fontSize: '0.875rem',
-                    cursor: 'pointer',
-                    padding: 0,
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 6,
-                  }}
-                >
-                  <span>Enskri kòm Machann Patnè sou Delivery Haïti →</span>
-                </button>
-              </div>
-            )}
           </div>
 
-          {/* ════ RIGHT COLUMN: Interactive Form ════ */}
-          <div className="auth-pro-form-col">
-            <div className="auth-pro-header">
-              <div className="auth-pro-logo-badge">
-                <div className="auth-pro-logo-icon">
-                  <IconTruck />
-                </div>
-                <div>
-                  <span style={{ fontSize: '0.6875rem', fontWeight: 900, letterSpacing: '1px', textTransform: 'uppercase', color: '#FF8A00' }}>
-                    Eksperyans Kliyan
-                  </span>
-                  <div style={{ fontSize: '1.05rem', fontWeight: 900, color: '#FFFFFF', lineHeight: 1.1, textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
-                    Delivery Haïti
-                  </div>
-                </div>
-              </div>
+          {/* ════ RIGHT WHITE PANEL: Login / Register Form ════ */}
+          <div className="auth-ref-right">
+            {/* Peeking blue sphere in bottom-right corner from Reference Image */}
+            <div className="auth-ref-corner-orb" />
 
-              <h2 className="auth-pro-title">
-                {tab === 'login' ? 'Bon Retou!' : 'Kreye Kont Kliyan'}
-              </h2>
-              <p className="auth-pro-subtitle">
-                {tab === 'login'
-                  ? 'Antre nimewo telefòn ou ak modpas ou pou jwenn aksè.'
-                  : 'Ranpli ti fòmilè sa a pou w kòmanse kòmande manje ak machandiz.'}
-              </p>
-            </div>
+            {/* Title & Subtitle matching Reference */}
+            <h2 className="auth-ref-title">
+              {tab === 'login' ? 'Sign in' : 'Sign up'}
+            </h2>
+            <p className="auth-ref-subtitle">
+              {tab === 'login'
+                ? 'Konekte sou kont ou pou kòmande pi vit.'
+                : 'Kreye yon kont pou w kòmanse kòmande nan Nò d Ayiti.'}
+            </p>
 
-            {/* Tab Switcher */}
-            <div className="auth-pro-tabs">
-              <button
-                type="button"
-                className={`auth-pro-tab-btn ${tab === 'login' ? 'active' : ''}`}
-                onClick={() => switchTab('login')}
-              >
-                <span>🔐</span>
-                <span>Konekte</span>
-              </button>
-              <button
-                type="button"
-                className={`auth-pro-tab-btn ${tab === 'register' ? 'active' : ''}`}
-                onClick={() => switchTab('register')}
-              >
-                <span>👤</span>
-                <span>Kreye yon Kont</span>
-              </button>
-            </div>
-
-            {/* Error Message */}
+            {/* Error Alert */}
             {error && (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '12px 14px',
-                  borderRadius: 14,
-                  background: 'rgba(239, 68, 68, 0.2)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(239, 68, 68, 0.45)',
-                  color: '#FCA5A5',
-                  fontSize: '0.8125rem',
-                  fontWeight: 700,
-                  marginBottom: 16,
-                  boxShadow: '0 4px 14px rgba(220, 38, 38, 0.2)',
-                }}
-              >
+              <div className="auth-ref-alert-error">
                 <IconAlert />
                 <span>{error}</span>
               </div>
             )}
 
-            {/* Success Message */}
+            {/* Success Alert */}
             {success && (
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '12px 14px',
-                  borderRadius: 14,
-                  background: 'rgba(34, 197, 94, 0.2)',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  border: '1px solid rgba(34, 197, 94, 0.45)',
-                  color: '#86EFAC',
-                  fontSize: '0.8125rem',
-                  fontWeight: 700,
-                  marginBottom: 16,
-                  boxShadow: '0 4px 14px rgba(34, 197, 94, 0.2)',
-                }}
-              >
+              <div className="auth-ref-alert-success">
                 <IconCheck />
                 <span>{success}</span>
               </div>
             )}
 
-            {/* ─── TAB: LOGIN ─── */}
+            {/* ════ VIEW: SIGN IN (Matches Reference 1:1) ════ */}
             {tab === 'login' && (
-              <form onSubmit={e => { e.preventDefault(); handleLogin() }}>
-                {/* Demo Quick Login Assist */}
-                <div style={{ marginBottom: 14 }}>
+              <form onSubmit={handleLogin}>
+                {/* Field 1: User / Phone Input */}
+                <div className="auth-ref-input-box">
+                  <span className="auth-ref-input-icon">
+                    <IconUser />
+                  </span>
+                  <input
+                    type="tel"
+                    className="auth-ref-input"
+                    placeholder="User Name / Nimewo telefòn"
+                    value={loginPhone}
+                    onChange={e => setLoginPhone(e.target.value)}
+                    autoComplete="tel"
+                    required
+                  />
+                </div>
+
+                {/* Field 2: Password Input with SHOW Toggle */}
+                <div className="auth-ref-input-box">
+                  <span className="auth-ref-input-icon">
+                    <IconLock />
+                  </span>
+                  <input
+                    type={showPwd ? 'text' : 'password'}
+                    className="auth-ref-input"
+                    placeholder="Password / Modpas"
+                    value={loginPwd}
+                    onChange={e => setLoginPwd(e.target.value)}
+                    autoComplete="current-password"
+                    required
+                  />
                   <button
                     type="button"
-                    onClick={handleQuickDemoLogin}
-                    style={{
-                      width: '100%',
-                      padding: '8px 12px',
-                      borderRadius: 12,
-                      background: 'rgba(255, 96, 0, 0.18)',
-                      backdropFilter: 'blur(10px)',
-                      WebkitBackdropFilter: 'blur(10px)',
-                      border: '1px dashed rgba(255, 138, 0, 0.6)',
-                      color: '#FFB366',
-                      fontSize: '0.75rem',
-                      fontWeight: 800,
-                      cursor: 'pointer',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: 6,
-                      transition: 'all 0.15s ease',
-                    }}
-                    onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255, 96, 0, 0.28)')}
-                    onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255, 96, 0, 0.18)')}
+                    className="auth-ref-show-btn"
+                    onClick={() => setShowPwd(p => !p)}
                   >
-                    <span>🔑</span>
-                    <span>Ranpli rapid ak kont demonstrasyon (+509 3700-0007)</span>
+                    {showPwd ? 'HIDE' : 'SHOW'}
                   </button>
                 </div>
 
-                <div style={{ marginBottom: 4 }}>
-                  <label htmlFor="login-phone" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 6 }}>
-                    Nimewo Telefòn
+                {/* Row: Remember me checkbox + Forgot Password? */}
+                <div className="auth-ref-row">
+                  <label className="auth-ref-remember">
+                    <input
+                      type="checkbox"
+                      checked={rememberMe}
+                      onChange={e => setRememberMe(e.target.checked)}
+                    />
+                    <span>Remember me</span>
                   </label>
-                  <div className="auth-pro-input-wrap">
-                    <div className="auth-pro-prefix">
-                      <span style={{ fontSize: '1.1rem' }}>🇭🇹</span>
-                      <span>+509</span>
-                    </div>
-                    <input
-                      id="login-phone"
-                      type="tel"
-                      placeholder="37 XX XX XX"
-                      value={loginPhone}
-                      onChange={e => setLoginPhone(e.target.value)}
-                      autoComplete="tel"
-                      required
-                    />
-                  </div>
+
+                  <a
+                    href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Haiti,%20mw%20bliye%20modpas%20kont%20mwen"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="auth-ref-forgot"
+                  >
+                    Forgot Password?
+                  </a>
                 </div>
 
-                <div style={{ marginBottom: 6 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-                    <label htmlFor="login-password" style={{ fontSize: '0.8125rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
-                      Modpas
-                    </label>
-                    <a
-                      href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Haiti,%20mw%20bliye%20modpas%20kont%20mwen"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ fontSize: '0.75rem', color: '#FFB366', fontWeight: 800, textDecoration: 'none' }}
-                    >
-                      Bliye modpas?
-                    </a>
-                  </div>
-
-                  <div className="auth-pro-input-wrap">
-                    <div style={{ paddingLeft: 14, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                      <IconLock />
-                    </div>
-                    <input
-                      id="login-password"
-                      type={showPwd ? 'text' : 'password'}
-                      placeholder="••••••••"
-                      value={loginPwd}
-                      onChange={e => setLoginPwd(e.target.value)}
-                      autoComplete="current-password"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPwd(p => !p)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        padding: '0 14px',
-                        cursor: 'pointer',
-                        color: 'rgba(255, 255, 255, 0.7)',
-                        display: 'flex',
-                        alignItems: 'center',
-                      }}
-                      title={showPwd ? 'Kache modpas' : 'Montre modpas'}
-                    >
-                      <IconEye off={showPwd} />
-                    </button>
-                  </div>
-                </div>
-
+                {/* Primary Button: Deep Royal Navy "Sign in" */}
                 <button
                   type="submit"
-                  className="auth-pro-btn"
+                  className="auth-ref-primary-btn"
                   disabled={loading}
                 >
-                  {loading ? (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span className="spinner" style={{ width: 18, height: 18, borderTopColor: '#FFFFFF' }} />
-                      <span>Ap konekte...</span>
-                    </span>
-                  ) : (
-                    <span>Konekte sou Kont Mwen →</span>
-                  )}
+                  {loading ? 'Singing in...' : 'Sign in'}
                 </button>
+
+                {/* Divider: "or" */}
+                <div className="auth-ref-divider">
+                  <span>or</span>
+                </div>
+
+                {/* Secondary Button: "Sing in with other" from image / Quick Demo */}
+                <button
+                  type="button"
+                  className="auth-ref-secondary-btn"
+                  onClick={handleQuickDemoLogin}
+                >
+                  Sing in with demo (+509 3700-0007)
+                </button>
+
+                {/* Footer Switcher */}
+                <div className="auth-ref-footer">
+                  <span>Don't have an account?</span>
+                  <span
+                    className="auth-ref-switch-link"
+                    onClick={() => switchTab('register')}
+                  >
+                    Sign up
+                  </span>
+                </div>
               </form>
             )}
 
-            {/* ─── TAB: REGISTER ─── */}
+            {/* ════ VIEW: SIGN UP (Registration with Haiti Coverage) ════ */}
             {tab === 'register' && (
-              <form onSubmit={e => { e.preventDefault(); handleRegister() }}>
+              <form onSubmit={handleRegister}>
                 {/* Names */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div className="auth-ref-grid-2">
                   <div>
-                    <label htmlFor="reg-first" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                      Prenon *
-                    </label>
-                    <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <IconUser />
-                      </div>
+                    <label className="auth-ref-label">Prenon *</label>
+                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                      <span className="auth-ref-input-icon"><IconUser /></span>
                       <input
-                        id="reg-first"
                         type="text"
+                        className="auth-ref-input"
                         placeholder="Jean"
                         value={rFirst}
                         onChange={e => setRFirst(e.target.value)}
@@ -604,16 +427,12 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
 
                   <div>
-                    <label htmlFor="reg-last" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                      Non Fanmi *
-                    </label>
-                    <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <IconUser />
-                      </div>
+                    <label className="auth-ref-label">Non Fanmi *</label>
+                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                      <span className="auth-ref-input-icon"><IconUser /></span>
                       <input
-                        id="reg-last"
                         type="text"
+                        className="auth-ref-input"
                         placeholder="Baptiste"
                         value={rLast}
                         onChange={e => setRLast(e.target.value)}
@@ -625,17 +444,12 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 {/* Phone */}
                 <div>
-                  <label htmlFor="reg-phone" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                    Nimewo Telefòn *
-                  </label>
-                  <div className="auth-pro-input-wrap">
-                    <div className="auth-pro-prefix">
-                      <span style={{ fontSize: '1rem' }}>🇭🇹</span>
-                      <span>+509</span>
-                    </div>
+                  <label className="auth-ref-label">Nimewo Telefòn *</label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#173B6C', marginRight: 8 }}>+509</span>
                     <input
-                      id="reg-phone"
                       type="tel"
+                      className="auth-ref-input"
                       placeholder="37 XX XX XX"
                       value={rPhone}
                       onChange={e => setRPhone(e.target.value)}
@@ -646,17 +460,13 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                 {/* Email (Optional) */}
                 <div>
-                  <label htmlFor="reg-email" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                    Email (Opsyonèl)
-                  </label>
-                  <div className="auth-pro-input-wrap">
-                    <div style={{ paddingLeft: 12, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                      <IconMail />
-                    </div>
+                  <label className="auth-ref-label">Email (Opsyonèl)</label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <span className="auth-ref-input-icon"><IconMail /></span>
                     <input
-                      id="reg-email"
                       type="email"
-                      placeholder="oumenm@gmail.com"
+                      className="auth-ref-input"
+                      placeholder="kliyan@gmail.com"
                       value={rEmail}
                       onChange={e => setREmail(e.target.value)}
                     />
@@ -664,19 +474,15 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 </div>
 
                 {/* Passwords */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <div className="auth-ref-grid-2">
                   <div>
-                    <label htmlFor="reg-pwd" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                      Modpas * (6+ karaktè)
-                    </label>
-                    <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <IconLock />
-                      </div>
+                    <label className="auth-ref-label">Modpas *</label>
+                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                      <span className="auth-ref-input-icon"><IconLock /></span>
                       <input
-                        id="reg-pwd"
                         type={showPwd ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        className="auth-ref-input"
+                        placeholder="••••••"
                         value={rPwd}
                         onChange={e => setRPwd(e.target.value)}
                         required
@@ -685,17 +491,13 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
 
                   <div>
-                    <label htmlFor="reg-pwd2" style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 4 }}>
-                      Konfime Modpas *
-                    </label>
-                    <div className="auth-pro-input-wrap">
-                      <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <IconLock />
-                      </div>
+                    <label className="auth-ref-label">Konfime *</label>
+                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                      <span className="auth-ref-input-icon"><IconLock /></span>
                       <input
-                        id="reg-pwd2"
                         type={showPwd ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        className="auth-ref-input"
+                        placeholder="••••••"
                         value={rPwd2}
                         onChange={e => setRPwd2(e.target.value)}
                         required
@@ -704,92 +506,38 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </div>
                 </div>
 
-                {/* Location & Coverage Section (Frosted Glass Tile) */}
-                <div
-                  style={{
-                    background: 'rgba(255, 255, 255, 0.08)',
-                    backdropFilter: 'blur(16px)',
-                    WebkitBackdropFilter: 'blur(16px)',
-                    border: '1.5px solid rgba(255, 255, 255, 0.25)',
-                    borderRadius: 16,
-                    padding: '14px',
-                    marginBottom: 14,
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.12)',
-                  }}
-                >
+                {/* Location & Coverage Selector */}
+                <div className="auth-ref-loc-box">
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#FFFFFF', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
-                      <span style={{ color: '#FF8A00' }}>📍</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#173B6C' }}>
+                      <IconMapPin />
                       <span>Lokalizasyon & Zòn Livrezon</span>
                     </div>
 
                     <button
                       type="button"
+                      className="auth-ref-gps-btn"
                       onClick={handleDetectGPS}
                       disabled={gpsLoading}
-                      style={{
-                        background: 'rgba(255, 96, 0, 0.22)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        border: '1px solid rgba(255, 138, 0, 0.6)',
-                        color: '#FFB366',
-                        padding: '4px 9px',
-                        borderRadius: 8,
-                        fontSize: '0.6875rem',
-                        fontWeight: 800,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 4,
-                        transition: 'all 0.15s ease',
-                      }}
                     >
-                      <span>{gpsLoading ? '📡 Ap detekte...' : '⚡ Detekte ak GPS'}</span>
+                      {gpsLoading ? '📡 Ap detekte...' : '⚡ Detekte ak GPS'}
                     </button>
                   </div>
 
                   {gpsNotice && (
-                    <div
-                      style={{
-                        fontSize: '0.6875rem',
-                        color: '#FDE68A',
-                        background: 'rgba(180, 83, 9, 0.3)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        padding: '6px 10px',
-                        borderRadius: 8,
-                        marginBottom: 8,
-                        border: '1px solid rgba(245, 158, 11, 0.4)',
-                        lineHeight: 1.4,
-                      }}
-                    >
+                    <div style={{ fontSize: '0.6875rem', color: '#B45309', background: '#FEF3C7', padding: '6px 8px', borderRadius: 6, marginBottom: 8 }}>
                       {gpsNotice}
                     </div>
                   )}
 
-                  {/* Department & Zone Selectors */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>
+                  {/* Department & Zone Dropdowns */}
+                  <div className="auth-ref-grid-2" style={{ marginBottom: 8 }}>
                     <div>
-                      <label htmlFor="reg-dept" style={{ display: 'block', fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', fontWeight: 700, marginBottom: 4 }}>
-                        Depatman
-                      </label>
+                      <label className="auth-ref-label">Depatman</label>
                       <select
-                        id="reg-dept"
+                        className="auth-ref-select"
                         value={selectedDeptCode}
                         onChange={e => setSelectedDeptCode(e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '8px 10px',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: 10,
-                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
-                          background: 'rgba(15, 23, 42, 0.75)',
-                          backdropFilter: 'blur(12px)',
-                          WebkitBackdropFilter: 'blur(12px)',
-                          color: '#FFFFFF',
-                          outline: 'none',
-                        }}
                       >
                         <option value="HTI-N">Nord (Nò) — Aktif</option>
                         <option value="HTI-O" disabled>Ouest (Lwès) — Bento</option>
@@ -800,26 +548,11 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     </div>
 
                     <div>
-                      <label htmlFor="reg-zone" style={{ display: 'block', fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', fontWeight: 700, marginBottom: 4 }}>
-                        Zòn Sèvis (Okap)
-                      </label>
+                      <label className="auth-ref-label">Zòn Sèvis (Okap)</label>
                       <select
-                        id="reg-zone"
+                        className="auth-ref-select"
                         value={selectedZoneId}
                         onChange={e => handleZoneSelect(e.target.value)}
-                        style={{
-                          width: '100%',
-                          padding: '8px 10px',
-                          fontSize: '0.75rem',
-                          fontWeight: 700,
-                          borderRadius: 10,
-                          border: '1.5px solid rgba(255, 255, 255, 0.3)',
-                          background: 'rgba(15, 23, 42, 0.75)',
-                          backdropFilter: 'blur(12px)',
-                          WebkitBackdropFilter: 'blur(12px)',
-                          color: '#FFFFFF',
-                          outline: 'none',
-                        }}
                       >
                         {allAreas.filter(a => a.type === 'ZONE').map(z => (
                           <option key={z.id} value={z.id}>
@@ -830,165 +563,63 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     </div>
                   </div>
 
-                  {/* Real-time Coverage Feedback Pill */}
+                  {/* Coverage Feedback Badge */}
                   {detectedLocation && (
-                    <div
-                      style={{
-                        padding: '7px 10px',
-                        borderRadius: 10,
-                        fontSize: '0.6875rem',
-                        fontWeight: 700,
-                        marginBottom: 8,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 6,
-                        background: detectedLocation.isAvailable ? 'rgba(34, 197, 94, 0.22)' : 'rgba(239, 68, 68, 0.22)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        color: detectedLocation.isAvailable ? '#86EFAC' : '#FCA5A5',
-                        border: `1px solid ${detectedLocation.isAvailable ? 'rgba(34, 197, 94, 0.45)' : 'rgba(239, 68, 68, 0.45)'}`,
-                      }}
-                    >
+                    <div className={detectedLocation.isAvailable ? 'auth-ref-badge-available' : 'auth-ref-badge-unavailable'}>
                       <span>{detectedLocation.isAvailable ? '✅' : '⚠️'}</span>
                       <span>{detectedLocation.statusMessage}</span>
                     </div>
                   )}
 
-                  {/* Street Address / Landmark */}
-                  <div className="auth-pro-input-wrap" style={{ marginBottom: 0 }}>
-                    <div style={{ paddingLeft: 10, display: 'flex', alignItems: 'center', color: 'rgba(255, 255, 255, 0.6)' }}>
-                      <IconMapPin />
-                    </div>
+                  {/* Street address */}
+                  <div className="auth-ref-input-box" style={{ height: 38, marginBottom: 0, background: '#FFFFFF', border: '1px solid #CBD5E1' }}>
+                    <span className="auth-ref-input-icon"><IconMapPin /></span>
                     <input
-                      id="reg-addr"
                       type="text"
-                      placeholder="Lari, nimewo oswa repè (eg: Boulevard, Rue 18 L)"
+                      className="auth-ref-input"
+                      placeholder="Lari, nimewo oswa repè (eg: Rue 18 L)"
                       value={rAddr}
                       onChange={e => setRAddr(e.target.value)}
-                      style={{ height: 38, fontSize: '0.8125rem' }}
                     />
                   </div>
                 </div>
 
-                {/* Language Preference */}
-                <div style={{ marginBottom: 10 }}>
-                  <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'rgba(255, 255, 255, 0.95)', textShadow: '0 1px 3px rgba(0,0,0,0.3)', marginBottom: 6 }}>
-                    Preferans Lang
-                  </label>
-                  <div style={{ display: 'flex', gap: 8 }}>
-                    <button
-                      type="button"
-                      onClick={() => setRLang('ht')}
-                      style={{
-                        flex: 1,
-                        padding: '8px 12px',
-                        borderRadius: 12,
-                        fontSize: '0.75rem',
-                        fontWeight: 800,
-                        border: rLang === 'ht' ? '2px solid #FF8A00' : '1.5px solid rgba(255, 255, 255, 0.25)',
-                        background: rLang === 'ht' ? 'rgba(255, 96, 0, 0.24)' : 'rgba(255, 255, 255, 0.08)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        color: rLang === 'ht' ? '#FFB366' : 'rgba(255, 255, 255, 0.85)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        boxShadow: rLang === 'ht' ? '0 4px 14px rgba(255, 96, 0, 0.25)' : 'none',
-                      }}
-                    >
-                      <span style={{ fontWeight: 900 }}>🇭🇹</span>
-                      <span>Kreyòl Ayisyen</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setRLang('fr')}
-                      style={{
-                        flex: 1,
-                        padding: '8px 12px',
-                        borderRadius: 12,
-                        fontSize: '0.75rem',
-                        fontWeight: 800,
-                        border: rLang === 'fr' ? '2px solid #FF8A00' : '1.5px solid rgba(255, 255, 255, 0.25)',
-                        background: rLang === 'fr' ? 'rgba(255, 96, 0, 0.24)' : 'rgba(255, 255, 255, 0.08)',
-                        backdropFilter: 'blur(10px)',
-                        WebkitBackdropFilter: 'blur(10px)',
-                        color: rLang === 'fr' ? '#FFB366' : 'rgba(255, 255, 255, 0.85)',
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        boxShadow: rLang === 'fr' ? '0 4px 14px rgba(255, 96, 0, 0.25)' : 'none',
-                      }}
-                    >
-                      <span style={{ fontWeight: 900 }}>🇫🇷</span>
-                      <span>Français</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* Terms and conditions */}
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, margin: '12px 0 16px' }}>
+                {/* Terms */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, margin: '8px 0 14px 0' }}>
                   <input
-                    id="reg-terms"
                     type="checkbox"
+                    id="ref-terms"
                     checked={terms}
                     onChange={e => setTerms(e.target.checked)}
-                    style={{ marginTop: 2, accentColor: '#FF6000', cursor: 'pointer' }}
+                    style={{ accentColor: '#173B6C', cursor: 'pointer' }}
                   />
-                  <label htmlFor="reg-terms" style={{ fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.85)', lineHeight: 1.4, cursor: 'pointer' }}>
-                    Mwen aksepte kondisyon sèvis ak règleman konfidansyalite Delivery Haïti.
+                  <label htmlFor="ref-terms" style={{ fontSize: '0.6875rem', color: '#64748B', cursor: 'pointer' }}>
+                    Mwen aksepte kondisyon sèvis ak règleman Delivery Haïti.
                   </label>
                 </div>
 
-                {/* Submit Register Button */}
+                {/* Primary Register Button */}
                 <button
                   type="submit"
-                  className="auth-pro-btn"
+                  className="auth-ref-primary-btn"
                   disabled={loading}
                 >
-                  {loading ? (
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span className="spinner" style={{ width: 18, height: 18, borderTopColor: '#FFFFFF' }} />
-                      <span>Ap kreye kont ou...</span>
-                    </span>
-                  ) : (
-                    <span>Kreye Kont Mwen & Kòmanse →</span>
-                  )}
+                  {loading ? 'Ap kreye kont...' : 'Sign up & Kòmanse'}
                 </button>
+
+                {/* Footer Switcher */}
+                <div className="auth-ref-footer">
+                  <span>Ou gen yon kont deja?</span>
+                  <span
+                    className="auth-ref-switch-link"
+                    onClick={() => switchTab('login')}
+                  >
+                    Sign in
+                  </span>
+                </div>
               </form>
             )}
 
-            {/* Direct WhatsApp Support Pill */}
-            <a
-              href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Haiti,%20mw%20bezwen%20yon%20ti%20èd%20pou%20konekte"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="auth-pro-support-pill"
-            >
-              <span>💬</span>
-              <span>Bezwen èd rapid? Ekri nou sou WhatsApp (+509 4055-3636)</span>
-            </a>
-
-            {/* Bottom Security / Trust indicator */}
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: 6,
-                marginTop: 14,
-                fontSize: '0.6875rem',
-                color: 'rgba(255, 255, 255, 0.7)',
-                fontWeight: 600,
-              }}
-            >
-              <span>🔒</span>
-              <span>Done w yo an sekirite • Chifreman 256-bit SSL</span>
-            </div>
           </div>
 
         </div>
