@@ -64,6 +64,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
   const { login, register } = useAuth()
 
   const [tab, setTab]         = useState<'login' | 'register'>('login')
+  const [step, setStep]       = useState<1 | 2>(1)   // register multi-step
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState<string | null>(null)
@@ -126,7 +127,18 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
     if (resolved.area && !rAddr.trim()) setRAddr(`${resolved.area.name}, Cap-Haïtien`)
   }
 
-  const switchTab = (t: 'login' | 'register') => { setTab(t); setError(null); setSuccess(null) }
+  const switchTab = (t: 'login' | 'register') => { setTab(t); setError(null); setSuccess(null); setStep(1) }
+
+  // ── Step 1 → 2 validation ──────────────────────────────────────
+  const handleStep1Next = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!rFirst.trim() || !rLast.trim()) { setError('Prenon ak non fanmi yo obligatwa.'); return }
+    if (rPhone.replace(/\D/g, '').length < 8) { setError('Nimewo telefòn pa valab.'); return }
+    if (rPwd.length < 6) { setError('Modpas la dwe gen omwen 6 karaktè.'); return }
+    if (rPwd !== rPwd2) { setError('Modpas yo pa menm.'); return }
+    setError(null)
+    setStep(2)
+  }
 
   const handleLogin = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
@@ -172,9 +184,6 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
       setSuccess(`Byenvini ${rFirst}! Kont ou kreye avèk siksè.`)
     }
   }
-
-  // ─── Shared input style object ─────────────────────────────────
-  const inputSm: React.CSSProperties = { height: 42, marginBottom: 10 }
 
   return (
     <div className="auth-ref-page">
@@ -310,152 +319,195 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
           {/* ═══ REGISTER FORM ═══ */}
           {tab === 'register' && (
-            <form onSubmit={handleRegister}>
-
-              {/* Names */}
-              <div className="auth-ref-grid-2">
-                <div>
-                  <label className="auth-ref-label" htmlFor="r-first">Prenon *</label>
-                  <div className="auth-ref-input-box" style={inputSm}>
-                    <span className="auth-ref-input-icon"><IconUser /></span>
-                    <input id="r-first" type="text" className="auth-ref-input" placeholder="Jean"
-                      value={rFirst} onChange={e => setRFirst(e.target.value)} required />
-                  </div>
-                </div>
-                <div>
-                  <label className="auth-ref-label" htmlFor="r-last">Non Fanmi *</label>
-                  <div className="auth-ref-input-box" style={inputSm}>
-                    <span className="auth-ref-input-icon"><IconUser /></span>
-                    <input id="r-last" type="text" className="auth-ref-input" placeholder="Baptiste"
-                      value={rLast} onChange={e => setRLast(e.target.value)} required />
-                  </div>
-                </div>
-              </div>
-
-              {/* Phone */}
-              <label className="auth-ref-label" htmlFor="r-phone">Telefòn *</label>
-              <div className="auth-ref-input-box" style={inputSm}>
-                <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#FF6000', marginRight: 8 }}>+509</span>
-                <input id="r-phone" type="tel" className="auth-ref-input" placeholder="37 XX XX XX"
-                  value={rPhone} onChange={e => setRPhone(e.target.value)} required />
-              </div>
-
-              {/* Email */}
-              <label className="auth-ref-label" htmlFor="r-email">Email <span style={{ color: '#AAA', fontWeight: 400 }}>(opsyonèl)</span></label>
-              <div className="auth-ref-input-box" style={inputSm}>
-                <span className="auth-ref-input-icon"><IconMail /></span>
-                <input id="r-email" type="email" className="auth-ref-input" placeholder="kliyan@gmail.com"
-                  value={rEmail} onChange={e => setREmail(e.target.value)} />
-              </div>
-
-              {/* Passwords */}
-              <div className="auth-ref-grid-2">
-                <div>
-                  <label className="auth-ref-label" htmlFor="r-pwd">Modpas *</label>
-                  <div className="auth-ref-input-box" style={inputSm}>
-                    <span className="auth-ref-input-icon"><IconLock /></span>
-                    <input id="r-pwd" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
-                      placeholder="6+ karaktè" value={rPwd} onChange={e => setRPwd(e.target.value)} required />
-                    <button type="button" className="auth-ref-show-btn" onClick={() => setShowPwd(p => !p)}>
-                      {showPwd ? 'Kache' : 'Wè'}
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <label className="auth-ref-label" htmlFor="r-pwd2">Konfime *</label>
-                  <div className="auth-ref-input-box" style={inputSm}>
-                    <span className="auth-ref-input-icon"><IconLock /></span>
-                    <input id="r-pwd2" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
-                      placeholder="Retype" value={rPwd2} onChange={e => setRPwd2(e.target.value)} required />
-                  </div>
-                </div>
-              </div>
-
-              {/* Location */}
-              <div className="auth-ref-loc-box">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-                  <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#333', display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <span style={{ color: '#FF6000' }}>📍</span> Zòn livrezon
-                  </span>
-                  <button type="button" className="auth-ref-gps-btn" onClick={handleDetectGPS} disabled={gpsLoading}>
-                    {gpsLoading ? '📡 Ap detekte…' : '⚡ Detekte GPS'}
-                  </button>
-                </div>
-
-                {gpsNotice && (
-                  <div style={{ fontSize: '0.6875rem', color: '#B45309', background: '#FFFBEB', padding: '6px 8px', borderRadius: 6, marginBottom: 8, border: '1px solid #FDE68A' }}>
-                    {gpsNotice}
-                  </div>
-                )}
-
-                <div className="auth-ref-grid-2" style={{ marginBottom: 8 }}>
-                  <div>
-                    <label className="auth-ref-label">Depatman</label>
-                    <select className="auth-ref-select" value={selectedDeptCode} onChange={e => setSelectedDeptCode(e.target.value)}>
-                      <option value="HTI-N">Nord — Aktif</option>
-                      <option value="HTI-O" disabled>Ouest — Byento</option>
-                      <option value="HTI-S" disabled>Sud — Byento</option>
-                      <option value="HTI-A" disabled>Artibonite — Byento</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="auth-ref-label">Zòn (Okap)</label>
-                    <select className="auth-ref-select" value={selectedZoneId} onChange={e => handleZoneSelect(e.target.value)}>
-                      {allAreas.filter(a => a.type === 'ZONE').map(z => (
-                        <option key={z.id} value={z.id}>{z.name}{!z.isActive ? ' ⚠' : ''}</option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                {detectedLocation && (
-                  <div className={detectedLocation.isAvailable ? 'auth-ref-badge-available' : 'auth-ref-badge-unavailable'}>
-                    <span>{detectedLocation.isAvailable ? '✓' : '⚠'}</span>
-                    <span>{detectedLocation.statusMessage}</span>
-                  </div>
-                )}
-
-                <div className="auth-ref-input-box" style={{ height: 40, marginBottom: 0, background: '#fff' }}>
-                  <span className="auth-ref-input-icon"><IconMapPin /></span>
-                  <input type="text" className="auth-ref-input" placeholder="Lari, nimewo, repè…"
-                    value={rAddr} onChange={e => setRAddr(e.target.value)} />
-                </div>
-              </div>
-
-              {/* Terms */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, margin: '10px 0 16px' }}>
-                <input type="checkbox" id="r-terms" checked={terms}
-                  onChange={e => setTerms(e.target.checked)}
-                  style={{ accentColor: '#FF6000', marginTop: 2, cursor: 'pointer', flexShrink: 0 }} />
-                <label htmlFor="r-terms" style={{ fontSize: '0.75rem', color: '#777', cursor: 'pointer', lineHeight: 1.4 }}>
-                  Mwen aksepte kondisyon sèvis ak règleman konfidansyalite Delivery Lakay.
-                </label>
-              </div>
-
-              {/* Submit */}
-              <button type="submit" className="auth-ref-primary-btn" disabled={loading}>
-                {loading ? 'Ap kreye kont…' : 'Kreye kont'}
-              </button>
-
-              {/* Switch */}
-              <div className="auth-ref-footer">
-                Ou gen yon kont deja?
-                <span className="auth-ref-switch-link" onClick={() => switchTab('login')}>
-                  Konekte
+            <div>
+              {/* ── Step indicator ── */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 26, height: 26, borderRadius: '50%',
+                  background: step === 1 ? '#FF6000' : '#E8E5E1',
+                  color: step === 1 ? '#fff' : '#888',
+                  fontSize: '0.75rem', fontWeight: 700, flexShrink: 0,
+                }}>1</div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: step === 1 ? '#FF6000' : '#AAA' }}>
+                  Enfòmasyon pèsonèl
+                </span>
+                <div style={{ flex: 1, height: 1, background: '#E8E5E1' }} />
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 26, height: 26, borderRadius: '50%',
+                  background: step === 2 ? '#FF6000' : '#E8E5E1',
+                  color: step === 2 ? '#fff' : '#888',
+                  fontSize: '0.75rem', fontWeight: 700, flexShrink: 0,
+                }}>2</div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 600, color: step === 2 ? '#FF6000' : '#AAA' }}>
+                  Zòn livrezon
                 </span>
               </div>
 
-              {/* Merchant CTA */}
-              {onGoMerchantRegister && (
-                <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #ECEAE7', textAlign: 'center' }}>
-                  <span style={{ fontSize: '0.75rem', color: '#999' }}>Ou se yon restoran oswa boutik? </span>
-                  <button type="button" onClick={onGoMerchantRegister}
-                    style={{ background: 'none', border: 'none', color: '#FF6000', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
-                    Enskri kòm machann →
+              {/* ── STEP 1: Identity + credentials ── */}
+              {step === 1 && (
+                <form onSubmit={handleStep1Next}>
+                  {/* Names */}
+                  <div className="auth-ref-grid-2">
+                    <div>
+                      <label className="auth-ref-label" htmlFor="r-first">Prenon *</label>
+                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                        <span className="auth-ref-input-icon"><IconUser /></span>
+                        <input id="r-first" type="text" className="auth-ref-input" placeholder="Jean"
+                          value={rFirst} onChange={e => setRFirst(e.target.value)} required />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="auth-ref-label" htmlFor="r-last">Non Fanmi *</label>
+                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                        <span className="auth-ref-input-icon"><IconUser /></span>
+                        <input id="r-last" type="text" className="auth-ref-input" placeholder="Baptiste"
+                          value={rLast} onChange={e => setRLast(e.target.value)} required />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Phone */}
+                  <label className="auth-ref-label" htmlFor="r-phone">Telefòn *</label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#FF6000', marginRight: 8, flexShrink: 0 }}>+509</span>
+                    <input id="r-phone" type="tel" className="auth-ref-input" placeholder="37 XX XX XX"
+                      value={rPhone} onChange={e => setRPhone(e.target.value)} required />
+                  </div>
+
+                  {/* Email optional */}
+                  <label className="auth-ref-label" htmlFor="r-email">
+                    Email <span style={{ color: '#AAA', fontWeight: 400 }}>(opsyonèl)</span>
+                  </label>
+                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <span className="auth-ref-input-icon"><IconMail /></span>
+                    <input id="r-email" type="email" className="auth-ref-input" placeholder="kliyan@gmail.com"
+                      value={rEmail} onChange={e => setREmail(e.target.value)} />
+                  </div>
+
+                  {/* Passwords side-by-side */}
+                  <div className="auth-ref-grid-2">
+                    <div>
+                      <label className="auth-ref-label" htmlFor="r-pwd">Modpas *</label>
+                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                        <span className="auth-ref-input-icon"><IconLock /></span>
+                        <input id="r-pwd" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
+                          placeholder="6+" value={rPwd} onChange={e => setRPwd(e.target.value)} required />
+                        <button type="button" className="auth-ref-show-btn" onClick={() => setShowPwd(p => !p)}>
+                          {showPwd ? 'Kache' : 'Wè'}
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <label className="auth-ref-label" htmlFor="r-pwd2">Konfime *</label>
+                      <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                        <span className="auth-ref-input-icon"><IconLock /></span>
+                        <input id="r-pwd2" type={showPwd ? 'text' : 'password'} className="auth-ref-input"
+                          placeholder="Retype" value={rPwd2} onChange={e => setRPwd2(e.target.value)} required />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="auth-ref-primary-btn">
+                    Kontinye →
                   </button>
-                </div>
+
+                  <div className="auth-ref-footer" style={{ marginTop: 14 }}>
+                    Ou gen yon kont deja?
+                    <span className="auth-ref-switch-link" onClick={() => switchTab('login')}>Konekte</span>
+                  </div>
+                </form>
               )}
-            </form>
+
+              {/* ── STEP 2: Location + terms ── */}
+              {step === 2 && (
+                <form onSubmit={handleRegister}>
+                  {/* Location box */}
+                  <div className="auth-ref-loc-box">
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
+                      <span style={{ fontSize: '0.8125rem', fontWeight: 700, color: '#333', display: 'flex', alignItems: 'center', gap: 5 }}>
+                        <span style={{ color: '#FF6000' }}>📍</span> Zòn livrezon
+                      </span>
+                      <button type="button" className="auth-ref-gps-btn" onClick={handleDetectGPS} disabled={gpsLoading}>
+                        {gpsLoading ? '📡 Ap detekte…' : '⚡ GPS'}
+                      </button>
+                    </div>
+
+                    {gpsNotice && (
+                      <div style={{ fontSize: '0.6875rem', color: '#B45309', background: '#FFFBEB', padding: '6px 8px', borderRadius: 6, marginBottom: 8, border: '1px solid #FDE68A' }}>
+                        {gpsNotice}
+                      </div>
+                    )}
+
+                    <div className="auth-ref-grid-2" style={{ marginBottom: 8 }}>
+                      <div>
+                        <label className="auth-ref-label">Depatman</label>
+                        <select className="auth-ref-select" value={selectedDeptCode} onChange={e => setSelectedDeptCode(e.target.value)}>
+                          <option value="HTI-N">Nord — Aktif</option>
+                          <option value="HTI-O" disabled>Ouest — Byento</option>
+                          <option value="HTI-S" disabled>Sud — Byento</option>
+                          <option value="HTI-A" disabled>Artibonite — Byento</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label className="auth-ref-label">Zòn (Okap)</label>
+                        <select className="auth-ref-select" value={selectedZoneId} onChange={e => handleZoneSelect(e.target.value)}>
+                          {allAreas.filter(a => a.type === 'ZONE').map(z => (
+                            <option key={z.id} value={z.id}>{z.name}{!z.isActive ? ' ⚠' : ''}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    {detectedLocation && (
+                      <div className={detectedLocation.isAvailable ? 'auth-ref-badge-available' : 'auth-ref-badge-unavailable'}>
+                        <span>{detectedLocation.isAvailable ? '✓' : '⚠'}</span>
+                        <span>{detectedLocation.statusMessage}</span>
+                      </div>
+                    )}
+
+                    <div className="auth-ref-input-box" style={{ height: 40, marginBottom: 0, background: '#fff' }}>
+                      <span className="auth-ref-input-icon"><IconMapPin /></span>
+                      <input type="text" className="auth-ref-input" placeholder="Lari, nimewo, repè…"
+                        value={rAddr} onChange={e => setRAddr(e.target.value)} />
+                    </div>
+                  </div>
+
+                  {/* Terms */}
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, margin: '10px 0 16px' }}>
+                    <input type="checkbox" id="r-terms" checked={terms}
+                      onChange={e => setTerms(e.target.checked)}
+                      style={{ accentColor: '#FF6000', marginTop: 2, cursor: 'pointer', flexShrink: 0 }} />
+                    <label htmlFor="r-terms" style={{ fontSize: '0.75rem', color: '#777', cursor: 'pointer', lineHeight: 1.4 }}>
+                      Mwen aksepte kondisyon sèvis ak règleman konfidansyalite Delivery Lakay.
+                    </label>
+                  </div>
+
+                  {/* Buttons */}
+                  <div style={{ display: 'flex', gap: 8 }}>
+                    <button type="button" onClick={() => { setStep(1); setError(null) }}
+                      className="auth-ref-secondary-btn" style={{ flex: '0 0 auto', padding: '0 16px' }}>
+                      ← Retounen
+                    </button>
+                    <button type="submit" className="auth-ref-primary-btn" disabled={loading} style={{ flex: 1 }}>
+                      {loading ? 'Ap kreye kont…' : 'Kreye kont'}
+                    </button>
+                  </div>
+
+                  {/* Merchant CTA */}
+                  {onGoMerchantRegister && (
+                    <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #ECEAE7', textAlign: 'center' }}>
+                      <span style={{ fontSize: '0.75rem', color: '#999' }}>Ou se yon restoran oswa boutik? </span>
+                      <button type="button" onClick={onGoMerchantRegister}
+                        style={{ background: 'none', border: 'none', color: '#FF6000', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', padding: 0 }}>
+                        Enskri kòm machann →
+                      </button>
+                    </div>
+                  )}
+                </form>
+              )}
+            </div>
           )}
 
           {/* Security badge */}
