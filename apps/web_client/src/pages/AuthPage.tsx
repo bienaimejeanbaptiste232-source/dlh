@@ -154,7 +154,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
     setError(null)
     const res = await login(loginPhone, loginPwd)
     setLoading(false)
-    if (!res.ok) setError(res.msg ?? 'Erè koneksyon.')
+    if (!res.ok) setError(res.msg ?? 'Erè koneksyon. Verifye nimewo w ak modpas ou.')
   }
 
   const handleQuickDemoLogin = () => {
@@ -225,15 +225,10 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
       <div className="auth-ref-container">
         <div className="auth-ref-card">
 
-          {/* ════ LEFT BLUE PANEL: 3D Spheres & Welcome Message ════ */}
+          {/* ════ LEFT BRAND PANEL: Official Logo & Verified Delivery Haïti ════ */}
           <div className="auth-ref-left">
-            {/* 3D Floating Shaded Spheres from Reference Design */}
-            <div className="auth-ref-orb-top" />
-            <div className="auth-ref-orb-bottom-left" />
-            <div className="auth-ref-orb-main" />
-
             <div className="auth-ref-left-content">
-              {/* Back to Home Link */}
+              {/* Return to Home link */}
               {onGoHome && (
                 <button
                   type="button"
@@ -245,43 +240,77 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 </button>
               )}
 
-              {/* WELCOME Headline */}
-              <h1 className="auth-ref-welcome">WELCOME</h1>
-              <div className="auth-ref-headline">DELIVERY HAÏTI</div>
+              {/* Official Brand Logo & Header */}
+              <div className="auth-brand-badge">
+                <div className="auth-brand-logo-box">
+                  <img
+                    src="/logo.png"
+                    alt="Delivery Lakay"
+                    className="auth-brand-logo-img"
+                  />
+                </div>
+                <div>
+                  <span className="auth-brand-meta-tag">🛵 Sèvis Ofisyèl Livrezon</span>
+                  <div className="auth-brand-meta-name">Delivery Lakay</div>
+                </div>
+              </div>
+
+              {/* Value proposition */}
+              <h1 className="auth-ref-welcome">Byenvini!</h1>
+              <div className="auth-ref-headline">KÒMANDE NAN TOUT OKAP & NÒ D AYITI</div>
               <p className="auth-ref-desc">
                 Platfòm livrezon #1 nan Cap-Haïtien. Kòmande manje, pwovizyon ak machandiz nan pi bon etablisman yo avèk kourye verifye.
               </p>
 
-              {/* Merchant link */}
-              {onGoMerchantRegister && (
-                <div style={{ marginTop: 24 }}>
-                  <button
-                    type="button"
-                    onClick={onGoMerchantRegister}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#93C5FD',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      padding: 0,
-                      textDecoration: 'underline',
-                    }}
-                  >
-                    Ou se yon machann? Enskri boutik ou isit la →
-                  </button>
+              {/* Verified Value Props (Frosted Glassmorphism Tiles) */}
+              <div className="auth-ref-features">
+                <div className="auth-ref-feature-pill">
+                  <span className="auth-ref-feat-icon">⚡</span>
+                  <div>
+                    <div className="auth-ref-feat-title">20–35 Minit</div>
+                    <div className="auth-ref-feat-desc">Livrezon ekstrèmman rapid devan pòt ou.</div>
+                  </div>
                 </div>
-              )}
+
+                <div className="auth-ref-feature-pill">
+                  <span className="auth-ref-feat-icon">🛵</span>
+                  <div>
+                    <div className="auth-ref-feat-title">Kourye Verifye</div>
+                    <div className="auth-ref-feat-desc">100% kourye idantifye ak swivi GPS an tan reyèl.</div>
+                  </div>
+                </div>
+
+                <div className="auth-ref-feature-pill">
+                  <span className="auth-ref-feat-icon">💰</span>
+                  <div>
+                    <div className="auth-ref-feat-title">MonCash & Kach</div>
+                    <div className="auth-ref-feat-desc">Peye fasilman lè kourye a delivre kòmand ou a.</div>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* Merchant sign-up CTA at bottom */}
+            {onGoMerchantRegister && (
+              <div className="auth-ref-merchant-cta">
+                <div style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.7)', marginBottom: 4 }}>
+                  Ou se yon restoran oswa boutik?
+                </div>
+                <button
+                  type="button"
+                  onClick={onGoMerchantRegister}
+                  className="auth-ref-merchant-btn"
+                >
+                  <span>Enskri kòm Machann Patnè sou Delivery Lakay →</span>
+                </button>
+              </div>
+            )}
           </div>
 
-          {/* ════ RIGHT WHITE PANEL: Login / Register Form ════ */}
+          {/* ════ RIGHT FORM PANEL: Pure Frosted White Card ════ */}
           <div className="auth-ref-right">
-            {/* Peeking blue sphere in bottom-right corner from Reference Image */}
-            <div className="auth-ref-corner-orb" />
 
-            {/* Title & Subtitle matching Reference */}
+            {/* Title & Subtitle */}
             <h2 className="auth-ref-title">
               {tab === 'login' ? 'Sign in' : 'Sign up'}
             </h2>
@@ -307,7 +336,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
               </div>
             )}
 
-            {/* ════ VIEW: SIGN IN (Matches Reference 1:1) ════ */}
+            {/* ════ VIEW: SIGN IN ════ */}
             {tab === 'login' && (
               <form onSubmit={handleLogin}>
                 {/* Field 1: User / Phone Input */}
@@ -361,7 +390,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </label>
 
                   <a
-                    href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Haiti,%20mw%20bliye%20modpas%20kont%20mwen"
+                    href="https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mw%20bliye%20modpas%20kont%20mwen"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="auth-ref-forgot"
@@ -370,13 +399,13 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   </a>
                 </div>
 
-                {/* Primary Button: Deep Royal Navy "Sign in" */}
+                {/* Primary Button: Delivery Lakay Brand Orange */}
                 <button
                   type="submit"
                   className="auth-ref-primary-btn"
                   disabled={loading}
                 >
-                  {loading ? 'Singing in...' : 'Sign in'}
+                  {loading ? 'Ap konekte...' : 'Sign in'}
                 </button>
 
                 {/* Divider: "or" */}
@@ -384,13 +413,13 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   <span>or</span>
                 </div>
 
-                {/* Secondary Button: "Sing in with other" from image / Quick Demo */}
+                {/* Secondary Button: Demo quick test */}
                 <button
                   type="button"
                   className="auth-ref-secondary-btn"
                   onClick={handleQuickDemoLogin}
                 >
-                  Sing in with demo (+509 3700-0007)
+                  Sign in with demo (+509 3700-0007)
                 </button>
 
                 {/* Footer Switcher */}
@@ -413,7 +442,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 <div className="auth-ref-grid-2">
                   <div>
                     <label className="auth-ref-label">Prenon *</label>
-                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
                       <span className="auth-ref-input-icon"><IconUser /></span>
                       <input
                         type="text"
@@ -428,7 +457,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                   <div>
                     <label className="auth-ref-label">Non Fanmi *</label>
-                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
                       <span className="auth-ref-input-icon"><IconUser /></span>
                       <input
                         type="text"
@@ -445,8 +474,8 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 {/* Phone */}
                 <div>
                   <label className="auth-ref-label">Nimewo Telefòn *</label>
-                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
-                    <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#173B6C', marginRight: 8 }}>+509</span>
+                  <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
+                    <span style={{ fontSize: '0.8125rem', fontWeight: 800, color: '#FF6000', marginRight: 8 }}>+509</span>
                     <input
                       type="tel"
                       className="auth-ref-input"
@@ -461,7 +490,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 {/* Email (Optional) */}
                 <div>
                   <label className="auth-ref-label">Email (Opsyonèl)</label>
-                  <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                  <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
                     <span className="auth-ref-input-icon"><IconMail /></span>
                     <input
                       type="email"
@@ -477,7 +506,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 <div className="auth-ref-grid-2">
                   <div>
                     <label className="auth-ref-label">Modpas *</label>
-                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
                       <span className="auth-ref-input-icon"><IconLock /></span>
                       <input
                         type={showPwd ? 'text' : 'password'}
@@ -492,7 +521,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
 
                   <div>
                     <label className="auth-ref-label">Konfime *</label>
-                    <div className="auth-ref-input-box" style={{ height: 42, marginBottom: 10 }}>
+                    <div className="auth-ref-input-box" style={{ height: 44, marginBottom: 10 }}>
                       <span className="auth-ref-input-icon"><IconLock /></span>
                       <input
                         type={showPwd ? 'text' : 'password'}
@@ -509,8 +538,8 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                 {/* Location & Coverage Selector */}
                 <div className="auth-ref-loc-box">
                   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#173B6C' }}>
-                      <IconMapPin />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '0.8125rem', fontWeight: 800, color: '#0F172A' }}>
+                      <span style={{ color: '#FF6000' }}>📍</span>
                       <span>Lokalizasyon & Zòn Livrezon</span>
                     </div>
 
@@ -572,7 +601,7 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                   )}
 
                   {/* Street address */}
-                  <div className="auth-ref-input-box" style={{ height: 38, marginBottom: 0, background: '#FFFFFF', border: '1px solid #CBD5E1' }}>
+                  <div className="auth-ref-input-box" style={{ height: 40, marginBottom: 0, background: '#FFFFFF', border: '1px solid #CBD5E1' }}>
                     <span className="auth-ref-input-icon"><IconMapPin /></span>
                     <input
                       type="text"
@@ -591,10 +620,10 @@ export default function AuthPage({ onGoHome, onGoMerchantRegister }: AuthPagePro
                     id="ref-terms"
                     checked={terms}
                     onChange={e => setTerms(e.target.checked)}
-                    style={{ accentColor: '#173B6C', cursor: 'pointer' }}
+                    style={{ accentColor: '#FF6000', cursor: 'pointer' }}
                   />
                   <label htmlFor="ref-terms" style={{ fontSize: '0.6875rem', color: '#64748B', cursor: 'pointer' }}>
-                    Mwen aksepte kondisyon sèvis ak règleman Delivery Haïti.
+                    Mwen aksepte kondisyon sèvis ak règleman Delivery Lakay.
                   </label>
                 </div>
 
