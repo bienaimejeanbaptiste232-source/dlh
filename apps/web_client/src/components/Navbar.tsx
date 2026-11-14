@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useCart } from '../contexts/CartContext'
 import { getActiveDeliveryZones } from '../lib/coverage'
@@ -476,9 +477,10 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
         </form>
 
         {/* Right: Zone Dropdown + Account + Orders + Cart */}
-        <div className="ma-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+        {/* Right: Zone Dropdown + Account + Orders + Cart */}
+        <div className="ma-nav-right" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0, position: 'relative', zIndex: 1150 }}>
           {/* Dedicated Zone Selector Dropdown (Does NOT open drawer) */}
-          <div ref={zoneRef} style={{ position: 'relative' }}>
+          <div ref={zoneRef} style={{ position: 'relative', zIndex: 1200 }}>
             <button
               onClick={() => setZoneDropdownOpen(prev => !prev)}
               className="desktop-only"
@@ -506,17 +508,17 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             {zoneDropdownOpen && (
               <div style={{
                 position: 'absolute',
-                top: 'calc(100% + 6px)',
+                top: 'calc(100% + 8px)',
                 right: 0,
-                width: 210,
-                maxHeight: 340,
+                width: 220,
+                maxHeight: 360,
                 overflowY: 'auto',
                 background: '#FFFFFF',
-                borderRadius: 12,
-                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.18)',
-                border: '1px solid #E2E8F0',
+                borderRadius: 14,
+                boxShadow: '0 20px 45px -10px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.08)',
+                border: '1.5px solid #CBD5E1',
                 padding: '6px',
-                zIndex: 1050,
+                zIndex: 2200,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2
@@ -554,7 +556,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
           </div>
 
           {/* User Account Button & Dropdown */}
-          <div ref={accountRef} style={{ position: 'relative' }}>
+          <div ref={accountRef} style={{ position: 'relative', zIndex: 1200 }}>
             <button
               onClick={() => setAccountMenuOpen(prev => !prev)}
               className="ma-nav-account-btn desktop-only"
@@ -571,15 +573,15 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             {accountMenuOpen && (
               <div style={{
                 position: 'absolute',
-                top: 'calc(100% + 6px)',
+                top: 'calc(100% + 8px)',
                 right: 0,
-                width: 210,
+                width: 220,
                 background: '#FFFFFF',
-                borderRadius: 12,
-                boxShadow: '0 10px 30px rgba(15, 23, 42, 0.15)',
-                border: '1px solid #E2E8F0',
+                borderRadius: 14,
+                boxShadow: '0 20px 45px -10px rgba(15, 23, 42, 0.28), 0 0 0 1px rgba(0, 0, 0, 0.08)',
+                border: '1.5px solid #CBD5E1',
                 padding: '8px 6px',
-                zIndex: 1050,
+                zIndex: 2200,
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 2
@@ -709,6 +711,38 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
             <span className="ma-nav-main-label">& Kòmann</span>
           </button>
 
+          {/* Mobile Direct Account / Connect Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (user) {
+                setAccountMenuOpen(prev => !prev)
+              } else {
+                nav('auth')
+              }
+            }}
+            className="mobile-only"
+            aria-label={user ? "Kont Mwen" : "Konekte"}
+            title={user ? "Kont Mwen" : "Konekte sou Kont ou"}
+            style={{
+              alignItems: 'center',
+              gap: 5,
+              padding: '6px 12px',
+              borderRadius: 20,
+              background: user ? '#FFF7ED' : 'linear-gradient(135deg, #FF6000 0%, #FF8A00 100%)',
+              border: user ? '1.5px solid #FF8A00' : 'none',
+              color: user ? '#EA580C' : '#FFFFFF',
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              cursor: 'pointer',
+              boxShadow: user ? 'none' : '0 2px 10px rgba(255, 96, 0, 0.35)',
+              transition: 'all 0.15s ease',
+            }}
+          >
+            <IconUser />
+            <span>{user ? (user.firstName ? user.firstName.slice(0, 7) : 'Kont') : 'Konekte'}</span>
+          </button>
+
           {/* Cart Icon with Red Badge */}
           <button
             onClick={openCart}
@@ -800,7 +834,7 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
       </div>
 
       {/* ── Slide-Out Category Drawer (Maket Ayisyen Pattern) ── */}
-      {drawerOpen && (
+      {drawerOpen && typeof document !== 'undefined' && createPortal(
         <>
           <div
             className="ma-drawer-backdrop"
@@ -1113,11 +1147,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </div>
             </div>
           </div>
-        </>
+        </>,
+        document.body
       )}
 
       {/* ── MODAL: Vin Vandè sou Delivery Lakay ── */}
-      {vendorModalOpen && (
+      {vendorModalOpen && typeof document !== 'undefined' && createPortal(
         <div className="product-modal-backdrop" onClick={() => setVendorModalOpen(false)}>
           <div className="product-modal-card" style={{ maxWidth: 480, padding: 24 }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -1206,11 +1241,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── MODAL: Kat Kado ── */}
-      {giftCardModalOpen && (
+      {giftCardModalOpen && typeof document !== 'undefined' && createPortal(
         <div className="product-modal-backdrop" onClick={() => setGiftCardModalOpen(false)}>
           <div className="product-modal-card" style={{ maxWidth: 440, padding: 24 }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
@@ -1262,11 +1298,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <span>Kòmande Kat Kado sa sou WhatsApp ({selectedGiftAmount.toLocaleString('fr-HT')} HTG)</span>
             </a>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── MODAL: Envite Zanmi ── */}
-      {inviteModalOpen && (
+      {inviteModalOpen && typeof document !== 'undefined' && createPortal(
         <div className="product-modal-backdrop" onClick={() => setInviteModalOpen(false)}>
           <div className="product-modal-card" style={{ maxWidth: 440, padding: 24 }} onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
@@ -1314,11 +1351,12 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <span>Pataje sou WhatsApp</span>
             </a>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── MODAL: Èd & Asistans ── */}
-      {helpModalOpen && (
+      {helpModalOpen && typeof document !== 'undefined' && createPortal(
         <div
           className="product-modal-backdrop"
           onClick={() => setHelpModalOpen(false)}
@@ -1461,7 +1499,8 @@ export default function Navbar({ page, onNavigate, onCategoryFilter, activeCateg
               <span>Tounen nan Aplikasyon an</span>
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </header>
   )

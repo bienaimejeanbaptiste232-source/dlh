@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { useCart, DELIVERY_FEE } from '../contexts/CartContext'
 
 const formatHTG = (n: number) => `${n.toLocaleString('fr-HT')} Gdes`
@@ -82,7 +83,7 @@ export default function CartDrawer({ onCheckout }: { onCheckout: () => void }) {
   }, {})
   const restaurantCount = Object.keys(byRestaurant).length
 
-  return (
+  return createPortal(
     <>
       {/* Backdrop */}
       <div className="cart-overlay" onClick={closeCart} />
@@ -297,6 +298,7 @@ export default function CartDrawer({ onCheckout }: { onCheckout: () => void }) {
           </div>
         )}
       </div>
-    </>
+    </>,
+    document.body
   )
 }

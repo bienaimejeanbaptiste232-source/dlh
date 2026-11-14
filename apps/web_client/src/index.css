@@ -1140,9 +1140,10 @@ a { text-decoration: none; color: inherit; }
 .cart-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
-  backdrop-filter: blur(4px);
-  z-index: 200;
+  background: rgba(15, 23, 42, 0.5);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 99998 !important;
   animation: fadeIn 0.2s ease;
 }
 
@@ -1154,8 +1155,8 @@ a { text-decoration: none; color: inherit; }
   width: 420px;
   max-width: 100vw;
   background: white;
-  box-shadow: -4px 0 40px rgba(0,0,0,0.15);
-  z-index: 201;
+  box-shadow: -4px 0 40px rgba(0,0,0,0.25);
+  z-index: 99999 !important;
   display: flex;
   flex-direction: column;
   animation: slideInRight 0.3s ease;
@@ -8749,12 +8750,35 @@ img {
   height: auto;
 }
 
-/* ── Prevent fixed-width inline elements from overflowing ───── */
-.navbar-wrapper,
-.ma-header-main,
+/* ── Ensure navbar and header allow popovers & dropdowns to display on top ───── */
+.navbar-wrapper {
+  max-width: 100vw;
+  overflow: visible !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 1100 !important;
+}
+
+.ma-header-main {
+  max-width: 100vw;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 1110 !important;
+}
+
 .ma-subnav-bar {
   max-width: 100vw;
-  overflow-x: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ma-nav-right {
+  overflow: visible !important;
+  position: relative;
+  z-index: 1120 !important;
 }
 
 /* ── Responsive merchant register page background ───────────── */
