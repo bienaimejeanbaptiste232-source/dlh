@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { type PricingConfig, calculateItemTotal } from '../lib/pricingLogic'
 
 export interface CartItem {
   id: string
   name: string
-  price: number
+  price: number // Base price or effective price
   emoji?: string
   imageUrl?: string
   restaurantId: string
@@ -11,6 +12,10 @@ export interface CartItem {
   restaurantCategory?: string
   quantity: number
   specialInstructions?: string
+  pricingConfig?: PricingConfig
+  unitPrice?: number
+  appliedTier?: string
+  savingsAmount?: number
 }
 
 export interface DeliveryBreakdown {
@@ -148,7 +153,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const closeCart = useCallback(() => setOpen(false), [])
 
   const totalItems = items.reduce((s, i) => s + i.quantity, 0)
-  const subtotal   = items.reduce((s, i) => s + i.price * i.quantity, 0)
+  const subtotal   = items.reduce((s, i) => {
+    if (i.pricingConfig) {
+      const calc = calculateItemTotal(i.pricingConfig, i.quantity)
+      return s + calc.totalPrice
+    }
+    return s + (i.price * i.quantity)
+  }, 0)
 
   // Dynamic delivery fee calculation
   const primaryCategory = items[0]?.restaurantCategory || 'RESTAURANT'

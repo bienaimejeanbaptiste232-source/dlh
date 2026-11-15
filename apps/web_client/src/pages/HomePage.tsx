@@ -8,6 +8,7 @@ import {
   type Product
 } from '../lib/api'
 import { showToast } from '../lib/toast'
+import { extractPricingConfig, getProductDisplayPrice, calculateItemTotal } from '../lib/pricingLogic'
 
 // ─── Inline SVG Icons (Crisp & High-Performance) ────────────────
 const IconSearch = () => (
@@ -610,10 +611,14 @@ export default function HomePage({
   }
 
   const handleAddToCart = (product: Product, merchantName = 'Delivery Lakay') => {
+    const pricingCfg = extractPricingConfig(product)
+    const display = getProductDisplayPrice(pricingCfg)
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: display.effectiveUnitPrice,
+      pricingConfig: pricingCfg,
+      unitPrice: pricingCfg.unitPrice,
       imageUrl: getProductImage(product),
       restaurantId: product.merchantId || (selectedMerchant?.id ?? 'dlh-marketplace'),
       restaurantName: merchantName,
@@ -624,10 +629,14 @@ export default function HomePage({
 
   // ── Add to cart with special note ────────────────────────────
   const handleAddToCartWithNote = (product: Product, merchantName = 'Delivery Lakay', note = '') => {
+    const pricingCfg = extractPricingConfig(product)
+    const display = getProductDisplayPrice(pricingCfg)
     addItem({
       id: product.id,
       name: product.name,
-      price: product.price,
+      price: display.effectiveUnitPrice,
+      pricingConfig: pricingCfg,
+      unitPrice: pricingCfg.unitPrice,
       imageUrl: getProductImage(product),
       restaurantId: product.merchantId || (selectedMerchant?.id ?? 'dlh-marketplace'),
       restaurantName: merchantName,
@@ -934,7 +943,25 @@ export default function HomePage({
                     )}
                     <div className="ma-pc-list-title">{p.name}</div>
                     {p.description && <p className="ma-pc-list-desc">{p.description}</p>}
-                    <div className="ma-pc-list-price">{formatHTG(p.price)}</div>
+                    {(() => {
+                      const cfg = extractPricingConfig(p)
+                      const disp = getProductDisplayPrice(cfg)
+                      return (
+                        <div className="ma-pc-list-price">
+                          <div>{disp.primaryText}</div>
+                          {disp.secondaryText && (
+                            <div style={{ fontSize: '0.6875rem', color: '#64748B', fontWeight: 500, marginTop: 2 }}>
+                              {disp.secondaryText}
+                            </div>
+                          )}
+                          {disp.badgeText && (
+                            <span style={{ display: 'inline-block', fontSize: '0.625rem', fontWeight: 800, color: '#D97706', background: '#FEF3C7', padding: '1px 6px', borderRadius: 4, marginTop: 3 }}>
+                              {disp.badgeText}
+                            </span>
+                          )}
+                        </div>
+                      )
+                    })()}
                   </div>
                   <div className="ma-pc-list-media" onClick={e => e.stopPropagation()}>
                     <img src={img} alt={p.name} className="ma-pc-list-img" />
@@ -1011,7 +1038,25 @@ export default function HomePage({
                       </p>
                     )}
                     <div className="ma-pc-foot">
-                      <div className="ma-pc-price">{formatHTG(p.price)}</div>
+                      {(() => {
+                        const cfg = extractPricingConfig(p)
+                        const disp = getProductDisplayPrice(cfg)
+                        return (
+                          <div className="ma-pc-price" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                            <span>{disp.primaryText}</span>
+                            {disp.secondaryText && (
+                              <span style={{ fontSize: '0.6875rem', color: '#64748B', fontWeight: 500, lineHeight: 1.2 }}>
+                                {disp.secondaryText}
+                              </span>
+                            )}
+                            {disp.badgeText && (
+                              <span style={{ display: 'inline-block', fontSize: '0.625rem', fontWeight: 800, color: '#D97706', background: '#FEF3C7', padding: '1px 5px', borderRadius: 4, marginTop: 2 }}>
+                                {disp.badgeText}
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })()}
                       {qty > 0 ? (
                         <div
                           style={{ display: 'flex', alignItems: 'center', gap: 6, background: '#FFF3EB', borderRadius: 8, padding: '3px 6px', border: '1px solid #FF6000' }}
@@ -1173,21 +1218,56 @@ export default function HomePage({
                 {product.name}
               </h2>
 
-              {/* Price + availability */}
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, marginBottom: 14 }}>
-                <span style={{ fontSize: '1.625rem', fontWeight: 900, color: '#FF6000', letterSpacing: '-0.5px' }}>
-                  {formatHTG(product.price)}
-                </span>
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  fontSize: '0.75rem', fontWeight: 700,
-                  color: '#059669', background: '#F0FDF4',
-                  border: '1px solid #BBF7D0', borderRadius: 20, padding: '3px 10px'
-                }}>
-                  <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
-                  Disponib kounye a
-                </span>
-              </div>
+              {/* Price + availability + Wholesale/Pack info */}
+              {(() => {
+                const modalCfg = extractPricingConfig(product)
+                const modalDisp = getProductDisplayPrice(modalCfg)
+                return (
+                  <div style={{ marginBottom: 14 }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                      <span style={{ fontSize: '1.625rem', fontWeight: 900, color: '#FF6000', letterSpacing: '-0.5px' }}>
+                        {modalDisp.primaryText}
+                      </span>
+                      {modalDisp.badgeText && (
+                        <span style={{
+                          fontSize: '0.75rem', fontWeight: 800, color: '#D97706',
+                          background: '#FEF3C7', border: '1px solid #FDE68A',
+                          borderRadius: 20, padding: '3px 10px'
+                        }}>
+                          {modalDisp.badgeText}
+                        </span>
+                      )}
+                      <span style={{
+                        display: 'inline-flex', alignItems: 'center', gap: 5,
+                        fontSize: '0.75rem', fontWeight: 700,
+                        color: '#059669', background: '#F0FDF4',
+                        border: '1px solid #BBF7D0', borderRadius: 20, padding: '3px 10px'
+                      }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#10B981', display: 'inline-block' }} />
+                        Disponib kounye a
+                      </span>
+                    </div>
+
+                    {modalDisp.secondaryText && (
+                      <div style={{ fontSize: '0.8125rem', color: '#64748B', fontWeight: 600, marginTop: 4 }}>
+                        {modalDisp.secondaryText}
+                      </div>
+                    )}
+
+                    {modalCfg.sellingMode === 'PACK' && modalCfg.packQuantity && (
+                      <div style={{ marginTop: 8, padding: '8px 12px', background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: 8, fontSize: '0.75rem', color: '#92400E' }}>
+                        📦 <strong>Vann pa pake {modalCfg.packQuantity}:</strong> Pri inite a rete {formatHTG(modalDisp.effectiveUnitPrice)} / inite.
+                      </div>
+                    )}
+
+                    {modalCfg.sellingMode === 'WHOLESALE' && (
+                      <div style={{ marginTop: 8, padding: '8px 12px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8, fontSize: '0.75rem', color: '#166534' }}>
+                        🏬 <strong>Vant an gwo (Gwosis):</strong> Kòmann minimòm se {modalCfg.minWholesaleQty || 12} inite.
+                      </div>
+                    )}
+                  </div>
+                )
+              })()}
 
               {/* Divider */}
               <div style={{ height: 1, background: '#F1F5F9', marginBottom: 14 }} />

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useCart, DELIVERY_FEE } from '../contexts/CartContext'
+import { calculateItemTotal } from '../lib/pricingLogic'
 
 const formatHTG = (n: number) => `${n.toLocaleString('fr-HT')} Gdes`
 
@@ -182,7 +183,28 @@ export default function CartDrawer({ onCheckout }: { onCheckout: () => void }) {
                   {/* Info */}
                   <div className="cart-item-info">
                     <div className="cart-item-name">{item.name}</div>
-                    <div className="cart-item-price">{formatHTG(item.price)}</div>
+                    {item.pricingConfig ? (() => {
+                      const calc = calculateItemTotal(item.pricingConfig, item.quantity)
+                      return (
+                        <div>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                            <span className="cart-item-price" style={{ color: '#FF6000', fontWeight: 800 }}>
+                              {formatHTG(calc.totalPrice)}
+                            </span>
+                            <span style={{ fontSize: '0.6875rem', color: '#64748B' }}>
+                              ({formatHTG(calc.effectiveUnitPrice)} / inite)
+                            </span>
+                          </div>
+                          {calc.savingsAmount > 0 && (
+                            <div style={{ fontSize: '0.6875rem', color: '#16A34A', fontWeight: 700, marginTop: 2 }}>
+                              ✓ Ekonomi: {formatHTG(calc.savingsAmount)} ({calc.appliedTier})
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })() : (
+                      <div className="cart-item-price">{formatHTG(item.price * item.quantity)}</div>
+                    )}
                     {item.specialInstructions && (
                       <div style={{ fontSize: '0.6875rem', color: '#D9480F', fontStyle: 'italic', marginTop: 2, background: 'rgba(255, 96, 0, 0.08)', padding: '2px 6px', borderRadius: 4 }}>
                         Nòt: {item.specialInstructions}
@@ -204,15 +226,21 @@ export default function CartDrawer({ onCheckout }: { onCheckout: () => void }) {
                     <div className="qty-control">
                       <button
                         className="qty-btn minus"
-                        onClick={() => updateQty(item.id, item.quantity - 1)}
-                        aria-label="Retire youn">
+                        onClick={() => {
+                          const step = (item.pricingConfig?.allowOnlyPacks && item.pricingConfig?.packQuantity) || 1
+                          updateQty(item.id, item.quantity - step)
+                        }}
+                        aria-label="Retire">
                         <IconMinus />
                       </button>
                       <span className="qty-val">{item.quantity}</span>
                       <button
                         className="qty-btn"
-                        onClick={() => updateQty(item.id, item.quantity + 1)}
-                        aria-label="Ajoute youn">
+                        onClick={() => {
+                          const step = (item.pricingConfig?.allowOnlyPacks && item.pricingConfig?.packQuantity) || 1
+                          updateQty(item.id, item.quantity + step)
+                        }}
+                        aria-label="Ajoute">
                         <IconPlus />
                       </button>
                     </div>

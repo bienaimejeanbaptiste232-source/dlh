@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'pricing_config.dart';
 
 class ProductVariant {
   final String size;
@@ -51,6 +52,7 @@ class ProductMeta {
   final List<String> portions;
   final List<String> accompaniments;
   final List<String> extras;
+  final ProductPricingConfig? pricingConfig;
   final Map<String, dynamic> extra;
 
   const ProductMeta({
@@ -76,6 +78,7 @@ class ProductMeta {
     this.portions = const [],
     this.accompaniments = const [],
     this.extras = const [],
+    this.pricingConfig,
     this.extra = const {},
   });
 
@@ -104,6 +107,7 @@ class ProductMeta {
         if (portions.isNotEmpty) 'portions': portions,
         if (accompaniments.isNotEmpty) 'accompaniments': accompaniments,
         if (extras.isNotEmpty) 'extras': extras,
+        if (pricingConfig != null) 'pricing': pricingConfig!.toJson(),
         ...extra,
       };
 
@@ -147,6 +151,9 @@ class ProductMeta {
               [],
           extras:
               (j['extras'] as List?)?.map((e) => e.toString()).toList() ?? [],
+          pricingConfig: j['pricing'] != null
+              ? ProductPricingConfig.fromJson(j['pricing'] as Map<String, dynamic>, 0)
+              : null,
         );
       } catch (_) {}
     }

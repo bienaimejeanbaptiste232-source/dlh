@@ -92,6 +92,7 @@ export interface Product {
   currency?: string
   category?: { name: string } | null
   merchant?: { name: string; type?: string; address?: string } | null
+  options?: string | Record<string, any>
 }
 
 // ── Merchants — read directly from Supabase (mirrors mobile app) ─
