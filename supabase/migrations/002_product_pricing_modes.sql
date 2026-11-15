@@ -50,3 +50,4 @@ LEFT JOIN merchants m ON m.id = p."merchantId";
 CREATE INDEX IF NOT EXISTS idx_products_options_selling_mode 
 ON products (((options::jsonb)->>'sellingMode'))
 WHERE options IS NOT NULL;
+

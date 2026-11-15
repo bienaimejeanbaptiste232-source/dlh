@@ -301,32 +301,88 @@ function getMerchantBanner(m: Merchant) {
 }
 
 function getProductImage(product: Product, type = '') {
-  if (product.imageUrl) return product.imageUrl
+  if (product.imageUrl && product.imageUrl.trim().length > 0) return product.imageUrl
   const name = (product.name || '').toLowerCase()
+  const cat = (product.category?.name || '').toLowerCase()
+  const t = (type || '').toUpperCase()
+
+  // 1. Manje Kreyòl & Restoran
+  if (name.includes('griot') || name.includes('griyo') || name.includes('tassot') || name.includes('taso') || name.includes('kabrit')) {
+    return 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('diri') || name.includes('riz') || name.includes('djon') || name.includes('pwa') || name.includes('legim')) {
+    return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80'
+  }
   if (name.includes('bouyon') || name.includes('soup') || name.includes('joumou')) {
     return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=600&q=80'
   }
-  if (name.includes('diri') || name.includes('riz') || name.includes('legim') || name.includes('pwa')) {
-    return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=600&q=80'
+  if (name.includes('pwason') || name.includes('poisson') || name.includes('lanbi') || name.includes('krab')) {
+    return 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80'
   }
-  if (name.includes('jus') || name.includes('bwason') || name.includes('grenadia') || name.includes('kowosol') || name.includes('dlo')) {
-    return 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80'
+  if (name.includes('pate') || name.includes('fritay') || name.includes('bannann') || name.includes('akra') || name.includes('marinad')) {
+    return 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80'
   }
-  if (name.includes('pate') || name.includes('fritay') || name.includes('bannann') || name.includes('griot') || name.includes('tassot')) {
-    return 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=600&q=80'
+  if (name.includes('burger') || name.includes('anbègè')) {
+    return 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80'
   }
-  if (type === 'PHARMACY') {
+  if (name.includes('pizza')) {
+    return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('poul') || name.includes('poulet') || name.includes('zèl') || name.includes('wing')) {
+    return 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=80'
+  }
+
+  // 2. Bwason, Dlo, Byè & Depo
+  if (name.includes('prestige') || name.includes('biere') || name.includes('byè') || name.includes('beer')) {
+    return 'https://images.unsplash.com/photo-1608270191873-10e82860d5b5?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('rhum') || name.includes('barbancourt') || name.includes('whisky')) {
+    return 'https://images.unsplash.com/photo-1527061011665-3652c757a4d4?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('jus') || name.includes('bwason') || name.includes('ji') || name.includes('grenadia') || name.includes('kowosol') || name.includes('kola')) {
+    return 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('dlo') || name.includes('eau') || name.includes('water') || name.includes('culligan')) {
+    return 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=600&q=80'
+  }
+
+  // 3. Patisri & Boulanjri
+  if (name.includes('gato') || name.includes('cake') || name.includes('patisserie') || cat.includes('gato') || t === 'BAKERY') {
+    return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=600&q=80'
+  }
+  if (name.includes('pen') || name.includes('pain') || name.includes('croissant') || name.includes('krwasan')) {
+    return 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80'
+  }
+
+  // 4. Famasi
+  if (t === 'PHARMACY' || name.includes('grenn') || name.includes('kapsil') || name.includes('siwo') || name.includes('panseman')) {
     return 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80'
   }
-  if (type === 'CONSTRUCTION') {
+
+  // 5. Konstriksyon & Quincaillerie
+  if (t === 'CONSTRUCTION' || t === 'HARDWARE' || name.includes('siman') || name.includes('sab') || name.includes('zouti') || name.includes('penti')) {
     return 'https://images.unsplash.com/photo-1581783898377-1c85bf937427?auto=format&fit=crop&w=600&q=80'
   }
-  if (type === 'BEVERAGE_DEPOT') {
+
+  // 6. Rad & Boutik
+  if (t === 'CLOTHING' || t === 'BOUTIQUE' || name.includes('t-shirt') || name.includes('chemiz') || name.includes('pantalon') || name.includes('wòb') || name.includes('soulye')) {
+    return 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?auto=format&fit=crop&w=600&q=80'
+  }
+
+  // 7. Elektwonik / Tech
+  if (t === 'TECH' || t === 'ELECTRONICS' || name.includes('telefon') || name.includes('phone') || name.includes('laptop') || name.includes('chargeur')) {
+    return 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80'
+  }
+
+  // 8. Depo & Sipèmache
+  if (t === 'BEVERAGE_DEPOT') {
     return 'https://images.unsplash.com/photo-1527661591475-527312dd65f5?auto=format&fit=crop&w=600&q=80'
   }
-  if (type === 'SUPERMARKET' || type === 'GROCERY') {
+  if (t === 'SUPERMARKET' || t === 'GROCERY') {
     return 'https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=600&q=80'
   }
+
+  // Fallback jeneral
   return 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80'
 }
 

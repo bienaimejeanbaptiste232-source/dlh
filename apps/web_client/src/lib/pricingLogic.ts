@@ -281,3 +281,4 @@ export function extractPricingConfig(product: {
     wholesaleTiers: Array.isArray(meta.wholesaleTiers) ? meta.wholesaleTiers : [],
   }
 }
+

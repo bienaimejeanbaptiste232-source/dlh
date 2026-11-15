@@ -606,41 +606,83 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                                         ),
                                       ),
                                     )
-                                  : const Center(
-                                      child: Icon(Icons.add_a_photo_outlined, color: Color(0xFF94A3B8), size: 24),
-                                    ))),
+                                  : (() {
+                                      final currentCatName = activeCategories.firstWhere(
+                                        (c) => c.id == selectedCatId,
+                                        orElse: () => MerchantCategory(id: '', name: ''),
+                                      ).name;
+                                      final suggestedUrl = _suggestProductImage(
+                                        config.type,
+                                        nameController.text.trim(),
+                                        currentCatName,
+                                      );
+                                      return Stack(
+                                        fit: StackFit.expand,
+                                        children: [
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(11),
+                                            child: _buildProductPhotoWidget(
+                                              suggestedUrl,
+                                              fallback: const Center(
+                                                child: Icon(Icons.add_a_photo_outlined, color: Color(0xFF94A3B8), size: 24),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            bottom: 2,
+                                            right: 2,
+                                            child: Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1.5),
+                                              decoration: BoxDecoration(
+                                                color: Colors.black.withOpacity(0.7),
+                                                borderRadius: BorderRadius.circular(4),
+                                              ),
+                                              child: const Text(
+                                                '✨ Sigjere',
+                                                style: TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    })())),
                     ),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: TextField(
-                        controller: imageUrlController,
-                        style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
-                        onChanged: (_) {
-                          pickedImageBytes = null;
-                          setModalState(() {});
-                        },
-                        decoration: InputDecoration(
-                          labelText: 'Lyen foto a (otomatik oswa manyèl)',
-                          labelStyle: const TextStyle(color: Color(0xFF475569), fontSize: 12),
-                          hintText: 'Pran foto sou aparèy la oswa kole lyen...',
-                          hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11),
-                          suffixIcon: (imageUrlController.text.isNotEmpty || pickedImageBytes != null)
-                              ? IconButton(
-                                  icon: const Icon(Icons.close, size: 18),
-                                  onPressed: () {
-                                    imageUrlController.clear();
-                                    pickedImageBytes = null;
-                                    setModalState(() {});
-                                  },
-                                )
-                              : null,
-                          filled: true,
-                          fillColor: const Color(0xFFF8FAFC),
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
-                          enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
-                          focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: MerchantConstants.brandOrange, width: 1.8)),
-                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextField(
+                            controller: imageUrlController,
+                            style: const TextStyle(color: Color(0xFF0F172A), fontSize: 13),
+                            onChanged: (_) {
+                              pickedImageBytes = null;
+                              setModalState(() {});
+                            },
+                            decoration: InputDecoration(
+                              labelText: 'Lyen foto a (otomatik oswa manyèl)',
+                              labelStyle: const TextStyle(color: Color(0xFF475569), fontSize: 12),
+                              hintText: 'Pran foto sou aparèy la oswa kole lyen...',
+                              hintStyle: const TextStyle(color: Color(0xFF94A3B8), fontSize: 11),
+                              suffixIcon: (imageUrlController.text.isNotEmpty || pickedImageBytes != null)
+                                  ? IconButton(
+                                      icon: const Icon(Icons.close, size: 18),
+                                      onPressed: () {
+                                        imageUrlController.clear();
+                                        pickedImageBytes = null;
+                                        setModalState(() {});
+                                      },
+                                    )
+                                  : null,
+                              filled: true,
+                              fillColor: const Color(0xFFF8FAFC),
+                              contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: MerchantConstants.brandOrange, width: 1.8)),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -1674,12 +1716,20 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                       final messenger = ScaffoldMessenger.of(context);
                       Navigator.pop(ctx);
 
+                      final activeCatName = activeCategories.firstWhere(
+                        (c) => c.id == selectedCatId,
+                        orElse: () => MerchantCategory(id: '', name: ''),
+                      ).name;
+                      final finalImgUrl = imgUrl.isNotEmpty
+                          ? imgUrl
+                          : _suggestProductImage(config.type, name, activeCatName);
+
                       final ok = await ref.read(merchantProductsProvider.notifier).addProduct(
                         name: name,
                         categoryId: selectedCatId,
                         price: price,
                         description: fullDesc.isNotEmpty ? fullDesc : null,
-                        imageUrl: imgUrl.isNotEmpty ? imgUrl : null,
+                        imageUrl: finalImgUrl,
                         prepTimeMinutes: selectedPrepMinutes,
                       );
 
@@ -2054,7 +2104,9 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
   }
 
   List<Map<String, String>> _getPresetImages(String? businessType) {
-    if (businessType == 'PHARMACY') {
+    final type = (businessType ?? 'RESTAURANT').toUpperCase();
+
+    if (type == 'PHARMACY') {
       return [
         {
           'label': 'Grenn & Kapsil',
@@ -2071,9 +2123,15 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
           'emoji': '🩹',
           'url': 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600&auto=format&fit=crop',
         },
+        {
+          'label': 'Vitamin & Tès',
+          'emoji': '🔬',
+          'url': 'https://images.unsplash.com/photo-1550572017-ed23351d3e8e?w=600&auto=format&fit=crop',
+        },
       ];
     }
-    if (businessType == 'CONSTRUCTION') {
+
+    if (type == 'CONSTRUCTION' || type == 'HARDWARE' || type == 'QUINCAILLERIE') {
       return [
         {
           'label': 'Siman & Sab',
@@ -2090,12 +2148,18 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
           'emoji': '🎨',
           'url': 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&auto=format&fit=crop',
         },
+        {
+          'label': 'Tiyo & Plonbri',
+          'emoji': '🚰',
+          'url': 'https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=600&auto=format&fit=crop',
+        },
       ];
     }
-    if (businessType == 'SUPERMARKET' || businessType == 'GROCERY') {
+
+    if (type == 'SUPERMARKET' || type == 'GROCERY') {
       return [
         {
-          'label': 'Pwodwi Alimantè',
+          'label': 'Pwodwi Alimantè (Diri/Lwil)',
           'emoji': '🍚',
           'url': 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=600&auto=format&fit=crop',
         },
@@ -2109,9 +2173,100 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
           'emoji': '🧴',
           'url': 'https://images.unsplash.com/photo-1585670210693-e7fdd16b142e?w=600&auto=format&fit=crop',
         },
+        {
+          'label': 'Lèt & Pwodwi Letye',
+          'emoji': '🥛',
+          'url': 'https://images.unsplash.com/photo-1528750997573-59b89d56f4f7?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Ti Goute & Biskwit',
+          'emoji': '🍪',
+          'url': 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=600&auto=format&fit=crop',
+        },
       ];
     }
-    if (businessType == 'BAKERY') {
+
+    if (type == 'BEVERAGE_DEPOT' || type == 'DEPOT' || type == 'DRINKS' || type == 'BAR') {
+      return [
+        {
+          'label': 'Byè & Prestige',
+          'emoji': '🍺',
+          'url': 'https://images.unsplash.com/photo-1608270191873-10e82860d5b5?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Kola & Rafrechisman',
+          'emoji': '🥤',
+          'url': 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Dlo Trete & Bonbon Dlo',
+          'emoji': '💧',
+          'url': 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Rhum & Alkòl',
+          'emoji': '🍾',
+          'url': 'https://images.unsplash.com/photo-1527061011665-3652c757a4d4?w=600&auto=format&fit=crop',
+        },
+      ];
+    }
+
+    if (type == 'CLOTHING' || type == 'BOUTIQUE' || type == 'FASHION') {
+      return [
+        {
+          'label': 'T-Shirt & Polo',
+          'emoji': '👕',
+          'url': 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Wòb & Rad Fanm',
+          'emoji': '👗',
+          'url': 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Pantalon & Jeans',
+          'emoji': '👖',
+          'url': 'https://images.unsplash.com/photo-1542272604-780c96856592?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Soulye & Baskets',
+          'emoji': '👟',
+          'url': 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Akseswa & Mont',
+          'emoji': '⌚',
+          'url': 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop',
+        },
+      ];
+    }
+
+    if (type == 'TECH' || type == 'ELECTRONICS') {
+      return [
+        {
+          'label': 'Telefòn & Smartphone',
+          'emoji': '📱',
+          'url': 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Òdinatè & Laptop',
+          'emoji': '💻',
+          'url': 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Kas & Ekoutè',
+          'emoji': '🎧',
+          'url': 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Chargeur & Kab',
+          'emoji': '🔌',
+          'url': 'https://images.unsplash.com/photo-1583863788434-e58a36330cf0?w=600&auto=format&fit=crop',
+        },
+      ];
+    }
+
+    if (type == 'BAKERY' || type == 'PATISSERIE') {
       return [
         {
           'label': 'Gato & Pâtisserie',
@@ -2130,7 +2285,33 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
         },
       ];
     }
-    // Default Restaurant
+
+    if (type == 'FAST_FOOD') {
+      return [
+        {
+          'label': 'Burger & Frit',
+          'emoji': '🍔',
+          'url': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Pizza Kreyòl',
+          'emoji': '🍕',
+          'url': 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Shawarma & Tacos',
+          'emoji': '🌯',
+          'url': 'https://images.unsplash.com/photo-1561651823-34feb02250e4?w=600&auto=format&fit=crop',
+        },
+        {
+          'label': 'Poul Frit & Zèl',
+          'emoji': '🍗',
+          'url': 'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop',
+        },
+      ];
+    }
+
+    // Default Restaurant & Haitian Food
     return [
       {
         'label': 'Griot & Bannann',
@@ -2153,6 +2334,11 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
         'url': 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&auto=format&fit=crop',
       },
       {
+        'label': 'Soup Joumou & Bouyon',
+        'emoji': '🍲',
+        'url': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format&fit=crop',
+      },
+      {
         'label': 'Burger & Frit',
         'emoji': '🍔',
         'url': 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop',
@@ -2168,6 +2354,116 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
         'url': 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop',
       },
     ];
+  }
+
+  /// Sigjere yon foto entèlijan selon non pwodwi a ak kalite biznis la
+  String _suggestProductImage(String? businessType, String? productName, String? categoryName) {
+    final name = (productName ?? '').toLowerCase();
+    final cat = (categoryName ?? '').toLowerCase();
+    final presets = _getPresetImages(businessType);
+
+    // 1. Manje & Restoran / Fritay
+    if (name.contains('griot') || name.contains('griyo') || name.contains('porc')) {
+      return 'https://images.unsplash.com/photo-1544025162-d76694265947?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('tassot') || name.contains('taso') || name.contains('kabrit') || name.contains('boeuf') || name.contains('bèf')) {
+      return 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('diri') || name.contains('riz') || name.contains('djon') || name.contains('pwa')) {
+      return 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('pwason') || name.contains('poisson') || name.contains('lanbi') || name.contains('lambi') || name.contains('krab')) {
+      return 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('soup') || name.contains('joumou') || name.contains('bouyon')) {
+      return 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('burger') || name.contains('anbègè')) {
+      return 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('pizza')) {
+      return 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('poul') || name.contains('poulet') || name.contains('zèl') || name.contains('wing')) {
+      return 'https://images.unsplash.com/photo-1562967914-608f82629710?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('pate') || name.contains('paté') || name.contains('fritay') || name.contains('bannann')) {
+      return 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('gato') || name.contains('cake') || name.contains('patisserie') || cat.contains('gato')) {
+      return 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('pen') || name.contains('pain') || name.contains('croissant')) {
+      return 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600&auto=format&fit=crop';
+    }
+
+    // 2. Bwason / Dlo / Byè / Rhum
+    if (name.contains('prestige') || name.contains('biere') || name.contains('byè') || name.contains('beer')) {
+      return 'https://images.unsplash.com/photo-1608270191873-10e82860d5b5?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('rhum') || name.contains('barbancourt') || name.contains('bakara') || name.contains('whisky')) {
+      return 'https://images.unsplash.com/photo-1527061011665-3652c757a4d4?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('dlo') || name.contains('eau') || name.contains('water') || name.contains('culligan')) {
+      return 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('ji') || name.contains('jus') || name.contains('juice') || name.contains('grenadia') || name.contains('kola') || name.contains('soda')) {
+      return 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?w=600&auto=format&fit=crop';
+    }
+
+    // 3. Famasi
+    if (name.contains('grenn') || name.contains('kapsil') || name.contains('comprime') || name.contains('paracetamol')) {
+      return 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('siwo') || name.contains('sirop') || name.contains('likid')) {
+      return 'https://images.unsplash.com/photo-1584017911766-d451b3d0e843?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('swen') || name.contains('panseman') || name.contains('alkol') || name.contains('gaze')) {
+      return 'https://images.unsplash.com/photo-1603398938378-e54eab446dde?w=600&auto=format&fit=crop';
+    }
+
+    // 4. Konstriksyon & Materyo
+    if (name.contains('siman') || name.contains('ciment') || name.contains('sab') || name.contains('blok')) {
+      return 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('zouti') || name.contains('mato') || name.contains('marteau') || name.contains('zouti')) {
+      return 'https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('penti') || name.contains('peinture') || name.contains('bwos')) {
+      return 'https://images.unsplash.com/photo-1562259949-e8e7689d7828?w=600&auto=format&fit=crop';
+    }
+
+    // 5. Rad / Boutik
+    if (name.contains('t-shirt') || name.contains('polo') || name.contains('chemiz')) {
+      return 'https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('wòb') || name.contains('robe') || name.contains('jip')) {
+      return 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('pantalon') || name.contains('jeans')) {
+      return 'https://images.unsplash.com/photo-1542272604-780c96856592?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('soulye') || name.contains('sandal') || name.contains('chaussure') || name.contains('basket')) {
+      return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&auto=format&fit=crop';
+    }
+
+    // 6. Elektwonik / Tech
+    if (name.contains('telefon') || name.contains('phone') || name.contains('iphone') || name.contains('samsung')) {
+      return 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('laptop') || name.contains('ordinateur') || name.contains('pc')) {
+      return 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&auto=format&fit=crop';
+    }
+    if (name.contains('kas') || name.contains('ekoute') || name.contains('ecouteur') || name.contains('airpod')) {
+      return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop';
+    }
+
+    // Fallback: Premye foto nan lis preset kategori a
+    if (presets.isNotEmpty && presets.first['url'] != null) {
+      return presets.first['url']!;
+    }
+
+    return 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=600&auto=format&fit=crop';
   }
 
   Widget _buildProductPhotoWidget(String? imageUrl, {double? width, double? height, BoxFit fit = BoxFit.cover, Widget? fallback}) {
