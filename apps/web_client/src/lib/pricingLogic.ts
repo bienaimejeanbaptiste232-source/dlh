@@ -251,6 +251,21 @@ export function extractPricingConfig(product: {
     meta = product.options
   }
 
+  // Si pa gen nan options, chèche nan deskripsyon an si li te anrejistre kòm [Meta:{...}]
+  if (product.description && (!meta || Object.keys(meta).length === 0 || !meta.pricing)) {
+    const metaMatch = product.description.match(/^\[Meta:(\{[\s\S]*?\})\]/i) || product.description.match(/^Meta:\s*(\{[\s\S]*\})/i)
+    if (metaMatch) {
+      try {
+        const parsed = JSON.parse(metaMatch[1])
+        if (parsed.pricing) {
+          meta = { ...meta, ...parsed.pricing }
+        } else if (parsed.packQuantity || parsed.sellingMode) {
+          meta = { ...meta, ...parsed }
+        }
+      } catch { /* ignore */ }
+    }
+  }
+
   // Default config si pa gen detay
   const baseUnitPrice = product.price || 0
 

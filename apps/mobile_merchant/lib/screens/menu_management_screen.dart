@@ -7,6 +7,7 @@ import '../config/business_type_config.dart';
 import '../config/constants.dart';
 import '../models/merchant_models.dart';
 import '../providers/merchant_providers.dart';
+import '../utils/pricing_config.dart';
 import '../utils/product_meta.dart';
 
 class MenuManagementScreen extends ConsumerStatefulWidget {
@@ -245,6 +246,14 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
     // TECH fields
     String? selectedCondition;
 
+    // PRICING / VANT PA PAKE & GWOSIS fields
+    SellingMode sellingMode = SellingMode.unit;
+    int selectedPackQty = 3;
+    final packPriceController = TextEditingController();
+    bool isWholesaleEnabled = false;
+    final wholesaleMinQtyController = TextEditingController(text: '12');
+    final wholesalePriceController = TextEditingController();
+
     String selectedCatId = activeCategories.isNotEmpty ? activeCategories.first.id : (config.defaultCategories.first);
     int selectedPrepMinutes = 15;
 
@@ -476,7 +485,7 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                   keyboardType: TextInputType.number,
                   style: const TextStyle(color: Color(0xFF0F172A), fontSize: 15, fontWeight: FontWeight.bold),
                   decoration: InputDecoration(
-                    labelText: 'Pri (an HTG) *',
+                    labelText: 'Pri Inite (an HTG) *',
                     labelStyle: const TextStyle(color: Color(0xFF475569), fontSize: 13),
                     prefixIcon: const Icon(Icons.payments_outlined, color: MerchantConstants.brandAmber),
                     suffixText: 'HTG',
@@ -486,6 +495,136 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                     border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
                     enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: const BorderSide(color: MerchantConstants.brandOrange, width: 1.8)),
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // ── MÒD VANT AK FÒMA PRI (Par 3, Par 6, Gwosis) ──
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFE2E8F0)),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(Icons.inventory_2_outlined, size: 16, color: MerchantConstants.brandOrange),
+                          const SizedBox(width: 6),
+                          const Text(
+                            'Mòd Vant & Pake (Lot):',
+                            style: TextStyle(color: Color(0xFF1E293B), fontSize: 13, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      // Opsyon Chwa Mòd
+                      Wrap(
+                        spacing: 8,
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Pa Inite'),
+                            selected: sellingMode == SellingMode.unit,
+                            selectedColor: MerchantConstants.brandOrange.withValues(alpha: 0.15),
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: sellingMode == SellingMode.unit ? MerchantConstants.brandOrange : const Color(0xFF475569),
+                            ),
+                            onSelected: (val) {
+                              if (val) setModalState(() => sellingMode = SellingMode.unit);
+                            },
+                          ),
+                          ChoiceChip(
+                            label: const Text('Vant Pa Pake (Lot)'),
+                            selected: sellingMode == SellingMode.pack,
+                            selectedColor: MerchantConstants.brandOrange.withValues(alpha: 0.15),
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: sellingMode == SellingMode.pack ? MerchantConstants.brandOrange : const Color(0xFF475569),
+                            ),
+                            onSelected: (val) {
+                              if (val) setModalState(() => sellingMode = SellingMode.pack);
+                            },
+                          ),
+                          ChoiceChip(
+                            label: const Text('Toulede (Inite + Pake)'),
+                            selected: sellingMode == SellingMode.hybrid,
+                            selectedColor: MerchantConstants.brandOrange.withValues(alpha: 0.15),
+                            labelStyle: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: sellingMode == SellingMode.hybrid ? MerchantConstants.brandOrange : const Color(0xFF475569),
+                            ),
+                            onSelected: (val) {
+                              if (val) setModalState(() => sellingMode = SellingMode.hybrid);
+                            },
+                          ),
+                        ],
+                      ),
+
+                      // Konfigirasyon Pake si chwazi Pack oswa Hybrid
+                      if (sellingMode == SellingMode.pack || sellingMode == SellingMode.hybrid) ...[
+                        const SizedBox(height: 12),
+                        const Text(
+                          'Chwazi kantite nan pake a:',
+                          style: TextStyle(color: Color(0xFF475569), fontSize: 12, fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [3, 6, 12, 24].map((qty) {
+                            final isSel = selectedPackQty == qty;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 6),
+                              child: InkWell(
+                                onTap: () => setModalState(() => selectedPackQty = qty),
+                                borderRadius: BorderRadius.circular(8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                  decoration: BoxDecoration(
+                                    color: isSel ? MerchantConstants.brandOrange : Colors.white,
+                                    borderRadius: BorderRadius.circular(8),
+                                    border: Border.all(color: isSel ? MerchantConstants.brandOrange : const Color(0xFFCBD5E1)),
+                                  ),
+                                  child: Text(
+                                    'Pa $qty',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: isSel ? Colors.white : const Color(0xFF334155),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: packPriceController,
+                          keyboardType: TextInputType.number,
+                          style: const TextStyle(color: Color(0xFF0F172A), fontSize: 14, fontWeight: FontWeight.bold),
+                          decoration: InputDecoration(
+                            labelText: 'Pri pou pake $selectedPackQty a (an HTG) *',
+                            hintText: 'Egz: 500',
+                            labelStyle: const TextStyle(color: Color(0xFF475569), fontSize: 12),
+                            prefixIcon: const Icon(Icons.sell_outlined, color: MerchantConstants.brandOrange, size: 18),
+                            suffixText: 'HTG',
+                            suffixStyle: const TextStyle(color: MerchantConstants.brandOrange, fontWeight: FontWeight.bold, fontSize: 12),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
+                            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xFFCBD5E1))),
+                            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: MerchantConstants.brandOrange, width: 1.5)),
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -1670,7 +1809,30 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                         }
                       }
 
-                      final hasDynamicData = requiresPrescription ||
+                      final hasPricingConfig = sellingMode != SellingMode.unit || isWholesaleEnabled;
+                      ProductPricingConfig? pricingConfig;
+                      if (hasPricingConfig) {
+                        final parsedPackPrice = double.tryParse(packPriceController.text.trim());
+                        final parsedWholesalePrice = double.tryParse(wholesalePriceController.text.trim());
+                        final parsedMinWholesale = int.tryParse(wholesaleMinQtyController.text.trim()) ?? 12;
+
+                        pricingConfig = ProductPricingConfig(
+                          sellingMode: sellingMode,
+                          displayMode: sellingMode == SellingMode.pack ? PriceDisplayMode.packFirst : PriceDisplayMode.unitFirst,
+                          unitPrice: price,
+                          unitName: selectedUnit ?? (unitController.text.trim().isNotEmpty ? unitController.text.trim() : 'inite'),
+                          packQuantity: (sellingMode == SellingMode.pack || sellingMode == SellingMode.hybrid) ? selectedPackQty : null,
+                          packPrice: (sellingMode == SellingMode.pack || sellingMode == SellingMode.hybrid) ? parsedPackPrice : null,
+                          packName: (sellingMode == SellingMode.pack || sellingMode == SellingMode.hybrid) ? 'Pake pa $selectedPackQty' : null,
+                          allowOnlyPacks: sellingMode == SellingMode.pack,
+                          isWholesaleAvailable: isWholesaleEnabled,
+                          minWholesaleQty: isWholesaleEnabled ? parsedMinWholesale : null,
+                          wholesalePricePerUnit: isWholesaleEnabled ? parsedWholesalePrice : null,
+                        );
+                      }
+
+                      final hasDynamicData = hasPricingConfig ||
+                          requiresPrescription ||
                           brandController.text.trim().isNotEmpty ||
                           dosageController.text.trim().isNotEmpty ||
                           expiryController.text.trim().isNotEmpty ||
@@ -1709,6 +1871,7 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                           ram: ramController.text.trim().isNotEmpty ? ramController.text.trim() : null,
                           storage: storageController.text.trim().isNotEmpty ? storageController.text.trim() : null,
                           warranty: config.hasTechSpecs && warrantyController.text.trim().isNotEmpty ? warrantyController.text.trim() : null,
+                          pricingConfig: pricingConfig,
                         );
                         fullDesc = ProductMeta.serialize(meta, plainDesc: descController.text.trim());
                       }
@@ -2643,6 +2806,29 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                             }
                             if (meta.colors.isNotEmpty) {
                               badges.add(_buildMetaBadge('🎨 ${meta.colors.join(", ")}', const Color(0xFFFDF4FF), const Color(0xFF7E22CE)));
+                            }
+                            if (meta.pricingConfig != null) {
+                              final pCfg = meta.pricingConfig!;
+                              if (pCfg.packQuantity != null && pCfg.packPrice != null) {
+                                badges.add(_buildMetaBadge(
+                                  '📦 Pa ${pCfg.packQuantity} (${pCfg.packPrice!.toInt()} HTG)',
+                                  const Color(0xFFFFF7ED),
+                                  const Color(0xFFEA580C),
+                                ));
+                              } else if (pCfg.sellingMode == SellingMode.pack && pCfg.packQuantity != null) {
+                                badges.add(_buildMetaBadge(
+                                  '📦 Pa ${pCfg.packQuantity}',
+                                  const Color(0xFFFFF7ED),
+                                  const Color(0xFFEA580C),
+                                ));
+                              }
+                              if (pCfg.isWholesaleAvailable && pCfg.wholesalePricePerUnit != null) {
+                                badges.add(_buildMetaBadge(
+                                  '🏬 Gwosis (${pCfg.wholesalePricePerUnit!.toInt()} HTG)',
+                                  const Color(0xFFF0FDF4),
+                                  const Color(0xFF16A34A),
+                                ));
+                              }
                             }
 
                             return Column(
