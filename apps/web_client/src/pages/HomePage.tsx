@@ -50,7 +50,20 @@ function cleanDescription(raw: string | undefined | null): string {
   if (!raw) return ''
   let s = raw.trim()
 
-  // ── Case 1: "Meta: {...}" prefix from mobile merchant app ──────
+  // ── Case 0: Flutter mobile serialized format "[Meta:{...}] optional plain text" ──
+  const bracketMetaMatch = s.match(/^\[Meta:(\{[\s\S]*?\})\]\s*([\s\S]*)$/i)
+  if (bracketMetaMatch) {
+    try {
+      const obj = JSON.parse(bracketMetaMatch[1])
+      const metaText = extractMetaFields(obj)
+      const plainText = bracketMetaMatch[2]?.trim() || ''
+      if (metaText && plainText) return `${plainText} · ${metaText}`
+      if (metaText) return metaText
+      if (plainText) return plainText
+    } catch { /* fall through */ }
+  }
+
+  // ── Case 1: "Meta: {...}" prefix without brackets ─────────────
   const metaMatch = s.match(/^Meta:\s*(\{[\s\S]*\})\s*$/i)
   if (metaMatch) {
     try {
