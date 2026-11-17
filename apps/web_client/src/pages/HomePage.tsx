@@ -11,40 +11,87 @@ import { showToast } from '../lib/toast'
 import { extractPricingConfig, getProductDisplayPrice, calculateItemTotal } from '../lib/pricingLogic'
 
 // ─── Description cleaner ─────────────────────────────────────────
-// Handles raw JSON arrays/objects stored as strings, strips stray quotes/apostrophes
+// Handles: plain text, JSON arrays, JSON objects, "Meta: {...}" prefix from mobile app
+const META_LABEL_MAP: Record<string, string> = {
+  dimensions: 'Dimansyon',
+  dimension:  'Dimansyon',
+  unit:       'Inite',
+  transport:  'Transpò',
+  material:   'Matye',
+  color:      'Koulè',
+  couleur:    'Koulè',
+  weight:     'Pwa',
+  poids:      'Pwa',
+  size:       'Tay',
+  taille:     'Tay',
+  note:       'Nòt',
+  description:'',           // skip — it would be recursive
+}
+// Fields to skip entirely (internal/technical)
+const META_SKIP = new Set(['v','type','sellingMode','packSize','wholesaleMinQty',
+  'packPrice','wholesalePrice','pricePerUnit','displayMode'])
+
+function extractMetaFields(obj: Record<string, any>): string {
+  return Object.entries(obj)
+    .filter(([k]) => !META_SKIP.has(k))
+    .map(([k, v]) => {
+      if (v === null || v === undefined || v === '') return null
+      const label = META_LABEL_MAP[k.toLowerCase()] ?? null
+      if (label === '') return null          // skip 'description' key itself
+      const valStr = String(v).trim()
+      if (!valStr) return null
+      return label ? `${label}: ${valStr}` : valStr
+    })
+    .filter(Boolean)
+    .join(' · ')
+}
+
 function cleanDescription(raw: string | undefined | null): string {
   if (!raw) return ''
-  const s = raw.trim()
-  // Try parse as JSON
-  try {
-    const parsed = JSON.parse(s)
-    if (Array.isArray(parsed)) {
-      // Array of strings or {label,value} pairs
-      return parsed.map((item: any) => {
-        if (typeof item === 'string') return item
-        if (item && typeof item === 'object') {
-          const label = item.label || item.name || item.key || ''
-          const val   = item.value ?? item.val ?? ''
-          return label && val ? `${label}: ${val}` : String(label || val)
-        }
-        return String(item)
-      }).filter(Boolean).join(' · ')
-    }
-    if (parsed && typeof parsed === 'object') {
-      // Object like { dimension: '3 Pouces', material: 'Bwa' }
-      return Object.entries(parsed)
-        .map(([k, v]) => `${k}: ${v}`)
-        .join(' · ')
-    }
-    // Primitive inside JSON (e.g. a quoted string)
-    return String(parsed)
-  } catch {
-    // Not JSON — just clean up stray quotes and normalize
-    return s
-      .replace(/^['"\[{]+|['"\]}"]+$/g, '')   // strip leading/trailing quotes/brackets
-      .replace(/'+/g, "'")                      // normalize apostrophes
-      .trim()
+  let s = raw.trim()
+
+  // ── Case 1: "Meta: {...}" prefix from mobile merchant app ──────
+  const metaMatch = s.match(/^Meta:\s*(\{[\s\S]*\})\s*$/i)
+  if (metaMatch) {
+    try {
+      const obj = JSON.parse(metaMatch[1])
+      return extractMetaFields(obj)
+    } catch { /* fall through */ }
   }
+
+  // ── Case 2: Pure JSON object ───────────────────────────────────
+  if (s.startsWith('{')) {
+    try {
+      const obj = JSON.parse(s)
+      if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+        return extractMetaFields(obj)
+      }
+    } catch { /* fall through */ }
+  }
+
+  // ── Case 3: JSON array ─────────────────────────────────────────
+  if (s.startsWith('[')) {
+    try {
+      const arr = JSON.parse(s)
+      if (Array.isArray(arr)) {
+        return arr.map((item: any) => {
+          if (typeof item === 'string') return item
+          if (item && typeof item === 'object') {
+            const label = item.label || item.name || item.key || ''
+            const val   = item.value ?? item.val ?? ''
+            return label && val ? `${label}: ${val}` : String(label || val)
+          }
+          return String(item)
+        }).filter(Boolean).join(' · ')
+      }
+    } catch { /* fall through */ }
+  }
+
+  // ── Case 4: Plain string — strip stray leading/trailing punctuation ──
+  return s
+    .replace(/^['"\[{]+/, '')
+    .replace(/['"\]}]+$/, '')
+    .trim()
 }
 
 // ─── Inline SVG Icons (Crisp & High-Performance) ────────────────
