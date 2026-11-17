@@ -87,10 +87,15 @@ function cleanDescription(raw: string | undefined | null): string {
     } catch { /* fall through */ }
   }
 
-  // ── Case 4: Plain string — strip stray leading/trailing punctuation ──
+  // ── Case 4: Try as plain JSON array (last resort) ─────────────
+  try {
+    const arr = JSON.parse(s)
+    if (Array.isArray(arr)) return arr.map((x: any) => String(x)).filter(Boolean).join(' · ')
+  } catch { /* ignore */ }
+
+  // ── Case 5: Plain string — strip stray leading/trailing punctuation ──
   return s
-    .replace(/^['"\[{]+/, '')
-    .replace(/['"\]}]+$/, '')
+    .replace(/^['"[\]{}\s]+|['"[\]{}\s]+$/g, '')
     .trim()
 }
 
