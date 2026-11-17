@@ -10,6 +10,43 @@ import {
 import { showToast } from '../lib/toast'
 import { extractPricingConfig, getProductDisplayPrice, calculateItemTotal } from '../lib/pricingLogic'
 
+// ─── Description cleaner ─────────────────────────────────────────
+// Handles raw JSON arrays/objects stored as strings, strips stray quotes/apostrophes
+function cleanDescription(raw: string | undefined | null): string {
+  if (!raw) return ''
+  const s = raw.trim()
+  // Try parse as JSON
+  try {
+    const parsed = JSON.parse(s)
+    if (Array.isArray(parsed)) {
+      // Array of strings or {label,value} pairs
+      return parsed.map((item: any) => {
+        if (typeof item === 'string') return item
+        if (item && typeof item === 'object') {
+          const label = item.label || item.name || item.key || ''
+          const val   = item.value ?? item.val ?? ''
+          return label && val ? `${label}: ${val}` : String(label || val)
+        }
+        return String(item)
+      }).filter(Boolean).join(' · ')
+    }
+    if (parsed && typeof parsed === 'object') {
+      // Object like { dimension: '3 Pouces', material: 'Bwa' }
+      return Object.entries(parsed)
+        .map(([k, v]) => `${k}: ${v}`)
+        .join(' · ')
+    }
+    // Primitive inside JSON (e.g. a quoted string)
+    return String(parsed)
+  } catch {
+    // Not JSON — just clean up stray quotes and normalize
+    return s
+      .replace(/^['"\[{]+|['"\]}"]+$/g, '')   // strip leading/trailing quotes/brackets
+      .replace(/'+/g, "'")                      // normalize apostrophes
+      .trim()
+  }
+}
+
 // ─── Inline SVG Icons (Crisp & High-Performance) ────────────────
 const IconSearch = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.4} strokeLinecap="round" strokeLinejoin="round" width="18" height="18">
@@ -998,7 +1035,7 @@ export default function HomePage({
                       }}>{badge}</span>
                     )}
                     <div className="ma-pc-list-title">{p.name}</div>
-                    {p.description && <p className="ma-pc-list-desc">{p.description}</p>}
+                    {p.description && <p className="ma-pc-list-desc">{cleanDescription(p.description)}</p>}
                     {(() => {
                       const cfg = extractPricingConfig(p)
                       const disp = getProductDisplayPrice(cfg)
@@ -1090,7 +1127,7 @@ export default function HomePage({
                         overflow: 'hidden',
                         lineHeight: 1.4
                       }}>
-                        {p.description}
+                        {cleanDescription(p.description)}
                       </p>
                     )}
                     <div className="ma-pc-foot">
@@ -1343,7 +1380,7 @@ export default function HomePage({
                   borderRadius: 10,
                   border: '1px solid #E2E8F0'
                 }}>
-                  {product.description || `Pwodwi fre ak bon kalite soti nan boutik ${storeName}. Disponib pou livrezon rapid nan tout Cap-Haïtien — livrezon sou lòd kounye a!`}
+                  {cleanDescription(product.description) || `Pwodwi fre ak bon kalite soti nan boutik ${storeName}. Disponib pou livrezon rapid nan tout Cap-Haïtien — livrezon sou lòd kounye a!`}
                 </p>
               </div>
 

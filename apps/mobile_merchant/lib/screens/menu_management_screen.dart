@@ -609,7 +609,7 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
                                   : (() {
                                       final currentCatName = activeCategories.firstWhere(
                                         (c) => c.id == selectedCatId,
-                                        orElse: () => MerchantCategory(id: '', name: ''),
+                                        orElse: () => MerchantCategory(id: '', merchantId: '', name: ''),
                                       ).name;
                                       final suggestedUrl = _suggestProductImage(
                                         config.type,
@@ -1718,7 +1718,7 @@ class _MenuManagementScreenState extends ConsumerState<MenuManagementScreen> {
 
                       final activeCatName = activeCategories.firstWhere(
                         (c) => c.id == selectedCatId,
-                        orElse: () => MerchantCategory(id: '', name: ''),
+                        orElse: () => MerchantCategory(id: '', merchantId: '', name: ''),
                       ).name;
                       final finalImgUrl = imgUrl.isNotEmpty
                           ? imgUrl
