@@ -995,6 +995,81 @@ class SupabaseService {
     }
   }
 
+  // ─── ZONES & TARIFIKASYON DINAMIK ──────────────────────────
+  Future<Map<String, double>> getDeliveryZonesMap() async {
+    final Map<String, double> zonesMap = {
+      'Sant Vil': 150.0,
+      'Carénage': 160.0,
+      'Haut-du-Cap': 180.0,
+      'Baryè Boutèy / Vertières': 180.0,
+      'Vaudreuil': 200.0,
+      'Petite Anse': 220.0,
+      'Madan Kolo': 250.0,
+      'Bande du Nord': 300.0,
+      'Labadie': 400.0,
+    };
+
+    try {
+      // 1. Tcheke si gen nan delivery_zones
+      final res = await http.get(
+        Uri.parse('$_url/rest/v1/delivery_zones?select=name,baseDeliveryFee,baseFee&isActive=eq.true'),
+        headers: _publicHeaders,
+      ).timeout(const Duration(seconds: 4));
+
+      if (res.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(res.body);
+        for (final z in data) {
+          final name = (z['name'] ?? '').toString();
+          final fee = (z['baseDeliveryFee'] as num?)?.toDouble() ??
+              (z['baseFee'] as num?)?.toDouble();
+          if (name.isNotEmpty && fee != null) {
+            zonesMap[name] = fee;
+          }
+        }
+      }
+
+      // 2. Tcheke tou nan platform_settings (haiti_area_pricing_map)
+      final settingsRes = await http.get(
+        Uri.parse('$_url/rest/v1/platform_settings?key=eq.haiti_area_pricing_map&select=value'),
+        headers: _publicHeaders,
+      ).timeout(const Duration(seconds: 4));
+
+      if (settingsRes.statusCode == 200) {
+        final List<dynamic> sData = jsonDecode(settingsRes.body);
+        if (sData.isNotEmpty && sData[0]['value'] != null) {
+          final pMap = sData[0]['value'] as Map<String, dynamic>;
+          // Tcheke zòn yo
+          final areasRes = await http.get(
+            Uri.parse('$_url/rest/v1/platform_settings?key=eq.haiti_coverage_areas&select=value'),
+            headers: _publicHeaders,
+          ).timeout(const Duration(seconds: 4));
+
+          if (areasRes.statusCode == 200) {
+            final List<dynamic> aData = jsonDecode(areasRes.body);
+            if (aData.isNotEmpty && aData[0]['value'] is List) {
+              final aList = aData[0]['value'] as List<dynamic>;
+              for (final a in aList) {
+                final aId = a['id'];
+                final aName = a['name'];
+                final aNameKr = a['nameKr'];
+                final pricing = pMap[aId];
+                if (pricing != null && pricing['baseFee'] != null) {
+                  final fee = (pricing['baseFee'] as num).toDouble();
+                  if (aName != null) zonesMap[aName] = fee;
+                  if (aNameKr != null) zonesMap[aNameKr] = fee;
+                }
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      print('getDeliveryZonesMap fallback: $e');
+    }
+
+    return zonesMap;
+  }
+
   // ─── FALLBACK DATA ─────────────────────────────────────────
   List<Merchant> _fallbackMerchants() {
     return [

@@ -100,9 +100,34 @@ export default function PricingPage() {
     try {
       const { error } = await supabase
         .from('delivery_zones')
-        .update({ baseFee, perKmFee, nightSurcharge, updatedAt: new Date().toISOString() })
+        .update({
+          baseDeliveryFee: baseFee,
+          baseFee: baseFee,
+          perKmFee: perKmFee,
+          nightSurcharge: nightSurcharge,
+          updatedAt: new Date().toISOString()
+        })
         .eq('id', zone.id);
       if (error) throw error;
+
+      // Sync to pricingMap as well
+      const matchedArea = haitiAreas.find(a =>
+        a.name.toLowerCase().includes(zone.name.toLowerCase()) ||
+        zone.name.toLowerCase().includes(a.name.toLowerCase())
+      );
+      if (matchedArea) {
+        await updateAreaPricing(
+          matchedArea.id,
+          {
+            isConfigured: true,
+            baseFee,
+            perKmFee,
+            nightSurcharge,
+          },
+          pricingMap
+        );
+      }
+
       await loadAllPricing();
     } catch (e: any) {
       alert('Erreur: ' + (e?.message || 'Impossible de mettre à jour'));

@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import React, { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from 'react'
 import { type PricingConfig, calculateItemTotal } from '../lib/pricingLogic'
+import { getClientCoverage, getZoneEffectivePricing } from '../lib/coverage'
 
 export interface CartItem {
   id: string
@@ -90,6 +91,39 @@ const DELIVERY_FEE: number = 150  // HTG de baz
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([])
   const [isOpen, setOpen] = useState(false)
+  const [zoneBaseFee, setZoneBaseFee] = useState<number>(150)
+
+  // Fetch configured zone pricing dynamically from coverage
+  useEffect(() => {
+    async function loadDynamicZoneFee() {
+      try {
+        const savedZone = typeof window !== 'undefined' ? localStorage.getItem('dlh_zone') : null
+        const { areas, pricing } = await getClientCoverage()
+        if (savedZone && areas.length > 0) {
+          const matchedArea = areas.find(a =>
+            a.name.toLowerCase().includes(savedZone.toLowerCase()) ||
+            a.nameKr.toLowerCase().includes(savedZone.toLowerCase())
+          )
+          if (matchedArea) {
+            const { pricing: effectivePricing } = getZoneEffectivePricing(matchedArea.id, areas, pricing)
+            if (effectivePricing?.baseFee) {
+              setZoneBaseFee(effectivePricing.baseFee)
+            }
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load dynamic zone fee:', err)
+      }
+    }
+    loadDynamicZoneFee()
+
+    // Listen for zone changes
+    const onZoneChange = () => {
+      loadDynamicZoneFee()
+    }
+    window.addEventListener('dlh:zone-change', onZoneChange)
+    return () => window.removeEventListener('dlh:zone-change', onZoneChange)
+  }, [])
   const [switchConflict, setSwitchConflict] = useState<{
     newItem: Omit<CartItem, 'quantity'>
     currentRestaurantName: string
@@ -164,7 +198,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   // Dynamic delivery fee calculation
   const primaryCategory = items[0]?.restaurantCategory || 'RESTAURANT'
   const deliveryBreakdown = calculateDeliveryFee({
-    baseFee: 150,
+    baseFee: zoneBaseFee,
     distanceKm: 2.5,
     totalQty: totalItems,
     category: primaryCategory,

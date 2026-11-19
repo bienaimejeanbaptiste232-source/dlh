@@ -386,6 +386,28 @@ export async function updateAreaPricing(
   };
 
   const ok = await saveAreaPricingMap(updatedMap);
+
+  // Sync with standard `delivery_zones` table if this area has a match or is a zone
+  try {
+    if (pricingData.baseFee !== null && pricingData.baseFee !== undefined) {
+      // Find area info to match by name or code
+      const areas = await fetchCoverageAreas();
+      const targetArea = areas.find(a => a.id === areaId);
+      if (targetArea) {
+        await supabase
+          .from('delivery_zones')
+          .update({
+            baseDeliveryFee: pricingData.baseFee,
+            perKmFee: pricingData.perKmFee ?? 35.0,
+            surgeMultiplier: (pricingData.nightSurcharge && pricingData.nightSurcharge > 0) ? 1.25 : 1.0,
+          })
+          .or(`name.ilike.%${targetArea.name}%,name.ilike.%${targetArea.nameKr}%`);
+      }
+    }
+  } catch (err) {
+    console.warn('Sync to delivery_zones failed:', err);
+  }
+
   return { success: ok, updatedMap };
 }
 

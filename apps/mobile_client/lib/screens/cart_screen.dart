@@ -23,7 +23,7 @@ class _CartScreenState extends ConsumerState<CartScreen>
   final noteController = TextEditingController();
   final promoController = TextEditingController();
 
-  static const Map<String, double> capHaitienZones = {
+  Map<String, double> capHaitienZones = {
     'Sant Vil': 150.0,
     'Carénage': 160.0,
     'Haut-du-Cap': 180.0,
@@ -85,7 +85,22 @@ class _CartScreenState extends ConsumerState<CartScreen>
       addressController.text = loc.address.isNotEmpty
           ? loc.address
           : 'Boulevard du Cap, Cap-Haïtien';
+      _loadDynamicZones();
     });
+  }
+
+  Future<void> _loadDynamicZones() async {
+    try {
+      final dynZones = await SupabaseService().getDeliveryZonesMap();
+      if (mounted && dynZones.isNotEmpty) {
+        setState(() {
+          capHaitienZones = dynZones;
+          if (!capHaitienZones.containsKey(selectedDeliveryZone)) {
+            selectedDeliveryZone = capHaitienZones.keys.first;
+          }
+        });
+      }
+    } catch (_) {}
   }
 
   @override
