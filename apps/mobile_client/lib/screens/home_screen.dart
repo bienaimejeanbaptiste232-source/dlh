@@ -367,6 +367,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> with WidgetsBindingObse
                 bottom: 12,
                 child: DoorDashCartBar(),
               ),
+
+            // ── FLOATING WHATSAPP SUPPORT BUTTON (DIRECT HELP 24/7) ──────────
+            Positioned(
+              right: 16,
+              bottom: cart.openCarts.isNotEmpty ? 80 : 24,
+              child: Material(
+                elevation: 6,
+                shadowColor: const Color(0x4025D366),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                color: const Color(0xFF25D366),
+                child: InkWell(
+                  onTap: () async {
+                    final uri = Uri.parse('https://wa.me/50940553636?text=Bonjou%20Delivery%20Lakay,%20mwen%20bezwen%20yon%20èd%20tanpri');
+                    if (await canLaunchUrl(uri)) {
+                      await launchUrl(uri, mode: LaunchMode.externalApplication);
+                    }
+                  },
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.chat_bubble_rounded, color: Colors.white, size: 20),
+                        SizedBox(width: 8),
+                        Text(
+                          'Sipò WhatsApp',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

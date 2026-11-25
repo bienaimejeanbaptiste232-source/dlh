@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppController } from './app.controller';
 import { getDatabaseConfig } from './config/database.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { MerchantsModule } from './modules/merchants/merchants.module';
@@ -28,5 +29,6 @@ import { PlatformSettingsModule } from './modules/platform-settings/platform-set
     PaymentModule,
     PlatformSettingsModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
