@@ -769,6 +769,10 @@ export default function HomePage({
   }
 
   const handleAddToCart = (product: Product, merchantName = 'Delivery Lakay') => {
+    if (selectedMerchant && !selectedMerchant.isOpen) {
+      showToast(`Boutik "${selectedMerchant.name}" fèmen kounye a. Li pa ka resevwa kòmand.`, 'error')
+      return
+    }
     const pricingCfg = extractPricingConfig(product)
     const display = getProductDisplayPrice(pricingCfg)
     addItem({
@@ -787,6 +791,10 @@ export default function HomePage({
 
   // ── Add to cart with special note ────────────────────────────
   const handleAddToCartWithNote = (product: Product, merchantName = 'Delivery Lakay', note = '') => {
+    if (selectedMerchant && !selectedMerchant.isOpen) {
+      showToast(`Boutik "${selectedMerchant.name}" fèmen kounye a. Li pa ka resevwa kòmand.`, 'error')
+      return
+    }
     const pricingCfg = extractPricingConfig(product)
     const display = getProductDisplayPrice(pricingCfg)
     addItem({

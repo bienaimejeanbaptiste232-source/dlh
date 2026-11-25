@@ -140,8 +140,9 @@ class _MerchantDetailScreenState extends ConsumerState<MerchantDetailScreen>
           }
           final total = effectivePrice * quantity;
 
-          // Check if we can add (required fields satisfied)
-          bool canAdd = true;
+          // Check if we can add (required fields satisfied & merchant is open)
+          final bool isStoreOpen = widget.merchant.isActive;
+          bool canAdd = isStoreOpen;
           if (merchantType == 'CLOTHING') {
             if (meta.sizes.isNotEmpty && selectedSize == null) canAdd = false;
             if (meta.colors.isNotEmpty && selectedColor == null) canAdd = false;
@@ -844,7 +845,9 @@ class _MerchantDetailScreenState extends ConsumerState<MerchantDetailScreen>
                             ),
                             child: Center(
                               child: Text(
-                                canAdd ? 'Ajoute nan Panyen' : 'Chwazi opsyon obligatwa yo',
+                                !isStoreOpen
+                                    ? 'Boutik sa a fèmen kounye a'
+                                    : (canAdd ? 'Ajoute nan Panyen' : 'Chwazi opsyon obligatwa yo'),
                                 style: const TextStyle(
                                   color: Colors.white, fontSize: 15,
                                   fontWeight: FontWeight.w900, letterSpacing: -0.2,
@@ -1040,6 +1043,28 @@ class _MerchantDetailScreenState extends ConsumerState<MerchantDetailScreen>
                             const SizedBox(height: 6),
                             Row(
                               children: [
+                                _HeroBadge(
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        widget.merchant.isActive ? Icons.check_circle_rounded : Icons.do_not_disturb_on_rounded,
+                                        color: widget.merchant.isActive ? const Color(0xFF16A34A) : Colors.white,
+                                        size: 12,
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        widget.merchant.isActive ? 'Ouvri kounye a' : 'Fèmen tanporèman',
+                                        style: TextStyle(
+                                          color: widget.merchant.isActive ? const Color(0xFF15803D) : Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w900,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  bg: widget.merchant.isActive ? const Color(0xFFDCFCE7) : const Color(0xFFDC2626),
+                                ),
+                                const SizedBox(width: 6),
                                 _HeroBadge(
                                   child: Row(
                                     children: [
